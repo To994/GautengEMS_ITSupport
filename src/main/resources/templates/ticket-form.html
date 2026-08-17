@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create IT Ticket | Gauteng EMS IT Support</title>
+
+    <link rel="stylesheet" href="/css/ticket-form.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<div class="ticket-form-page">
+
+    <!-- HEADER -->
+
+    <header class="form-header">
+
+        <div class="header-left">
+
+            <a href="/tickets" class="back-button">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <div>
+                <h1>Create New IT Ticket</h1>
+                <p>Gauteng EMS IT Support Management System</p>
+            </div>
+
+        </div>
+
+        <div class="header-badge">
+            <i class="fa-solid fa-headset"></i>
+            IT SUPPORT
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="form-container">
+
+        <div class="form-card">
+
+            <!-- FORM HEADER -->
+
+            <div class="form-card-header">
+
+                <div class="form-title-icon">
+                    <i class="fa-solid fa-ticket"></i>
+                </div>
+
+                <div>
+
+                    <h2>New Support Request</h2>
+
+                    <p>
+                        Enter the details of the IT issue below.
+                        Required fields are marked with <strong>*</strong>.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form action="/tickets/save"
+                  method="post"
+
+                  th:object="${ticket}">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <!-- ISSUE INFORMATION -->
+
+                <div class="section-title">
+
+                    <div class="section-number">
+                        01
+                    </div>
+
+                    <div>
+                        <h3>Issue Information</h3>
+                        <span>Describe the problem that requires IT assistance.</span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group full">
+
+                        <label for="title">
+                            Issue Title
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-heading"></i>
+
+                            <input
+                                    type="text"
+                                    id="title"
+                                    th:field="*{title}"
+                                    placeholder="e.g. Computer not connecting to network"
+                                    required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label for="category">
+                            Issue Category
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-layer-group"></i>
+
+                            <select
+                                    id="category"
+                                    th:field="*{category}"
+                                    required>
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option value="Hardware">
+                                    Hardware
+                                </option>
+
+                                <option value="Software">
+                                    Software
+                                </option>
+
+                                <option value="Network">
+                                    Network
+                                </option>
+
+                                <option value="Printer">
+                                    Printer
+                                </option>
+
+                                <option value="Email">
+                                    Email / Outlook
+                                </option>
+
+                                <option value="Active Directory">
+                                    Active Directory
+                                </option>
+
+                                <option value="Citrix">
+                                    Citrix
+                                </option>
+
+                                <option value="GEMS">
+                                    GEMS
+                                </option>
+
+                                <option value="Tablet">
+                                    Tablet
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Priority
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            <select
+                                    id="priority"
+                                    th:field="*{priority}"
+                                    required>
+
+                                <option value="">
+                                    Select priority
+                                </option>
+
+                                <option value="LOW">
+                                    Low
+                                </option>
+
+                                <option value="MEDIUM">
+                                    Medium
+                                </option>
+
+                                <option value="HIGH">
+                                    High
+                                </option>
+
+                                <option value="CRITICAL">
+                                    Critical
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full">
+
+                        <label for="description">
+                            Description
+                            <span>*</span>
+                        </label>
+
+                        <div class="textarea-wrapper">
+
+                            <i class="fa-solid fa-align-left"></i>
+
+                            <textarea
+                                    id="description"
+                                    th:field="*{description}"
+                                    rows="5"
+                                    placeholder="Describe the issue in detail. Include any error messages or symptoms..."
+                                    required></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REQUESTER INFORMATION -->
+
+                <div class="section-title">
+
+                    <div class="section-number">
+                        02
+                    </div>
+
+                    <div>
+                        <h3>Requester Information</h3>
+                        <span>Details of the EMS employee reporting the issue.</span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- REQUESTER NAME -->
+
+                    <div class="form-group">
+
+                        <label for="requesterName">
+                            Full Name
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                    type="text"
+                                    id="requesterName"
+                                    th:field="*{requesterName}"
+                                    placeholder="Employee full name"
+                                    required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="requesterEmail">
+                            Email Address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            <input
+                                    type="email"
+                                    id="requesterEmail"
+                                    th:field="*{requesterEmail}"
+                                    placeholder="employee@gauteng.gov.za">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DEPARTMENT -->
+
+                    <div class="form-group">
+
+                        <label for="department">
+                            Department / Unit
+                            <span>*</span>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-building"></i>
+
+                            <select
+                                    id="department"
+                                    th:field="*{department}"
+                                    required>
+
+                                <option value="">
+                                    Select department
+                                </option>
+
+                                <option value="Call Centre">
+                                    Call Centre
+                                </option>
+
+                                <option value="Dispatch">
+                                    Dispatch
+                                </option>
+
+                                <option value="Finance">
+                                    Finance
+                                </option>
+
+                                <option value="HR">
+                                    Human Resources
+                                </option>
+
+                                <option value="Operations">
+                                    Operations
+                                </option>
+
+                                <option value="IT">
+                                    IT Department
+                                </option>
+
+                                <option value="Management">
+                                    Management
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TECHNICIAN -->
+
+                    <div class="form-group">
+
+                        <label for="assignedTechnician">
+                            Assign Technician
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user-gear"></i>
+
+                            <select
+                                    id="assignedTechnician"
+                                    th:field="*{assignedTechnician}">
+
+                                <option value="">
+                                    Unassigned
+                                </option>
+
+                                <option value="IT Technician">
+                                    IT Technician
+                                </option>
+
+                                <option value="Senior Technician">
+                                    Senior Technician
+                                </option>
+
+                                <option value="Support Technician">
+                                    Support Technician
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <small class="field-help">
+                            Leave unassigned if a technician will claim the ticket.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMISSION -->
+
+                <div class="form-actions">
+
+                    <a href="/tickets" class="cancel-button">
+                        <i class="fa-solid fa-xmark"></i>
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="submit-button">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Create IT Ticket
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- INFORMATION PANEL -->
+
+        <aside class="information-panel">
+
+            <div class="info-header">
+
+                <div class="info-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <h3>IT Support</h3>
+                    <span>Ticket Guidelines</span>
+                </div>
+
+            </div>
+
+
+            <div class="info-list">
+
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-circle-info"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>Provide clear details</strong>
+
+                        <p>
+                            Include enough information for the technician
+                            to understand and troubleshoot the issue.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>Choose the correct priority</strong>
+
+                        <p>
+                            Critical issues affecting emergency operations
+                            should be marked as Critical.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>Technician assignment</strong>
+
+                        <p>
+                            Tickets can be assigned by IT Management,
+                            or left available for technicians to claim.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <div class="info-item-icon">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>Track your ticket</strong>
+
+                        <p>
+                            Once submitted, your ticket receives a unique
+                            reference number for tracking.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="emergency-note">
+
+                <i class="fa-solid fa-phone-volume"></i>
+
+                <div>
+
+                    <strong>Emergency IT Issue?</strong>
+
+                    <span>
+                        For critical operational IT issues,
+                        contact the IT Support team immediately.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <span>
+            <i class="fa-solid fa-headset"></i>
+            Gauteng EMS IT Support
+        </span>
+
+        <span>
+            Reliable. Responsive. Ready to Help.
+        </span>
+
+    </footer>
+
+</div>
+
+</body>
+</html>

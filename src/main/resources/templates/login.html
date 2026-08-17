@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gauteng EMS IT Support System</title>
+
+    <link rel="stylesheet" href="/css/login.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <div class="background-overlay"></div>
+
+    <!-- LOGIN CARD -->
+    <div class="login-card">
+
+        <!-- LOGO -->
+        <div class="logo-container">
+            <img
+                    src="/images/gauteng-ems-logo.jpeg"
+                    alt="Gauteng EMS Logo"
+                    class="ems-logo">
+        </div>
+
+        <!-- TITLE -->
+        <h1>GAUTENG EMS</h1>
+
+        <h2>IT SUPPORT SYSTEM</h2>
+
+        <!-- DIVIDER -->
+        <div class="heading-line">
+            <span></span>
+            <i class="fa-solid fa-headset"></i>
+            <span></span>
+        </div>
+
+        <p class="login-description">
+            Sign in to access the IT Support Portal
+        </p>
+
+        <!-- LOGIN FORM -->
+        <form action="/login" method="post">
+
+            <!-- USERNAME -->
+            <div class="input-group">
+
+                <i class="fa-solid fa-user"></i>
+
+                <input
+                        type="text"
+                        name="username"
+                        placeholder="Email ID / Username"
+                        autocomplete="username"
+                        required>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+            <div class="input-group">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required>
+
+                <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                        aria-label="Show or hide password">
+
+                    <i
+                            id="password-eye"
+                            class="fa-solid fa-eye">
+                    </i>
+
+                </button>
+
+            </div>
+
+
+            <!-- OPTIONS -->
+            <div class="login-options">
+
+                <label class="remember-me">
+
+                    <input
+                            type="checkbox"
+                            name="remember-me">
+
+                    <span>Remember me</span>
+
+                </label>
+
+                <a
+                        href="#"
+                        class="forgot-password">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+            <button
+                    type="submit"
+                    class="login-button">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                <span>LOGIN</span>
+
+            </button>
+
+        </form>
+
+
+        <!-- SUPPORT MESSAGE -->
+        <div class="support-message">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Need IT help? We're here to support you.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTTOM -->
+    <div class="bottom-text">
+
+        <i class="fa-solid fa-headset"></i>
+
+        <span><strong>IT Support</strong></span>
+
+        <span>|</span>
+
+        <span>Reliable. Responsive. Ready to Help.</span>
+
+    </div>
+
+</div>
+
+
+<!-- SHOW / HIDE PASSWORD -->
+<script>
+
+    function togglePassword() {
+
+        const password =
+            document.getElementById("password");
+
+        const eye =
+            document.getElementById("password-eye");
+
+        if (password.type === "password") {
+
+            password.type = "text";
+
+            eye.classList.remove("fa-eye");
+
+            eye.classList.add("fa-eye-slash");
+
+        } else {
+
+            password.type = "password";
+
+            eye.classList.remove("fa-eye-slash");
+
+            eye.classList.add("fa-eye");
+
+        }
+    }
+
+</script>
+
+</body>
+</html>

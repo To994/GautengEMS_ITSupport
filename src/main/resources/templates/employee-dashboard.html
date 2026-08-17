@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Dashboard | Gauteng EMS IT Support</title>
+
+    <link rel="stylesheet"
+          href="/css/employee-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+<!-- =========================================================
+     FIXED TOP NAVIGATION
+     ========================================================= -->
+
+<header class="form-header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+
+            <i class="fa-solid fa-headset"></i>
+
+        </div>
+
+        <div class="header-title">
+
+            <h1>Employee Dashboard</h1>
+
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <!-- EMS BRAND -->
+
+        <div class="header-brand">
+
+            <img src="/images/gauteng-ems-logo.jpeg"
+                 alt="Gauteng EMS Logo">
+
+            <div>
+
+                <strong>GAUTENG EMS</strong>
+
+                <span>IT SUPPORT</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- EMPLOYEE -->
+
+        <div class="header-user">
+
+            <i class="fa-solid fa-user-circle"></i>
+
+            <div>
+
+                <strong
+                        th:text="${employee.firstName + ' ' + employee.surname}">
+                    Employee
+                </strong>
+
+                <span>EMS Employee</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="employee-page">
+
+    <div class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME SECTION
+             ================================================= -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <span class="section-label">
+                    EMPLOYEE PORTAL
+                </span>
+
+                <h2>
+
+                    Welcome back,
+
+                    <span th:text="${employee.firstName}">
+                        Employee
+                    </span>
+
+                    👋
+
+                </h2>
+
+                <p>
+
+                    Submit IT support requests and keep track
+                    of your support tickets.
+
+                </p>
+
+            </div>
+
+
+            <!-- DATE -->
+
+            <div class="date-card">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <div>
+
+                    <span>Today</span>
+
+                    <strong
+                            th:text="${#temporals.format(T(java.time.LocalDate).now(), 'dd MMMM yyyy')}">
+
+                        15 August 2026
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EMPLOYEE INFORMATION
+             ================================================= -->
+
+        <section class="employee-info-card">
+
+            <div class="info-icon">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <div class="info-content">
+
+                <span>Logged in as</span>
+
+                <strong
+                        th:text="${employee.firstName + ' ' + employee.surname}">
+
+                    Employee Name
+
+                </strong>
+
+                <small
+                        th:text="${employee.email}">
+
+                    employee@gauteng.gov.za
+
+                </small>
+
+            </div>
+
+
+            <div class="department-info">
+
+                <span>Department</span>
+
+                <strong
+                        th:text="${employee.department}">
+
+                    Department
+
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+             ================================================= -->
+
+        <section class="section-block">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        QUICK ACTIONS
+                    </span>
+
+                    <h3>IT Support</h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+
+                <!-- CREATE TICKET -->
+
+                <a href="/tickets/new"
+                   class="quick-action primary-action">
+
+                    <div class="quick-icon blue">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>Create IT Ticket</strong>
+
+                        <span>
+                            Report a new IT problem
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right arrow"></i>
+
+                </a>
+
+
+                <!-- MY TICKETS -->
+
+                <a href="#my-tickets"
+                   class="quick-action">
+
+                    <div class="quick-icon green">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+                    <div>
+
+                        <strong>My Tickets</strong>
+
+                        <span>
+                            View your submitted support requests
+                        </span>
+
+                    </div>
+
+                    <i class="fa-solid fa-chevron-right arrow"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             TICKET STATISTICS
+             ================================================= -->
+
+        <section class="section-block">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        SUPPORT REQUESTS
+                    </span>
+
+                    <h3>My Ticket Overview</h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total Tickets</span>
+
+                        <strong th:text="${totalTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OPEN -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon red">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Open</span>
+
+                        <strong th:text="${openTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- IN PROGRESS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon yellow">
+
+                        <i class="fa-solid fa-spinner"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>In Progress</span>
+
+                        <strong th:text="${inProgressTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESOLVED -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Resolved</span>
+
+                        <strong th:text="${resolvedTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MY TICKETS
+             ================================================= -->
+
+        <section class="section-block"
+                 id="my-tickets">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        MY SUPPORT REQUESTS
+                    </span>
+
+                    <h3>My Tickets</h3>
+
+                </div>
+
+                <a href="/tickets/new"
+                   class="view-all-button">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    New Ticket
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 TICKETS EXIST
+                 ================================================= -->
+
+            <div class="ticket-list"
+                 th:if="${tickets != null and !tickets.isEmpty()}">
+
+
+                <div class="ticket-item"
+                     th:each="ticket : ${tickets}">
+
+
+                    <!-- TICKET ICON -->
+
+                    <div class="ticket-icon">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+
+                    <!-- TICKET INFORMATION -->
+
+                    <div class="ticket-content">
+
+                        <span class="ticket-number"
+                              th:text="${ticket.ticketNumber}">
+
+                            EMS-000000
+
+                        </span>
+
+                        <strong
+                                th:text="${ticket.title}">
+
+                            IT Support Request
+
+                        </strong>
+
+                        <small
+                                th:text="${ticket.category}">
+
+                            Category
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="ticket-status">
+
+                        <span
+                                th:text="${ticket.status}">
+
+                            OPEN
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- VIEW -->
+
+                    <a th:href="@{/tickets/{id}(id=${ticket.id})}"
+                       class="ticket-view-button">
+
+                        View
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 NO TICKETS
+                 ================================================= -->
+
+            <div class="empty-tickets"
+                 th:if="${tickets == null or tickets.isEmpty()}">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+                <h3>No Support Tickets Yet</h3>
+
+                <p>
+                    You haven't submitted any IT support requests.
+                </p>
+
+                <a href="/tickets/new"
+                   class="create-ticket-button">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Create Your First Ticket
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EMPLOYEE NOTICE
+             ================================================= -->
+
+        <section class="notice-card">
+
+            <div class="notice-icon">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+            </div>
+
+            <div>
+
+                <strong>Need IT assistance?</strong>
+
+                <p>
+                    Create a support ticket and the IT Support
+                    team will review and assist with your request.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LOGOUT
+             ================================================= -->
+
+        <section class="logout-section">
+
+            <form action="/logout"
+                  method="post">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <button type="submit"
+                        class="logout-button">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Logout
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="dashboard-footer">
+
+            <i class="fa-solid fa-headset"></i>
+
+            <span>
+                Gauteng EMS IT Support
+            </span>
+
+            <span>|</span>
+
+            <span>
+                Reliable. Responsive. Ready to Help.
+            </span>
+
+        </footer>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

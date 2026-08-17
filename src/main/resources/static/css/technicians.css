@@ -1,0 +1,655 @@
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fc;
+    color: #172033;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.top-header {
+    height: 82px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 35px;
+
+    background: linear-gradient(
+        90deg,
+        #071b52,
+        #073fae,
+        #075edb
+    );
+
+    color: white;
+
+    box-shadow: 0 3px 15px rgba(0,0,0,.18);
+}
+
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+
+.back-button {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    background: rgba(255,255,255,.13);
+
+    border-radius: 9px;
+
+    text-decoration: none;
+}
+
+
+.back-button:hover {
+    background: rgba(255,255,255,.23);
+}
+
+
+.header-left h1 {
+    margin: 0;
+
+    font-size: 23px;
+}
+
+
+.header-left p {
+    margin: 4px 0 0;
+
+    font-size: 12px;
+
+    opacity: .78;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.header-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.header-brand img {
+    width: 46px;
+    height: 46px;
+
+    object-fit: contain;
+
+    border-radius: 50%;
+
+    background: white;
+}
+
+
+.header-brand strong {
+    display: block;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+}
+
+
+.header-brand span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #ffd500;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page {
+    min-height: 100vh;
+
+    padding-top: 82px;
+}
+
+
+.container {
+    width: min(1200px, calc(100% - 50px));
+
+    margin: auto;
+
+    padding: 40px 0;
+}
+
+
+/* =========================================================
+   PAGE HEADING
+   ========================================================= */
+
+.page-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+
+.page-heading > div > span {
+    color: #075edb;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.8px;
+}
+
+
+.page-heading h2 {
+    margin: 6px 0;
+
+    color: #12213f;
+
+    font-size: 32px;
+}
+
+
+.page-heading p {
+    margin: 0;
+
+    color: #71809a;
+
+    font-size: 14px;
+}
+
+
+.dashboard-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    color: white;
+
+    background: #075edb;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.dashboard-button:hover {
+    background: #064eb8;
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 24px;
+}
+
+
+.stat-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 20px;
+
+    background: white;
+
+    border: 1px solid #e2e8f2;
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 5px 18px rgba(20,45,90,.05);
+}
+
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-size: 18px;
+}
+
+
+.stat-card span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #7d899e;
+
+    font-size: 11px;
+}
+
+
+.stat-card strong {
+    color: #172d52;
+
+    font-size: 23px;
+}
+
+
+.stat-card.blue .stat-icon {
+    color: #075edb;
+    background: #e9f2ff;
+}
+
+
+.stat-card.green .stat-icon {
+    color: #168451;
+    background: #e8f8ef;
+}
+
+
+.stat-card.red .stat-icon {
+    color: #d9363e;
+    background: #fff0f1;
+}
+
+
+.stat-card.orange .stat-icon {
+    color: #d08a00;
+    background: #fff7df;
+}
+
+
+.stat-card.purple .stat-icon {
+    color: #694bd1;
+    background: #f0edff;
+}
+
+
+/* =========================================================
+   TECHNICIAN CARD
+   ========================================================= */
+
+.technician-card {
+    background: white;
+
+    border: 1px solid #e2e8f2;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 5px 18px rgba(20,45,90,.05);
+
+    overflow: hidden;
+}
+
+
+.card-header {
+    padding: 22px 25px;
+
+    border-bottom: 1px solid #edf1f7;
+}
+
+
+.card-header h3 {
+    margin: 0;
+
+    color: #182a4b;
+
+    font-size: 17px;
+}
+
+
+.card-header h3 i {
+    color: #075edb;
+
+    margin-right: 7px;
+}
+
+
+.card-header p {
+    margin: 5px 0 0;
+
+    color: #8995a8;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   TECHNICIAN ROW
+   ========================================================= */
+
+.technician-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 20px 25px;
+
+    border-bottom: 1px solid #edf1f7;
+}
+
+
+.technician-row:last-child {
+    border-bottom: none;
+}
+
+
+.technician-avatar {
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background: linear-gradient(
+        135deg,
+        #075edb,
+        #0b3fa7
+    );
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+.technician-details {
+    flex: 1;
+}
+
+
+.technician-details strong {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #263958;
+
+    font-size: 15px;
+}
+
+
+.technician-details > span {
+    margin-right: 15px;
+
+    color: #8490a4;
+
+    font-size: 11px;
+}
+
+
+.technician-details i {
+    color: #075edb;
+
+    margin-right: 4px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.technician-status {
+    min-width: 100px;
+}
+
+
+.status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.status i {
+    font-size: 7px;
+}
+
+
+.status.active {
+    color: #168451;
+}
+
+
+.status.inactive {
+    color: #d9363e;
+}
+
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.view-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 10px 15px;
+
+    color: #075edb;
+
+    background: #edf5ff;
+
+    border: 1px solid #d9e9ff;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+.view-button:hover {
+    background: #dfeeff;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-state {
+    min-height: 220px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    color: #8a96a9;
+}
+
+
+.empty-state i {
+    color: #075edb;
+
+    font-size: 30px;
+
+    margin-bottom: 5px;
+}
+
+
+.empty-state strong {
+    color: #263958;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-top: 35px;
+
+    color: #8995a8;
+
+    font-size: 11px;
+}
+
+
+footer i {
+    color: #075edb;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .header-brand {
+        display: none;
+    }
+
+    .container {
+        width: calc(100% - 25px);
+
+        padding-top: 25px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .page-heading h2 {
+        font-size: 27px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .technician-row {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .technician-details {
+        min-width: calc(100% - 70px);
+    }
+
+    .technician-status {
+        margin-left: 68px;
+    }
+
+    .view-button {
+        margin-left: auto;
+    }
+}

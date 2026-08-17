@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Technician Dashboard | Gauteng EMS IT Support
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/technician-dashboard.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     FIXED TOP NAVIGATION
+     ========================================================= -->
+
+<header class="form-header">
+
+    <div class="header-left">
+
+        <div class="header-icon">
+
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+        </div>
+
+
+        <div class="header-title">
+
+            <h1>
+                Technician Dashboard
+            </h1>
+
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+
+        <div class="header-brand">
+
+            <img src="/images/gauteng-ems-logo.jpeg"
+                 alt="Gauteng EMS Logo">
+
+            <div>
+
+                <strong>
+                    GAUTENG EMS
+                </strong>
+
+                <span>
+                    IT SUPPORT
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-user">
+
+            <i class="fa-solid fa-user-circle"></i>
+
+            <div>
+
+                <strong
+                        th:text="${technician.firstName + ' ' + technician.surname}">
+                    Technician
+                </strong>
+
+                <span>
+                    IT Technician
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<main class="technician-page">
+
+    <div class="dashboard-container">
+
+
+        <!-- =================================================
+             WELCOME SECTION
+             ================================================= -->
+
+        <section class="welcome-section">
+
+            <div>
+
+                <span class="section-label">
+                    TECHNICIAN PORTAL
+                </span>
+
+
+                <h2>
+
+                    Welcome back,
+
+                    <span th:text="${technician.firstName}">
+                        Technician
+                    </span>
+
+                    👋
+
+                </h2>
+
+
+                <p>
+
+                    Manage your IT support tickets and record your
+                    daily attendance from one place.
+
+                </p>
+
+            </div>
+
+
+            <div class="date-card">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <div>
+
+                    <span>
+                        Today
+                    </span>
+
+                    <strong
+                            th:text="${#temporals.format(T(java.time.LocalDate).now(), 'dd MMMM yyyy')}">
+
+                        15 August 2026
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ATTENDANCE
+             ================================================= -->
+
+        <section class="attendance-card">
+
+
+            <!-- =================================================
+                 ATTENDANCE HEADER
+                 ================================================= -->
+
+            <div class="attendance-header">
+
+
+                <div class="attendance-title">
+
+                    <div class="attendance-icon">
+
+                        <i class="fa-solid fa-user-clock"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            Daily Attendance
+                        </h3>
+
+                        <p>
+                            Record your attendance and current work status.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     NOT CHECKED IN
+                     ================================================= -->
+
+                <div class="status-badge"
+                     th:if="${attendance == null}">
+
+                    <span class="status-dot grey"></span>
+
+                    Offline — Not Checked In
+
+                </div>
+
+
+
+                <!-- =================================================
+                     WORKING / ONLINE
+                     ================================================= -->
+
+                <div class="status-badge working"
+                     th:if="${attendance != null
+                     and attendance.status.name() == 'WORKING'}">
+
+                    <span class="status-dot green"></span>
+
+                    Online — Working
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LUNCH / OFFLINE
+                     ================================================= -->
+
+                <div class="status-badge lunch"
+                     th:if="${attendance != null
+                     and attendance.status.name() == 'LUNCH'}">
+
+                    <span class="status-dot yellow"></span>
+
+                    Offline — On Lunch
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LUNCH EXCEEDED / OFFLINE
+                     ================================================= -->
+
+                <div class="status-badge lunch-exceeded"
+                     th:if="${attendance != null
+                     and attendance.status.name() == 'LUNCH_EXCEEDED'}">
+
+                    <span class="status-dot red"></span>
+
+                    Offline — Lunch Time Exceeded
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CHECKED OUT / OFFLINE
+                     ================================================= -->
+
+                <div class="status-badge checked-out"
+                     th:if="${attendance != null
+                     and attendance.status.name() == 'CHECKED_OUT'}">
+
+                    <span class="status-dot grey"></span>
+
+                    Offline — Checked Out
+
+                </div>
+
+
+
+                <!-- =================================================
+                     AWAY / OFFLINE
+                     ================================================= -->
+
+                <div class="status-badge away"
+                     th:if="${attendance != null
+                     and attendance.status.name() == 'AWAY'}">
+
+                    <span class="status-dot orange"></span>
+
+                    Offline — Away
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ATTENDANCE INFORMATION
+                 ================================================= -->
+
+            <div class="attendance-content">
+
+
+                <!-- =================================================
+                     CHECK IN
+                     ================================================= -->
+
+                <div class="attendance-time">
+
+                    <div class="time-icon blue">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Check In
+                        </span>
+
+
+                        <strong
+                                th:if="${attendance != null
+                                and attendance.checkIn != null}"
+                                th:text="${#temporals.format(attendance.checkIn, 'HH:mm')}">
+
+                            --
+
+                        </strong>
+
+
+                        <strong
+                                th:unless="${attendance != null
+                                and attendance.checkIn != null}">
+
+                            --
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LUNCH START
+                     ================================================= -->
+
+                <div class="attendance-time">
+
+                    <div class="time-icon yellow">
+
+                        <i class="fa-solid fa-utensils"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Lunch Started
+                        </span>
+
+
+                        <strong
+                                th:if="${attendance != null
+                                and attendance.lunchStart != null}"
+                                th:text="${#temporals.format(attendance.lunchStart, 'HH:mm')}">
+
+                            --
+
+                        </strong>
+
+
+                        <strong
+                                th:unless="${attendance != null
+                                and attendance.lunchStart != null}">
+
+                            --
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LUNCH RETURN
+                     ================================================= -->
+
+                <div class="attendance-time">
+
+                    <div class="time-icon green">
+
+                        <i class="fa-solid fa-person-walking-arrow-right"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Returned
+                        </span>
+
+
+                        <strong
+                                th:if="${attendance != null
+                                and attendance.lunchEnd != null}"
+                                th:text="${#temporals.format(attendance.lunchEnd, 'HH:mm')}">
+
+                            --
+
+                        </strong>
+
+
+                        <strong
+                                th:unless="${attendance != null
+                                and attendance.lunchEnd != null}">
+
+                            --
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CHECK OUT
+                     ================================================= -->
+
+                <div class="attendance-time">
+
+                    <div class="time-icon red">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Check Out
+                        </span>
+
+
+                        <strong
+                                th:if="${attendance != null
+                                and attendance.checkOut != null}"
+                                th:text="${#temporals.format(attendance.checkOut, 'HH:mm')}">
+
+                            --
+
+                        </strong>
+
+
+                        <strong
+                                th:unless="${attendance != null
+                                and attendance.checkOut != null}">
+
+                            --
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LUNCH COUNTDOWN
+                 ================================================= -->
+
+            <div class="lunch-countdown"
+                 id="lunchCountdownContainer"
+
+                 th:if="${attendance != null
+                 and attendance.status.name() == 'LUNCH'
+                 and attendance.lunchStart != null
+                 and attendance.lunchEnd == null}">
+
+
+                <div class="countdown-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+
+                <div class="countdown-information">
+
+                    <span>
+                        LUNCH TIME REMAINING
+                    </span>
+
+
+                    <strong id="lunchCountdown">
+                        01:30:00
+                    </strong>
+
+
+                    <small>
+                        Maximum lunch period: 1 hour 30 minutes
+                    </small>
+
+                </div>
+
+
+                <div class="countdown-warning">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Return to work manually before the timer expires.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LUNCH EXCEEDED WARNING
+                 ================================================= -->
+
+            <div class="lunch-exceeded-message"
+
+                 th:if="${attendance != null
+                 and attendance.status.name() == 'LUNCH_EXCEEDED'
+                 and attendance.lunchEnd == null}">
+
+
+                <div class="exceeded-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Lunch Time Exceeded
+                    </strong>
+
+
+                    <span>
+                        Your 1 hour 30 minute lunch period has expired.
+                        You are still offline until you manually return to work.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ATTENDANCE ACTIONS
+                 ================================================= -->
+
+            <div class="attendance-actions">
+
+
+                <!-- =================================================
+                     CHECK IN
+                     ================================================= -->
+
+                <form th:if="${attendance == null}"
+                      th:action="@{/technician-dashboard/check-in}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <button type="submit"
+                            class="attendance-button check-in-button">
+
+                        <i class="fa-solid fa-right-to-bracket"></i>
+
+                        Check In
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- =================================================
+                     START LUNCH
+                     ================================================= -->
+
+                <form th:if="${attendance != null
+                     and attendance.status.name() == 'WORKING'
+                     and attendance.checkOut == null}"
+
+                      th:action="@{/technician-dashboard/lunch}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <button type="submit"
+                            class="attendance-button lunch-button">
+
+                        <i class="fa-solid fa-utensils"></i>
+
+                        I'm on Lunch
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- =================================================
+                     RETURN FROM NORMAL LUNCH
+                     ================================================= -->
+
+                <form th:if="${attendance != null
+                     and attendance.status.name() == 'LUNCH'
+                     and attendance.checkOut == null}"
+
+                      th:action="@{/technician-dashboard/return}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <button type="submit"
+                            class="attendance-button return-button">
+
+                        <i class="fa-solid fa-person-walking-arrow-right"></i>
+
+                        Return to Work
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- =================================================
+                     RETURN AFTER LUNCH TIME EXCEEDED
+                     ================================================= -->
+
+                <form th:if="${attendance != null
+                     and attendance.status.name() == 'LUNCH_EXCEEDED'
+                     and attendance.checkOut == null}"
+
+                      th:action="@{/technician-dashboard/return}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <button type="submit"
+                            class="attendance-button return-button">
+
+                        <i class="fa-solid fa-person-walking-arrow-right"></i>
+
+                        Return to Work
+
+                    </button>
+
+                </form>
+
+
+
+                <!-- =================================================
+                     CHECK OUT
+                     ================================================= -->
+
+                <form th:if="${attendance != null
+                     and attendance.checkOut == null}"
+
+                      th:action="@{/technician-dashboard/check-out}"
+                      method="post">
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}">
+
+
+                    <button type="submit"
+                            class="attendance-button checkout-button">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Check Out
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TICKET SUMMARY
+             ================================================= -->
+
+        <section class="section-block">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        SUPPORT WORK
+                    </span>
+
+
+                    <h3>
+                        My Ticket Overview
+                    </h3>
+
+                </div>
+
+
+                <a href="/tickets"
+                   class="view-all-button">
+
+                    View Tickets
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+
+            <div class="stats-grid">
+
+
+                <!-- ASSIGNED -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Assigned Tickets
+                        </span>
+
+
+                        <strong th:text="${assignedTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- OPEN -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon red">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Open
+                        </span>
+
+
+                        <strong th:text="${openTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- IN PROGRESS -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon yellow">
+
+                        <i class="fa-solid fa-spinner"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            In Progress
+                        </span>
+
+
+                        <strong th:text="${inProgressTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESOLVED -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Resolved
+                        </span>
+
+
+                        <strong th:text="${resolvedTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+             ================================================= -->
+
+        <section class="section-block">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        QUICK ACTIONS
+                    </span>
+
+
+                    <h3>
+                        Technician Tools
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="quick-actions">
+
+
+                <!-- VIEW TICKETS -->
+
+                <a href="/tickets"
+                   class="quick-action">
+
+                    <div class="quick-icon blue">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            View IT Tickets
+                        </strong>
+
+
+                        <span>
+                            View and manage support tickets
+                        </span>
+
+                    </div>
+
+
+                    <i class="fa-solid fa-chevron-right arrow"></i>
+
+                </a>
+
+
+
+                <!-- CREATE TICKET -->
+
+                <a href="/tickets/new"
+                   class="quick-action">
+
+                    <div class="quick-icon green">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Create Ticket
+                        </strong>
+
+
+                        <span>
+                            Create a new IT support request
+                        </span>
+
+                    </div>
+
+
+                    <i class="fa-solid fa-chevron-right arrow"></i>
+
+                </a>
+
+
+
+                <!-- USER MANAGEMENT -->
+
+                <a href="/users"
+                   class="quick-action restricted-action">
+
+                    <div class="quick-icon purple">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            User Management
+                        </strong>
+
+
+                        <span>
+                            Administrator function
+                        </span>
+
+                    </div>
+
+
+                    <i class="fa-solid fa-lock arrow"></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="dashboard-footer">
+
+            <i class="fa-solid fa-headset"></i>
+
+
+            <span>
+                Gauteng EMS IT Support
+            </span>
+
+
+            <span>
+                |
+            </span>
+
+
+            <span>
+                Reliable. Responsive. Ready to Help.
+            </span>
+
+        </footer>
+
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     LUNCH COUNTDOWN JAVASCRIPT
+     ========================================================= -->
+
+<script th:inline="javascript">
+
+    /*
+     * =========================================================
+     * LUNCH COUNTDOWN
+     * =========================================================
+     *
+     * The server provides the lunch start time.
+     *
+     * The maximum lunch period is exactly:
+     *
+     * 90 minutes = 5,400 seconds
+     *
+     * The countdown runs in the browser.
+     *
+     * IMPORTANT:
+     *
+     * Reaching 00:00 does NOT automatically return
+     * the technician to work.
+     *
+     * The technician must still click:
+     *
+     * "Return to Work"
+     *
+     * =========================================================
+     */
+
+
+    const lunchStart =
+        /*[[${attendance != null
+        and attendance.lunchStart != null
+        ? attendance.lunchStart.toString()
+        : null}]]*/ null;
+
+
+    const lunchStatus =
+        /*[[${attendance != null
+        ? attendance.status.name()
+        : 'NONE'}]]*/ "NONE";
+
+
+    const lunchEnd =
+        /*[[${attendance != null
+        and attendance.lunchEnd != null
+        ? attendance.lunchEnd.toString()
+        : null}]]*/ null;
+
+
+    const lunchCountdown =
+        document.getElementById(
+            "lunchCountdown"
+        );
+
+
+    const lunchCountdownContainer =
+        document.getElementById(
+            "lunchCountdownContainer"
+        );
+
+
+    /*
+     * Only run the countdown while the technician
+     * is actually on lunch.
+     */
+
+    if (
+        lunchCountdown &&
+        lunchCountdownContainer &&
+        lunchStart &&
+        lunchStatus === "LUNCH" &&
+        !lunchEnd
+    ) {
+
+
+        /*
+         * Convert server LocalDateTime
+         * into a JavaScript Date.
+         *
+         * The server and browser are expected
+         * to use the same local timezone.
+         */
+
+        const startTime =
+            new Date(
+                lunchStart
+                    .replace("T", " ")
+                    .replace(
+                        /(\d{2}):(\d{2}):(\d{2})(\.\d+)?$/,
+                        "$1:$2:$3"
+                    )
+            );
+
+
+        /*
+         * 90 MINUTES
+         */
+
+        const lunchLimitMilliseconds =
+            90 * 60 * 1000;
+
+
+        const lunchEndTime =
+            startTime.getTime()
+            + lunchLimitMilliseconds;
+
+
+
+        function updateLunchCountdown() {
+
+
+            const now =
+                new Date().getTime();
+
+
+            let remaining =
+                lunchEndTime - now;
+
+
+            /*
+             * =====================================================
+             * LUNCH TIME HAS EXPIRED
+             * =====================================================
+             */
+
+            if (remaining <= 0) {
+
+                lunchCountdown.textContent =
+                    "00:00:00";
+
+
+                lunchCountdownContainer.classList.add(
+                    "countdown-expired"
+                );
+
+
+                /*
+                 * We do NOT submit the return form.
+                 *
+                 * We do NOT automatically mark the technician
+                 * as working.
+                 *
+                 * We simply refresh the dashboard.
+                 *
+                 * The backend will then detect that the
+                 * 90 minutes have expired and change:
+                 *
+                 * LUNCH
+                 *      ↓
+                 * LUNCH_EXCEEDED
+                 */
+
+                setTimeout(
+                    function () {
+
+                        window.location.reload();
+
+                    },
+                    1000
+                );
+
+
+                return;
+            }
+
+
+
+            /*
+             * =====================================================
+             * CONVERT REMAINING TIME
+             * =====================================================
+             */
+
+            const totalSeconds =
+                Math.floor(
+                    remaining / 1000
+                );
+
+
+            const hours =
+                Math.floor(
+                    totalSeconds / 3600
+                );
+
+
+            const minutes =
+                Math.floor(
+                    (totalSeconds % 3600) / 60
+                );
+
+
+            const seconds =
+                totalSeconds % 60;
+
+
+
+            /*
+             * FORMAT
+             *
+             * HH:MM:SS
+             */
+
+            lunchCountdown.textContent =
+                String(hours).padStart(2, "0")
+                + ":"
+                + String(minutes).padStart(2, "0")
+                + ":"
+                + String(seconds).padStart(2, "0");
+
+        }
+
+
+
+        /*
+         * First update immediately.
+         */
+
+        updateLunchCountdown();
+
+
+        /*
+         * Update every second.
+         */
+
+        setInterval(
+            updateLunchCountdown,
+            1000
+        );
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

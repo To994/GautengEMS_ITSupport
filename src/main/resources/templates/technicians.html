@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Technicians | Gauteng EMS IT Support</title>
+
+    <link rel="stylesheet"
+          href="/css/technicians.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="top-header">
+
+    <div class="header-left">
+
+        <a href="/dashboard"
+           class="back-button">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </a>
+
+        <div>
+
+            <h1>
+                Technicians
+            </h1>
+
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-brand">
+
+        <img src="/images/gauteng-ems-logo.jpeg"
+             alt="Gauteng EMS">
+
+        <div>
+
+            <strong>
+                GAUTENG EMS
+            </strong>
+
+            <span>
+                IT SUPPORT
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="page">
+
+    <div class="container">
+
+
+        <!-- PAGE HEADING -->
+
+        <div class="page-heading">
+
+            <div>
+
+                <span>
+                    IT MANAGEMENT
+                </span>
+
+                <h2>
+                    Technician Management
+                </h2>
+
+                <p>
+                    View technicians, availability and current
+                    ticket workload.
+                </p>
+
+            </div>
+
+
+            <a href="/dashboard"
+               class="dashboard-button">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             STATISTICS
+             ================================================= -->
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card blue">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-user-gear"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Total Technicians
+                    </span>
+
+                    <strong th:text="${technicians.size()}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card green">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Active Technicians
+                    </span>
+
+                    <strong th:text="${activeTechnicians}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card red">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-user-slash"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Inactive Technicians
+                    </span>
+
+                    <strong th:text="${inactiveTechnicians}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card orange">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Assigned Tickets
+                    </span>
+
+                    <strong th:text="${assignedTickets}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card purple">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-ticket-simple"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Unassigned Tickets
+                    </span>
+
+                    <strong th:text="${unassignedTickets}">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TECHNICIAN LIST
+             ================================================= -->
+
+        <section class="technician-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                    <h3>
+
+                        <i class="fa-solid fa-users-gear"></i>
+
+                        IT Technicians
+
+                    </h3>
+
+                    <p>
+                        Current EMS IT support technicians
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="technician-list">
+
+
+                <!-- TECHNICIAN -->
+
+                <div class="technician-row"
+                     th:each="technician : ${technicians}">
+
+
+                    <!-- AVATAR -->
+
+                    <div class="technician-avatar"
+                         th:text="${#strings.substring(
+                         technician.firstName,0,1).toUpperCase()
+                         + #strings.substring(
+                         technician.surname,0,1).toUpperCase()}">
+
+                        TM
+
+                    </div>
+
+
+
+                    <!-- DETAILS -->
+
+                    <div class="technician-details">
+
+                        <strong>
+
+                            <span
+                                    th:text="${technician.firstName
+                                + ' '
+                                + technician.surname}">
+
+                                Technician Name
+
+                            </span>
+
+                        </strong>
+
+
+                        <span>
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span th:text="${technician.username}">
+                                username
+                            </span>
+
+                        </span>
+
+
+                        <span>
+
+                            <i class="fa-solid fa-building"></i>
+
+                            <span th:text="${technician.department}">
+                                IT
+                            </span>
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div class="technician-status">
+
+                        <span class="status active"
+                              th:if="${technician.active}">
+
+                            <i class="fa-solid fa-circle"></i>
+
+                            Available
+
+                        </span>
+
+
+                        <span class="status inactive"
+                              th:unless="${technician.active}">
+
+                            <i class="fa-solid fa-circle"></i>
+
+                            Inactive
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- VIEW -->
+
+                    <a th:href="@{/technicians/{id}
+                              (id=${technician.id})}"
+                       class="view-button">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                        View
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- EMPTY -->
+
+                <div class="empty-state"
+                     th:if="${#lists.isEmpty(technicians)}">
+
+                    <i class="fa-solid fa-user-gear"></i>
+
+                    <strong>
+                        No technicians found
+                    </strong>
+
+                    <span>
+                        No IT technicians have been registered yet.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <i class="fa-solid fa-headset"></i>
+
+            Gauteng EMS IT Support
+
+            <span>|</span>
+
+            Reliable. Responsive. Ready to Help.
+
+        </footer>
+
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

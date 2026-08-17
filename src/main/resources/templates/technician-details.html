@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Technician Details | Gauteng EMS IT Support
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/technician-details.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="top-header">
+
+    <div class="header-left">
+
+        <a href="/technicians"
+           class="back-button"
+           title="Back to Technicians">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+        </a>
+
+
+        <div class="header-title">
+
+            <h1>
+                Technician Details
+            </h1>
+
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         GAUTENG EMS BRAND
+         ===================================================== -->
+
+    <div class="header-brand">
+
+        <img src="/images/gauteng-ems-logo.jpeg"
+             alt="Gauteng EMS Logo">
+
+        <div>
+
+            <strong>
+                GAUTENG EMS
+            </strong>
+
+            <span>
+                IT SUPPORT
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN PAGE
+     ========================================================= -->
+
+<main class="page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
+
+        <div class="page-heading">
+
+            <div>
+
+                <span class="section-label">
+                    IT MANAGEMENT
+                </span>
+
+                <h2>
+                    Technician Profile
+                </h2>
+
+                <p>
+                    View technician information and current
+                    support workload.
+                </p>
+
+            </div>
+
+
+            <a href="/technicians"
+               class="back-technicians-button">
+
+                <i class="fa-solid fa-users-gear"></i>
+
+                Back to Technicians
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =================================================
+             TECHNICIAN PROFILE
+             ================================================= -->
+
+        <section class="profile-card">
+
+
+            <!-- =================================================
+                 AVATAR
+                 ================================================= -->
+
+            <div class="large-avatar"
+                 th:text="${#strings.substring(
+                    technician.firstName, 0, 1).toUpperCase()
+                    + #strings.substring(
+                    technician.surname, 0, 1).toUpperCase()}">
+
+                TM
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TECHNICIAN INFORMATION
+                 ================================================= -->
+
+            <div class="profile-information">
+
+
+                <span class="profile-label">
+                    IT TECHNICIAN
+                </span>
+
+
+                <h3
+                        th:text="${technician.firstName + ' ' + technician.surname}">
+
+                    Technician Name
+
+                </h3>
+
+
+                <div class="profile-meta">
+
+
+                    <!-- USERNAME -->
+
+                    <span>
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <strong>
+                            Username:
+                        </strong>
+
+                        <span th:text="${technician.username}">
+                            username
+                        </span>
+
+                    </span>
+
+
+
+                    <!-- DEPARTMENT -->
+
+                    <span>
+
+                        <i class="fa-solid fa-building"></i>
+
+                        <strong>
+                            Department:
+                        </strong>
+
+                        <span th:text="${technician.department}">
+                            IT Support
+                        </span>
+
+                    </span>
+
+
+
+                    <!-- EMAIL -->
+
+                    <span>
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <strong>
+                            Email:
+                        </strong>
+
+                        <span th:text="${technician.email}">
+                            email@gauteng.gov.za
+                        </span>
+
+                    </span>
+
+
+
+                    <!-- PHONE -->
+
+                    <span>
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        <strong>
+                            Phone:
+                        </strong>
+
+                        <span th:text="${technician.phone}">
+                            Not provided
+                        </span>
+
+                    </span>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TECHNICIAN STATUS
+                 ================================================= -->
+
+            <div class="profile-status">
+
+
+                <span class="status active"
+                      th:if="${technician.active}">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    Available
+
+                </span>
+
+
+                <span class="status inactive"
+                      th:unless="${technician.active}">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    Inactive
+
+                </span>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WORKLOAD STATISTICS
+             ================================================= -->
+
+        <div class="stats-grid">
+
+
+            <!-- TOTAL ASSIGNED -->
+
+            <div class="stat-card blue">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        Assigned Tickets
+                    </span>
+
+                    <strong th:text="${totalAssignedTickets}">
+                        0
+                    </strong>
+
+                    <small>
+                        Total assigned
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ACTIVE WORKLOAD -->
+
+            <div class="stat-card purple">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-spinner"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        Active Workload
+                    </span>
+
+                    <strong th:text="${activeWorkload}">
+                        0
+                    </strong>
+
+                    <small>
+                        Currently active
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OPEN -->
+
+            <div class="stat-card blue-light">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-folder-open"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        Open Tickets
+                    </span>
+
+                    <strong th:text="${openTickets}">
+                        0
+                    </strong>
+
+                    <small>
+                        Newly opened
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PENDING -->
+
+            <div class="stat-card orange">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-hourglass-half"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        Pending Tickets
+                    </span>
+
+                    <strong th:text="${pendingTickets}">
+                        0
+                    </strong>
+
+                    <small>
+                        Awaiting action
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- IN PROGRESS -->
+
+            <div class="stat-card purple">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-gears"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        In Progress
+                    </span>
+
+                    <strong th:text="${inProgressTickets}">
+                        0
+                    </strong>
+
+                    <small>
+                        Being handled
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RESOLVED -->
+
+            <div class="stat-card green">
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                </div>
+
+
+                <div class="stat-information">
+
+                    <span>
+                        Resolved Tickets
+                    </span>
+
+                    <strong th:text="${resolvedTickets}">
+                        0
+                    </strong>
+
+                    <small>
+                        Successfully resolved
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ASSIGNED TICKETS
+             ================================================= -->
+
+        <section class="tickets-card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="card-header">
+
+
+                <div>
+
+                    <h3>
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                        Assigned IT Tickets
+
+                    </h3>
+
+
+                    <p>
+                        Tickets currently assigned to this technician.
+                    </p>
+
+                </div>
+
+
+                <span class="ticket-count"
+                      th:text="${totalAssignedTickets + ' Tickets'}">
+
+                    0 Tickets
+
+                </span>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TICKET LIST
+                 ================================================= -->
+
+            <div class="ticket-list">
+
+
+                <!-- =================================================
+                     EACH ASSIGNED TICKET
+                     ================================================= -->
+
+                <a th:each="ticket : ${assignedTickets}"
+                   th:href="@{/tickets/{id}(id=${ticket.id})}"
+                   class="ticket-row">
+
+
+                    <!-- =================================================
+                         TICKET ICON
+                         ================================================= -->
+
+                    <div class="ticket-icon">
+
+
+                        <!-- DEFAULT -->
+
+                        <i class="fa-solid fa-computer"
+                           th:if="${ticket.category == null}">
+                        </i>
+
+
+                        <!-- HARDWARE -->
+
+                        <i class="fa-solid fa-laptop"
+                           th:if="${ticket.category == 'Hardware'}">
+                        </i>
+
+
+                        <!-- SOFTWARE -->
+
+                        <i class="fa-solid fa-code"
+                           th:if="${ticket.category == 'Software'}">
+                        </i>
+
+
+                        <!-- NETWORK -->
+
+                        <i class="fa-solid fa-network-wired"
+                           th:if="${ticket.category == 'Network'}">
+                        </i>
+
+
+                        <!-- PRINTER -->
+
+                        <i class="fa-solid fa-print"
+                           th:if="${ticket.category == 'Printer'}">
+                        </i>
+
+
+                        <!-- EMAIL -->
+
+                        <i class="fa-solid fa-envelope"
+                           th:if="${ticket.category == 'Email'}">
+                        </i>
+
+
+                        <!-- ACCOUNT -->
+
+                        <i class="fa-solid fa-key"
+                           th:if="${ticket.category == 'Account'}">
+                        </i>
+
+
+                        <!-- SYSTEM -->
+
+                        <i class="fa-solid fa-gear"
+                           th:if="${ticket.category == 'System'}">
+                        </i>
+
+
+                        <!-- OTHER -->
+
+                        <i class="fa-solid fa-circle-question"
+                           th:if="${ticket.category == 'Other'}">
+                        </i>
+
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         TICKET DETAILS
+                         ================================================= -->
+
+                    <div class="ticket-details">
+
+
+                        <strong th:text="${ticket.title}">
+
+                            Computer not connecting to network
+
+                        </strong>
+
+
+                        <span>
+
+                            Ticket #
+
+                            <b th:text="${ticket.ticketNumber}">
+                                EMS-000000
+                            </b>
+
+                        </span>
+
+
+                        <small th:text="${ticket.category}">
+                            Network
+                        </small>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         TICKET STATUS
+                         ================================================= -->
+
+                    <div class="ticket-status">
+
+
+                        <!-- OPEN -->
+
+                        <span class="status-badge open"
+                              th:if="${ticket.status == 'OPEN'}">
+
+                            <i class="fa-solid fa-folder-open"></i>
+
+                            OPEN
+
+                        </span>
+
+
+                        <!-- PENDING -->
+
+                        <span class="status-badge pending"
+                              th:if="${ticket.status == 'PENDING'}">
+
+                            <i class="fa-solid fa-hourglass-half"></i>
+
+                            PENDING
+
+                        </span>
+
+
+                        <!-- IN PROGRESS -->
+
+                        <span class="status-badge progress"
+                              th:if="${ticket.status == 'IN_PROGRESS'}">
+
+                            <i class="fa-solid fa-spinner"></i>
+
+                            IN PROGRESS
+
+                        </span>
+
+
+                        <!-- RESOLVED -->
+
+                        <span class="status-badge resolved"
+                              th:if="${ticket.status == 'RESOLVED'}">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            RESOLVED
+
+                        </span>
+
+
+                        <!-- OTHER -->
+
+                        <span class="status-badge"
+                              th:if="${ticket.status != 'OPEN'
+                              and ticket.status != 'PENDING'
+                              and ticket.status != 'IN_PROGRESS'
+                              and ticket.status != 'RESOLVED'}"
+                              th:text="${ticket.status}">
+
+                            STATUS
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         ARROW
+                         ================================================= -->
+
+                    <div class="ticket-arrow">
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </div>
+
+
+                </a>
+
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                     ================================================= -->
+
+                <div class="empty-state"
+                     th:if="${#lists.isEmpty(assignedTickets)}">
+
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+
+                    <strong>
+                        No tickets assigned
+                    </strong>
+
+
+                    <span>
+                        This technician currently has no assigned
+                        IT support tickets.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="page-footer">
+
+            <i class="fa-solid fa-headset"></i>
+
+            <span>
+                Gauteng EMS IT Support
+            </span>
+
+            <span>
+                |
+            </span>
+
+            <span>
+                Reliable. Responsive. Ready to Help.
+            </span>
+
+        </footer>
+
+
+    </div>
+
+</main>
+
+
+</body>
+
+</html>
