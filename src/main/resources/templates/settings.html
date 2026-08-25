@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Settings | Gauteng EMS IT Support
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/settings.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div class="settings-wrapper">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="settings-header">
+
+        <div class="header-left">
+
+            <a href="/dashboard"
+               class="back-button"
+               title="Back to Dashboard">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </a>
+
+
+            <div class="header-title">
+
+                <span>
+                    SYSTEM ADMINISTRATION
+                </span>
+
+                <h1>
+                    Settings
+                </h1>
+
+                <p>
+                    Gauteng EMS IT Support Management System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-brand">
+
+            <img src="/images/gauteng-ems-logo.jpeg"
+                 alt="Gauteng EMS Logo">
+
+            <div>
+
+                <strong>
+                    GAUTENG EMS
+                </strong>
+
+                <span>
+                    IT SUPPORT
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="settings-page">
+
+
+        <!-- =================================================
+             PAGE INTRO
+             ================================================= -->
+
+        <div class="page-intro">
+
+            <div>
+
+                <span class="section-label">
+                    ADMINISTRATOR SETTINGS
+                </span>
+
+                <h2>
+                    System Settings
+                </h2>
+
+                <p>
+                    Manage your administrator account and
+                    view the configuration of the Gauteng EMS
+                    IT Support Management System.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <i class="fa-solid fa-circle"></i>
+
+                <span>
+                    System Operational
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACCOUNT INFORMATION
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon blue">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Administrator Account
+                    </h3>
+
+                    <p>
+                        Information about the currently
+                        logged-in administrator.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <!-- NAME -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong
+                            th:text="${user.firstName + ' ' + user.surname}">
+
+                        Administrator
+
+                    </strong>
+
+                </div>
+
+
+                <!-- USERNAME -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Username
+                    </span>
+
+                    <strong
+                            th:text="${user.username}">
+
+                        administrator
+
+                    </strong>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Email Address
+                    </span>
+
+                    <strong
+                            th:text="${user.email}">
+
+                        admin@gauteng.gov.za
+
+                    </strong>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Phone Number
+                    </span>
+
+                    <strong
+                            th:text="${user.phone != null
+                                      and !user.phone.isBlank()
+                                      ? user.phone
+                                      : 'Not provided'}">
+
+                        Not provided
+
+                    </strong>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Department
+                    </span>
+
+                    <strong
+                            th:text="${user.department}">
+
+                        IT Department
+
+                    </strong>
+
+                </div>
+
+
+                <!-- ROLE -->
+
+                <div class="setting-item">
+
+                    <span>
+                        System Role
+                    </span>
+
+                    <strong>
+
+                        <span class="role-badge">
+
+                            <i class="fa-solid fa-user-shield"></i>
+
+                            Administrator
+
+                        </span>
+
+                    </strong>
+
+                </div>
+
+
+                <!-- DISTRICT -->
+
+                <div class="setting-item">
+
+                    <span>
+                        District
+                    </span>
+
+                    <strong
+                            th:text="${user.district}">
+
+                        Gauteng Provincial
+
+                    </strong>
+
+                </div>
+
+
+                <!-- STATION -->
+
+                <div class="setting-item">
+
+                    <span>
+                        EMS Station / Unit
+                    </span>
+
+                    <strong
+                            th:text="${user.stationUnit}">
+
+                        IT Department
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT ACTION -->
+
+            <div class="settings-actions">
+
+                <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-user-pen"></i>
+
+                    Edit Administrator Account
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SYSTEM INFORMATION
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon green">
+
+                    <i class="fa-solid fa-server"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        System Information
+                    </h3>
+
+                    <p>
+                        Current application and infrastructure
+                        information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Application
+                    </span>
+
+                    <strong
+                            th:text="${systemName}">
+
+                        Gauteng EMS IT Support Management System
+
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Version
+                    </span>
+
+                    <strong
+                            th:text="${systemVersion}">
+
+                        1.0.0
+
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Database
+                    </span>
+
+                    <strong class="status-online">
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        <span th:text="${databaseStatus}">
+                            Connected
+                        </span>
+
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Application Status
+                    </span>
+
+                    <strong class="status-online">
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        <span th:text="${systemStatus}">
+                            Operational
+                        </span>
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TICKET SYSTEM
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon purple">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Ticket System
+                    </h3>
+
+                    <p>
+                        Current ticket management configuration.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Ticket Reference
+                    </span>
+
+                    <strong>
+                        EMS-XXXXXXXX
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Ticket Assignment
+                    </span>
+
+                    <strong>
+                        Admin / Technician
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Ticket Statuses
+                    </span>
+
+                    <strong>
+                        Open · Pending · In Progress · Resolved
+                    </strong>
+
+                </div>
+
+
+                <div class="setting-item">
+
+                    <span>
+                        Priority Levels
+                    </span>
+
+                    <strong>
+                        Low · Medium · High · Urgent · Critical
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- TICKET ACTION -->
+
+            <div class="settings-actions">
+
+                <a href="/tickets"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    Manage IT Tickets
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             EMS LOCATIONS
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon orange">
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        EMS Locations
+                    </h3>
+
+                    <p>
+                        District and station configuration.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="location-list">
+
+
+                <!-- =================================================
+                     EKURHULENI
+                     ================================================= -->
+
+                <div class="location-item">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <strong>
+                            Ekurhuleni (COE)
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations configured
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     JOHANNESBURG
+                     ================================================= -->
+
+                <div class="location-item">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <strong>
+                            Johannesburg (COJ)
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations configured
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     SEDIBENG
+                     ================================================= -->
+
+                <div class="location-item">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <strong>
+                            Sedibeng
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations configured
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     TSHWANE
+                     ================================================= -->
+
+                <div class="location-item">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <strong>
+                            Tshwane (COT)
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations configured
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     WEST RAND
+                     ================================================= -->
+
+                <div class="location-item">
+
+                    <div>
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <strong>
+                            West Rand
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations configured
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     ECC
+                     ================================================= -->
+
+                <div class="location-item pending">
+
+                    <div>
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        <strong>
+                            ECC
+                        </strong>
+
+                    </div>
+
+                    <span>
+                        Stations to be updated
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOCATION MANAGEMENT ACTIONS
+                 ================================================= -->
+
+            <div class="settings-actions">
+
+                <!-- EXISTING BUTTON - KEEPING IT -->
+
+                <a href="/users"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Manage User Locations
+
+                </a>
+
+
+                <!-- NEW BUTTON -->
+
+                <a href="/locations"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                    Manage EMS Locations
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECURITY
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon red">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Security
+                    </h3>
+
+                    <p>
+                        Account security and access information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-list">
+
+
+                <!-- PASSWORD -->
+
+                <div class="security-item">
+
+                    <div>
+
+                        <div class="security-icon">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Password
+                            </strong>
+
+                            <span>
+                                Your password is protected and
+                                is not displayed here.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="security-status">
+                        Protected
+                    </span>
+
+                </div>
+
+
+                <!-- ACCOUNT STATUS -->
+
+                <div class="security-item">
+
+                    <div>
+
+                        <div class="security-icon">
+
+                            <i class="fa-solid fa-user-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Account Status
+                            </strong>
+
+                            <span>
+                                Your administrator account is
+                                currently active.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <span class="security-status">
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        Active
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- SECURITY ACTION -->
+
+            <div class="settings-actions">
+
+                <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                   class="settings-action-button security-action">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                    Manage Account Security
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             QUICK MANAGEMENT
+             ================================================= -->
+
+        <section class="settings-card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon blue">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Quick Management
+                    </h3>
+
+                    <p>
+                        Access the main administration areas
+                        of the system.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+
+                <!-- USERS -->
+
+                <div class="setting-item">
+
+                    <span>
+                        User Management
+                    </span>
+
+                    <strong>
+                        Manage EMS system users
+                    </strong>
+
+                </div>
+
+
+                <!-- TECHNICIANS -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Technician Management
+                    </span>
+
+                    <strong>
+                        Manage IT technicians
+                    </strong>
+
+                </div>
+
+
+                <!-- REPORTS -->
+
+                <div class="setting-item">
+
+                    <span>
+                        Reports
+                    </span>
+
+                    <strong>
+                        View IT support reports
+                    </strong>
+
+                </div>
+
+
+                <!-- TICKETS -->
+
+                <div class="setting-item">
+
+                    <span>
+                        IT Tickets
+                    </span>
+
+                    <strong>
+                        Manage support requests
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-actions">
+
+
+                <a href="/users"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    Users
+
+                </a>
+
+
+                <a href="/technicians"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-user-gear"></i>
+
+                    Technicians
+
+                </a>
+
+
+                <a href="/reports"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                    Reports
+
+                </a>
+
+
+                <a href="/tickets"
+                   class="settings-action-button">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    Tickets
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             IMPORTANT NOTE
+             ================================================= -->
+
+        <div class="settings-note">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <div>
+
+                <strong>
+                    Administrator Settings
+                </strong>
+
+                <p>
+                    These settings provide an overview of the
+                    current Gauteng EMS IT Support System.
+                    Administrator account information can be
+                    updated through the existing user management
+                    system. Ticket, user, technician and report
+                    management remain available through their
+                    respective administration sections.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="settings-footer">
+
+        <div>
+
+            <i class="fa-solid fa-headset"></i>
+
+            <span>
+                Gauteng EMS IT Support
+            </span>
+
+        </div>
+
+
+        <span>
+            Reliable. Responsive. Ready to Help.
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+</body>
+
+</html>

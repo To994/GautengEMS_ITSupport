@@ -3,45 +3,39 @@ package za.gov.gautengems.itsupport.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import za.gov.gautengems.itsupport.entity.User;
+import za.gov.gautengems.itsupport.entity.PasswordResetToken;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-    // =========================================================
-    // FIND USER BY USERNAME
-    // =========================================================
-
-    Optional<User> findByUsername(String username);
+public interface PasswordResetTokenRepository
+        extends JpaRepository<PasswordResetToken, Long> {
 
 
     // =========================================================
-    // FIND USER BY EMAIL
+    // FIND TOKEN
     // =========================================================
 
-    Optional<User> findByEmail(String email);
-
-
-    // =========================================================
-    // CHECK IF USERNAME ALREADY EXISTS
-    // =========================================================
-
-    boolean existsByUsername(String username);
+    Optional<PasswordResetToken> findByToken(String token);
 
 
     // =========================================================
-    // CHECK IF EMAIL ALREADY EXISTS
+    // FIND TOKEN BY USER
     // =========================================================
 
-    boolean existsByEmail(String email);
+    Optional<PasswordResetToken> findByUserId(Long userId);
 
 
     // =========================================================
-    // CHECK IF PERSONAL NUMBER ALREADY EXISTS
+    // DELETE TOKEN BY USER
     // =========================================================
 
-    boolean existsByPersonalNumber(String personalNumber);
+    void deleteByUserId(Long userId);
 
+
+    // =========================================================
+    // CHECK IF TOKEN EXISTS
+    // =========================================================
+
+    boolean existsByToken(String token);
 }

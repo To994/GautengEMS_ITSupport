@@ -1,5 +1,6 @@
 package za.gov.gautengems.itsupport.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import za.gov.gautengems.itsupport.entity.TechnicianAttendance;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class TechnicianAttendanceService {
 
     private final TechnicianAttendanceRepository attendanceRepository;
+    private final UserService userService;
 
     /*
      * Maximum allowed lunch duration.
@@ -25,10 +27,56 @@ public class TechnicianAttendanceService {
     private static final long MAX_LUNCH_MINUTES = 90;
 
 
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
+
     public TechnicianAttendanceService(
-            TechnicianAttendanceRepository attendanceRepository) {
+            TechnicianAttendanceRepository attendanceRepository,
+            UserService userService) {
 
         this.attendanceRepository = attendanceRepository;
+        this.userService = userService;
+    }
+
+
+    // =========================================================
+    // GET LOGGED-IN TECHNICIAN
+    // =========================================================
+
+    public User getLoggedInTechnician(
+            Authentication authentication) {
+
+        if (authentication == null) {
+
+            throw new IllegalStateException(
+                    "Authentication information is not available."
+            );
+        }
+
+        String username =
+                authentication.getName();
+
+        User technician =
+                userService.findByUsername(username);
+
+        /*
+         * IMPORTANT:
+         *
+         * findByUsername() returns User directly,
+         * NOT Optional<User>.
+         *
+         * Therefore we DO NOT use .orElseThrow().
+         */
+        if (technician == null) {
+
+            throw new IllegalStateException(
+                    "Logged-in technician not found: "
+                            + username
+            );
+        }
+
+        return technician;
     }
 
 
@@ -38,6 +86,11 @@ public class TechnicianAttendanceService {
 
     public Optional<TechnicianAttendance> getTodayAttendance(
             User technician) {
+
+        if (technician == null) {
+
+            return Optional.empty();
+        }
 
         return attendanceRepository
                 .findByTechnicianAndWorkDate(
@@ -50,13 +103,15 @@ public class TechnicianAttendanceService {
     // =========================================================
     // GET ALL TODAY'S ATTENDANCE
     //
-    // Used by the ADMIN dashboard.
+    // Used by ADMIN dashboard.
     // =========================================================
 
     public List<TechnicianAttendance> getTodayAttendances() {
 
         return attendanceRepository
-                .findByWorkDate(LocalDate.now());
+                .findByWorkDate(
+                        LocalDate.now()
+                );
     }
 
 
@@ -66,6 +121,13 @@ public class TechnicianAttendanceService {
 
     public TechnicianAttendance checkIn(
             User technician) {
+
+        if (technician == null) {
+
+            throw new IllegalArgumentException(
+                    "Technician cannot be null."
+            );
+        }
 
         Optional<TechnicianAttendance> existing =
                 getTodayAttendance(technician);
@@ -80,10 +142,10 @@ public class TechnicianAttendanceService {
             TechnicianAttendance attendance =
                     existing.get();
 
+
             /*
-             * If the technician previously checked out,
-             * we do not allow another check-in for the
-             * same working day.
+             * If the technician already checked out,
+             * another check-in is not allowed.
              */
             if (attendance.getCheckOut() != null) {
 
@@ -92,15 +154,21 @@ public class TechnicianAttendanceService {
                 );
             }
 
+
             return attendance;
         }
 
 
+        /*
+         * Create new attendance record.
+         */
         TechnicianAttendance attendance =
                 new TechnicianAttendance();
 
 
-        attendance.setTechnician(technician);
+        attendance.setTechnician(
+                technician
+        );
 
         attendance.setWorkDate(
                 LocalDate.now()
@@ -138,7 +206,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Technician cannot go to lunch after checking out.
+         * Cannot go to lunch after checking out.
          */
         if (attendance.getCheckOut() != null) {
 
@@ -169,15 +237,15 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Clear previous lunch end if necessary.
+         * Clear previous lunch end time.
          */
-        attendance.setLunchEnd(null);
+        attendance.setLunchEnd(
+                null
+        );
 
 
         /*
-         * Technician becomes OFFLINE from the
-         * manager's point of view because they are
-         * currently on lunch.
+         * Change status to LUNCH.
          */
         attendance.setStatus(
                 TechnicianAttendance.AttendanceStatus.LUNCH
@@ -219,12 +287,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Record the actual return time.
-         *
-         * IMPORTANT:
-         * Even if the 90-minute limit was exceeded,
-         * the technician must still manually click
-         * "Return to Work".
+         * Record lunch return time.
          */
         attendance.setLunchEnd(
                 LocalDateTime.now()
@@ -232,7 +295,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Technician becomes WORKING again.
+         * Technician is working again.
          */
         attendance.setStatus(
                 TechnicianAttendance.AttendanceStatus.WORKING
@@ -262,7 +325,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Technician cannot check out twice.
+         * Cannot check out twice.
          */
         if (attendance.getCheckOut() != null) {
 
@@ -273,9 +336,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Technician cannot check out while on lunch.
-         *
-         * They must first return to work.
+         * Technician must return from lunch first.
          */
         if (attendance.getStatus()
                 == TechnicianAttendance.AttendanceStatus.LUNCH) {
@@ -287,7 +348,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Record actual checkout time.
+         * Record checkout time.
          */
         attendance.setCheckOut(
                 LocalDateTime.now()
@@ -295,7 +356,7 @@ public class TechnicianAttendanceService {
 
 
         /*
-         * Technician becomes offline.
+         * Change status to CHECKED_OUT.
          */
         attendance.setStatus(
                 TechnicianAttendance.AttendanceStatus.CHECKED_OUT
@@ -319,6 +380,7 @@ public class TechnicianAttendanceService {
          * No attendance record.
          */
         if (attendance == null) {
+
             return false;
         }
 
@@ -337,6 +399,7 @@ public class TechnicianAttendanceService {
          * No lunch start time.
          */
         if (attendance.getLunchStart() == null) {
+
             return false;
         }
 
@@ -355,7 +418,7 @@ public class TechnicianAttendanceService {
     // =========================================================
     // GET REMAINING LUNCH SECONDS
     //
-    // Used by the technician dashboard countdown.
+    // Used by technician dashboard countdown.
     // =========================================================
 
     public long getRemainingLunchSeconds(
@@ -373,9 +436,14 @@ public class TechnicianAttendanceService {
         }
 
 
+        /*
+         * Calculate lunch expiry time.
+         */
         LocalDateTime lunchEnd =
                 attendance.getLunchStart()
-                        .plusMinutes(MAX_LUNCH_MINUTES);
+                        .plusMinutes(
+                                MAX_LUNCH_MINUTES
+                        );
 
 
         long seconds =

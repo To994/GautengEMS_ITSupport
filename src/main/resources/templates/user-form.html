@@ -9,7 +9,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Add User | Gauteng EMS IT Support</title>
+    <title th:text="${user.id == null ? 'Add User' : 'Edit User'} + ' | Gauteng EMS IT Support'">
+        User | Gauteng EMS IT Support
+    </title>
 
     <link rel="stylesheet"
           href="/css/user-form.css">
@@ -21,8 +23,9 @@
 
 <body>
 
+
 <!-- =========================================================
-     FIXED TOP NAVIGATION
+     HEADER
      ========================================================= -->
 
 <header class="form-header">
@@ -39,9 +42,13 @@
 
         <div class="header-title">
 
-            <h1>Add New User</h1>
+            <h1 th:text="${user.id == null ? 'Add New User' : 'Edit User'}">
+                Add New User
+            </h1>
 
-            <p>Gauteng EMS IT Support Management System</p>
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
 
         </div>
 
@@ -71,7 +78,7 @@
 
 
 <!-- =========================================================
-     MAIN CONTENT
+     MAIN
      ========================================================= -->
 
 <main class="user-form-page">
@@ -79,7 +86,9 @@
     <div class="form-container">
 
 
-        <!-- PAGE HEADING -->
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
 
         <div class="page-heading">
 
@@ -89,10 +98,20 @@
                     USER MANAGEMENT
                 </span>
 
-                <h2>Create System User</h2>
+                <h2 th:text="${user.id == null
+                              ? 'Create System User'
+                              : 'Edit System User'}">
 
-                <p>
-                    Register a new administrator, technician or employee.
+                    Create System User
+
+                </h2>
+
+                <p th:text="${user.id == null
+                             ? 'Register an administrator, IT technician or station manager.'
+                             : 'Update the user information, EMS station and account details.'}">
+
+                    Register an administrator, IT technician or station manager.
+
                 </p>
 
             </div>
@@ -106,20 +125,28 @@
 
         <section class="form-card">
 
+
             <div class="card-heading">
 
                 <div class="card-heading-icon">
 
-                    <i class="fa-solid fa-user-plus"></i>
+                    <i class="fa-solid"
+                       th:classappend="${user.id == null
+                                        ? ' fa-user-plus'
+                                        : ' fa-user-pen'}">
+                    </i>
 
                 </div>
 
                 <div>
 
-                    <h3>User Information</h3>
+                    <h3>
+                        User Information
+                    </h3>
 
                     <p>
-                        Complete the information below to create the account.
+                        Complete the information below to manage
+                        the system account.
                     </p>
 
                 </div>
@@ -127,11 +154,20 @@
             </div>
 
 
-            <form th:action="@{/users/save}"
+            <!-- =================================================
+                 FORM
+                 ================================================= -->
+
+            <form th:action="${user.id == null
+                              ? '/users/save'
+                              : '/users/update/' + user.id}"
                   th:object="${user}"
                   method="post">
 
-                <!-- CSRF -->
+
+                <!-- =================================================
+                     CSRF
+                     ================================================= -->
 
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
@@ -150,7 +186,9 @@
 
                     <div>
 
-                        <h3>Personal Information</h3>
+                        <h3>
+                            Personal Information
+                        </h3>
 
                         <span>
                             Enter the user's EMS information.
@@ -169,7 +207,11 @@
                     <div class="form-group">
 
                         <label for="personalNumber">
-                            Personal Number <span>*</span>
+
+                            Personal Number
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -193,7 +235,11 @@
                     <div class="form-group">
 
                         <label for="phone">
+
                             Phone Number
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -204,7 +250,8 @@
                                     type="tel"
                                     id="phone"
                                     th:field="*{phone}"
-                                    placeholder="e.g. 071 234 5678">
+                                    placeholder="e.g. 071 234 5678"
+                                    required>
 
                         </div>
 
@@ -216,7 +263,11 @@
                     <div class="form-group">
 
                         <label for="firstName">
-                            First Name <span>*</span>
+
+                            First Name
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -240,7 +291,11 @@
                     <div class="form-group">
 
                         <label for="surname">
-                            Surname <span>*</span>
+
+                            Surname
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -264,7 +319,11 @@
                     <div class="form-group">
 
                         <label for="email">
-                            Email Address <span>*</span>
+
+                            Email Address
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -288,21 +347,209 @@
                     <div class="form-group">
 
                         <label for="department">
-                            Department <span>*</span>
+
+                            Department
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
 
                             <i class="fa-solid fa-building"></i>
 
-                            <input
-                                    type="text"
+                            <select
                                     id="department"
                                     th:field="*{department}"
-                                    placeholder="e.g. IT Support"
                                     required>
 
+                                <option value="">
+                                    Select department
+                                </option>
+
+                                <option value="Human Resources">
+                                    Human Resources (HR)
+                                </option>
+
+                                <option value="Supply Chain Management">
+                                    Supply Chain Management (SCM)
+                                </option>
+
+                                <option value="Finance Department">
+                                    Finance Department
+                                </option>
+
+                                <option value="Transport Department">
+                                    Transport Department
+                                </option>
+
+                                <option value="IT Department">
+                                    IT Department
+                                </option>
+
+                                <option value="Loss Control">
+                                    Loss Control
+                                </option>
+
+                                <option value="Labour">
+                                    Labour
+                                </option>
+
+                                <option value="CEO's Office">
+                                    CEO's Office
+                                </option>
+
+                                <option value="Clinical Services">
+                                    Clinical Services
+                                </option>
+
+                                <option value="Operations">
+                                    Operations
+                                </option>
+
+                                <option value="Emergency Medical Services">
+                                    Emergency Medical Services
+                                </option>
+
+                                <option value="Communications">
+                                    Communications
+                                </option>
+
+                                <option value="Quality Assurance">
+                                    Quality Assurance
+                                </option>
+
+                                <option value="Legal Services">
+                                    Legal Services
+                                </option>
+
+                                <option value="Corporate Services">
+                                    Corporate Services
+                                </option>
+
+                            </select>
+
                         </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         DISTRICT
+                         ================================================= -->
+
+                    <div class="form-group">
+
+                        <label for="district">
+
+                            District
+
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-map-location-dot"></i>
+
+                            <select
+                                    id="district"
+                                    th:field="*{district}"
+                                    required>
+
+                                <option value="">
+                                    Select district
+                                </option>
+
+
+                                <!-- =================================================
+                                     DATABASE DISTRICTS
+                                     ================================================= -->
+
+                                <option
+                                        th:each="district : ${districts}"
+                                        th:value="${district.name}"
+                                        th:text="${district.name + ' (' + district.code + ')'}">
+
+                                    District
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <small class="field-help">
+
+                            Districts are managed from EMS
+                            Location Management.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         EMS STATION / UNIT
+                         ================================================= -->
+
+                    <div class="form-group">
+
+                        <label for="stationUnit">
+
+                            EMS Station / Unit
+
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-house-medical"></i>
+
+
+                            <select
+                                    id="stationUnit"
+                                    th:field="*{stationUnit}"
+                                    required>
+
+                                <option value="">
+                                    Select district first
+                                </option>
+
+
+                                <!-- =================================================
+                                     ALL ACTIVE STATIONS FROM DATABASE
+                                     ================================================= -->
+
+                                <th:block
+                                        th:each="district : ${districts}">
+
+                                    <option
+                                            th:each="station : ${district.stations}"
+                                            th:if="${station.active}"
+                                            th:value="${station.name}"
+                                            th:text="${station.name}"
+                                            th:attr="
+                                                data-district=${district.name},
+                                                data-district-id=${district.id}">
+
+                                        EMS Station
+
+                                    </option>
+
+                                </th:block>
+
+                            </select>
+
+                        </div>
+
+                        <small class="field-help">
+
+                            Select a district first. Only active EMS
+                            stations belonging to that district will appear.
+
+                        </small>
 
                     </div>
 
@@ -321,7 +568,9 @@
 
                     <div>
 
-                        <h3>Account Information</h3>
+                        <h3>
+                            Account Information
+                        </h3>
 
                         <span>
                             Create the user's login credentials and role.
@@ -340,7 +589,11 @@
                     <div class="form-group">
 
                         <label for="username">
-                            Username <span>*</span>
+
+                            Username
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -364,7 +617,13 @@
                     <div class="form-group">
 
                         <label for="password">
-                            Password <span>*</span>
+
+                            Password
+
+                            <span th:if="${user.id == null}">
+                                *
+                            </span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -375,10 +634,17 @@
                                     type="password"
                                     id="password"
                                     th:field="*{password}"
-                                    placeholder="Enter password"
-                                    required>
+                                    th:attr="required=${user.id == null}"
+                                    placeholder="Enter password">
 
                         </div>
+
+                        <small class="field-help"
+                               th:if="${user.id != null}">
+
+                            Leave blank to keep the current password.
+
+                        </small>
 
                     </div>
 
@@ -388,7 +654,11 @@
                     <div class="form-group">
 
                         <label for="role">
-                            User Role <span>*</span>
+
+                            User Role
+
+                            <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -412,8 +682,8 @@
                                     IT Technician
                                 </option>
 
-                                <option value="EMPLOYEE">
-                                    Employee
+                                <option value="STATION_MANAGER">
+                                    Station Manager
                                 </option>
 
                             </select>
@@ -428,7 +698,9 @@
                     <div class="form-group">
 
                         <label for="active">
+
                             Account Status
+
                         </label>
 
                         <div class="input-wrapper">
@@ -475,20 +747,33 @@
                     <button type="submit"
                             class="save-button">
 
-                        <i class="fa-solid fa-user-plus"></i>
+                        <i class="fa-solid"
+                           th:classappend="${user.id == null
+                                            ? ' fa-user-plus'
+                                            : ' fa-user-pen'}">
+                        </i>
 
-                        Create User
+                        <span th:text="${user.id == null
+                                        ? 'Create User'
+                                        : 'Update User'}">
+
+                            Create User
+
+                        </span>
 
                     </button>
 
                 </div>
+
 
             </form>
 
         </section>
 
 
-        <!-- FOOTER -->
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
 
         <footer class="form-footer">
 
@@ -509,6 +794,220 @@
     </div>
 
 </main>
+
+
+<!-- =========================================================
+     DISTRICT → STATION FILTER
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+
+            const districtSelect =
+                document.getElementById("district");
+
+
+            const stationSelect =
+                document.getElementById("stationUnit");
+
+
+            /*
+             * Existing station when editing.
+             */
+
+            const existingStation =
+                stationSelect.value;
+
+
+            /*
+             * Store every station option.
+             *
+             * We don't recreate the stations.
+             * We simply show/hide the database-generated
+             * options.
+             */
+
+            const allStationOptions =
+                Array.from(
+                    stationSelect.querySelectorAll(
+                        "option[data-district]"
+                    )
+                );
+
+
+            /*
+             * =====================================================
+             * UPDATE STATIONS
+             * =====================================================
+             */
+
+            function updateStations(
+                restoreExistingStation
+            ) {
+
+                const selectedDistrict =
+                    districtSelect.value;
+
+
+                /*
+                 * Hide every station first.
+                 */
+
+                allStationOptions.forEach(
+                    function (option) {
+
+                        option.hidden = true;
+
+                        option.disabled = true;
+
+                    }
+                );
+
+
+                /*
+                 * Clear current station selection.
+                 */
+
+                stationSelect.value = "";
+
+
+                /*
+                 * No district selected.
+                 */
+
+                if (!selectedDistrict) {
+
+                    stationSelect.disabled = true;
+
+                    return;
+
+                }
+
+
+                /*
+                 * Find stations belonging
+                 * to selected district.
+                 */
+
+                const matchingStations =
+                    allStationOptions.filter(
+                        function (option) {
+
+                            return option.dataset.district
+                                === selectedDistrict;
+
+                        }
+                    );
+
+
+                /*
+                 * No stations found.
+                 */
+
+                if (matchingStations.length === 0) {
+
+                    stationSelect.disabled = true;
+
+                    return;
+
+                }
+
+
+                /*
+                 * Show matching stations.
+                 */
+
+                matchingStations.forEach(
+                    function (option) {
+
+                        option.hidden = false;
+
+                        option.disabled = false;
+
+                    }
+                );
+
+
+                /*
+                 * Enable dropdown.
+                 */
+
+                stationSelect.disabled = false;
+
+
+                /*
+                 * Restore existing station
+                 * when editing.
+                 */
+
+                if (
+                    restoreExistingStation &&
+                    existingStation
+                ) {
+
+                    const matchingExistingStation =
+                        matchingStations.find(
+                            function (option) {
+
+                                return option.value
+                                    === existingStation;
+
+                            }
+                        );
+
+
+                    if (matchingExistingStation) {
+
+                        stationSelect.value =
+                            existingStation;
+
+                    }
+
+                }
+
+            }
+
+
+            /*
+             * =====================================================
+             * DISTRICT CHANGED
+             * =====================================================
+             */
+
+            districtSelect.addEventListener(
+                "change",
+                function () {
+
+                    /*
+                     * User selected a new district.
+                     *
+                     * Therefore we do not restore the old
+                     * station automatically.
+                     */
+
+                    updateStations(false);
+
+                }
+            );
+
+
+            /*
+             * =====================================================
+             * INITIAL PAGE LOAD
+             * =====================================================
+             */
+
+            updateStations(true);
+
+        }
+    );
+
+</script>
+
 
 </body>
 

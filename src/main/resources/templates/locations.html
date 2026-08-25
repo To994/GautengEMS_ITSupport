@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <!-- =====================================================
+         SPRING SECURITY CSRF
+         ===================================================== -->
+
+    <meta name="_csrf"
+          th:content="${_csrf.token}">
+
+    <meta name="_csrf_header"
+          th:content="${_csrf.headerName}">
+
+    <title>EMS Locations | Gauteng EMS IT Support</title>
+
+    <link rel="stylesheet"
+          href="/css/locations.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body>
+
+<div class="locations-wrapper">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="locations-header">
+
+        <div class="header-left">
+
+            <a href="/settings"
+               class="back-button"
+               title="Back to Settings">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </a>
+
+
+            <div class="header-title">
+
+                <span>
+                    SYSTEM ADMINISTRATION
+                </span>
+
+                <h1>
+                    EMS Locations
+                </h1>
+
+                <p>
+                    District and station management
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-brand">
+
+            <img src="/images/gauteng-ems-logo.jpeg"
+                 alt="Gauteng EMS Logo">
+
+            <div>
+
+                <strong>
+                    GAUTENG EMS
+                </strong>
+
+                <span>
+                    IT SUPPORT
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="locations-page">
+
+
+        <!-- =================================================
+             PAGE INTRO
+             ================================================= -->
+
+        <section class="page-intro">
+
+            <div>
+
+                <span class="section-label">
+                    LOCATION MANAGEMENT
+                </span>
+
+                <h2>
+                    District &amp; Station Management
+                </h2>
+
+                <p>
+                    Manage Gauteng EMS districts and stations
+                    directly from the system.
+                </p>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <i class="fa-solid fa-circle"></i>
+
+                <span>
+                    Management Enabled
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ACTION BAR
+             ================================================= -->
+
+        <section class="action-bar">
+
+            <div class="action-info">
+
+                <div class="action-icon">
+
+                    <i class="fa-solid fa-map-location-dot"></i>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        EMS Location Configuration
+                    </strong>
+
+                    <span>
+                        Add districts and maintain their EMS
+                        station lists.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button type="button"
+                    class="primary-button"
+                    onclick="openDistrictModal()">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add District
+
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DISTRICTS
+             ================================================= -->
+
+        <section class="district-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        GAUTENG EMS
+                    </span>
+
+                    <h3>
+                        Districts
+                    </h3>
+
+                </div>
+
+
+                <span class="district-count">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    <span th:text="${#lists.size(districts)}">
+                        0
+                    </span>
+
+                    Districts
+
+                </span>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EMPTY STATE
+                 ================================================= -->
+
+            <div class="empty-state"
+                 th:if="${#lists.isEmpty(districts)}">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-map"></i>
+
+                </div>
+
+                <h3>
+                    No districts configured
+                </h3>
+
+                <p>
+                    Add your first EMS district to begin
+                    configuring stations.
+                </p>
+
+                <button type="button"
+                        class="primary-button"
+                        onclick="openDistrictModal()">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add First District
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DISTRICT CARDS
+                 ================================================= -->
+
+            <div class="district-grid"
+                 th:if="${!#lists.isEmpty(districts)}">
+
+
+                <article class="district-card"
+                         th:each="district : ${districts}">
+
+
+                    <!-- =================================================
+                         DISTRICT HEADER
+                         ================================================= -->
+
+                    <div class="district-card-header">
+
+
+                        <div class="district-title-area">
+
+
+                            <div class="district-icon">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3 th:text="${district.name}">
+                                    District
+                                </h3>
+
+
+                                <span>
+
+                                    Code:
+
+                                    <strong th:text="${district.code}">
+                                        CODE
+                                    </strong>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ACTIVE -->
+
+                        <span class="status-badge active"
+                              th:if="${district.active}">
+
+                            <i class="fa-solid fa-circle"></i>
+
+                            Active
+
+                        </span>
+
+
+
+                        <!-- INACTIVE -->
+
+                        <span class="status-badge inactive"
+                              th:unless="${district.active}">
+
+                            <i class="fa-solid fa-circle"></i>
+
+                            Inactive
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DISTRICT SUMMARY
+                         ================================================= -->
+
+                    <div class="district-summary">
+
+
+                        <div class="summary-item">
+
+                            <span>
+                                Total Stations
+                            </span>
+
+                            <strong
+                                    th:text="${#lists.size(district.stations)}">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-item">
+
+                            <span>
+                                Active Stations
+                            </span>
+
+                            <strong class="green-text"
+                                    th:text="${#lists.size(district.stations.?[active])}">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-item">
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong
+                                    th:text="${district.active ? 'Operational' : 'Disabled'}">
+
+                                Operational
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         STATION HEADER
+                         ================================================= -->
+
+                    <div class="station-header">
+
+
+                        <div>
+
+                            <i class="fa-solid fa-building"></i>
+
+                            <strong>
+                                EMS Stations
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ADD STATION -->
+
+                        <button type="button"
+                                class="small-add-button"
+                                th:if="${district.active}"
+
+                                th:attr="
+                                    data-district-id=${district.id},
+                                    data-district-name=${district.name}"
+
+                                onclick="openStationModalFromButton(this)">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Add Station
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         STATION LIST
+                         ================================================= -->
+
+                    <div class="station-list"
+                         th:if="${!#lists.isEmpty(district.stations)}">
+
+
+                        <div class="station-item"
+                             th:each="station : ${district.stations}">
+
+
+                            <!-- STATION INFORMATION -->
+
+                            <div class="station-info">
+
+
+                                <div class="station-icon">
+
+                                    <i class="fa-solid fa-building"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong th:text="${station.name}">
+                                        Station Name
+                                    </strong>
+
+
+                                    <span>
+
+                                        Code:
+
+                                        <b th:text="${station.code}">
+                                            CODE
+                                        </b>
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- =================================================
+                                 STATION ACTIONS
+                                 ================================================= -->
+
+                            <div class="station-actions">
+
+
+                                <!-- STATUS -->
+
+                                <span class="mini-status active"
+                                      th:if="${station.active}">
+
+                                    Active
+
+                                </span>
+
+
+                                <span class="mini-status inactive"
+                                      th:unless="${station.active}">
+
+                                    Inactive
+
+                                </span>
+
+
+
+                                <!-- EDIT STATION -->
+
+                                <button type="button"
+                                        class="icon-button"
+                                        title="Edit Station"
+                                        th:if="${district.active}"
+
+                                        th:attr="
+                                            data-station-id=${station.id},
+                                            data-district-id=${district.id},
+                                            data-station-name=${station.name},
+                                            data-station-code=${station.code},
+                                            data-district-name=${district.name}"
+
+                                        onclick="openEditStationModalFromButton(this)">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+
+                                <!-- =================================================
+                                     DEACTIVATE STATION
+                                     ================================================= -->
+
+                                <form th:if="${station.active}"
+                                      th:action="@{/locations/station/{id}/deactivate(id=${station.id})}"
+                                      method="post"
+                                      class="inline-form">
+
+                                    <input type="hidden"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}">
+
+                                    <button type="submit"
+                                            class="icon-button danger"
+                                            title="Deactivate Station"
+                                            onclick="return confirm('Deactivate this station?')">
+
+                                        <i class="fa-solid fa-ban"></i>
+
+                                    </button>
+
+                                </form>
+
+
+
+                                <!-- =================================================
+                                     ACTIVATE STATION
+                                     ================================================= -->
+
+                                <form th:unless="${station.active}"
+                                      th:action="@{/locations/station/{id}/activate(id=${station.id})}"
+                                      method="post"
+                                      class="inline-form">
+
+                                    <input type="hidden"
+                                           th:name="${_csrf.parameterName}"
+                                           th:value="${_csrf.token}">
+
+                                    <button type="submit"
+                                            class="icon-button success"
+                                            title="Activate Station">
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         NO STATIONS
+                         ================================================= -->
+
+                    <div class="no-stations"
+                         th:if="${#lists.isEmpty(district.stations)}">
+
+
+                        <i class="fa-solid fa-building-circle-xmark"></i>
+
+
+                        <span>
+                            No stations configured for this district.
+                        </span>
+
+
+                        <button type="button"
+                                class="small-add-button"
+                                th:if="${district.active}"
+
+                                th:attr="
+                                    data-district-id=${district.id},
+                                    data-district-name=${district.name}"
+
+                                onclick="openStationModalFromButton(this)">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                            Add First Station
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         DISTRICT ACTIONS
+                         ================================================= -->
+
+                    <div class="district-actions">
+
+
+                        <!-- EDIT DISTRICT -->
+
+                        <button type="button"
+                                class="secondary-button"
+
+                                th:attr="
+                                    data-district-id=${district.id},
+                                    data-district-name=${district.name},
+                                    data-district-code=${district.code}"
+
+                                onclick="openEditDistrictModalFromButton(this)">
+
+                            <i class="fa-solid fa-pen"></i>
+
+                            Edit District
+
+                        </button>
+
+
+
+                        <!-- =================================================
+                             DISABLE DISTRICT
+                             ================================================= -->
+
+                        <form th:if="${district.active}"
+                              th:action="@{/locations/district/{id}/deactivate(id=${district.id})}"
+                              method="post">
+
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+
+                            <button type="submit"
+                                    class="secondary-button warning"
+                                    onclick="return confirm('Deactivate this district? Its stations will remain stored.')">
+
+                                <i class="fa-solid fa-ban"></i>
+
+                                Disable District
+
+                            </button>
+
+                        </form>
+
+
+
+                        <!-- =================================================
+                             ACTIVATE DISTRICT
+                             ================================================= -->
+
+                        <form th:unless="${district.active}"
+                              th:action="@{/locations/district/{id}/activate(id=${district.id})}"
+                              method="post">
+
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+
+                            <button type="submit"
+                                    class="secondary-button success-button">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Activate District
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INFORMATION
+             ================================================= -->
+
+        <div class="management-note">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <div>
+
+                <strong>
+                    Location Management
+                </strong>
+
+                <p>
+                    Existing districts and stations can be edited
+                    when information changes. New stations can be
+                    added without removing existing records.
+                    Deactivated locations remain stored.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         DISTRICT MODAL
+         ===================================================== -->
+
+    <div class="modal-overlay"
+         id="districtModal">
+
+
+        <div class="modal">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span>
+                        EMS LOCATION
+                    </span>
+
+                    <h2 id="districtModalTitle">
+                        Add District
+                    </h2>
+
+                </div>
+
+
+                <button type="button"
+                        class="modal-close"
+                        onclick="closeDistrictModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- DISTRICT FORM -->
+
+            <form id="districtForm"
+                  method="post"
+                  action="/locations/district/save">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+
+                        <label for="districtName">
+                            District Name
+                        </label>
+
+                        <input type="text"
+                               id="districtName"
+                               name="name"
+                               placeholder="e.g. Ekurhuleni"
+                               maxlength="100"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="districtCode">
+                            District Code
+                        </label>
+
+                        <input type="text"
+                               id="districtCode"
+                               name="code"
+                               placeholder="e.g. COE"
+                               maxlength="20"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="modal-information">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            District codes must be unique.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="secondary-button"
+                            onclick="closeDistrictModal()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="primary-button">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Save District
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATION MODAL
+         ===================================================== -->
+
+    <div class="modal-overlay"
+         id="stationModal">
+
+
+        <div class="modal">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span>
+                        EMS STATION
+                    </span>
+
+
+                    <h2 id="stationModalTitle">
+                        Add Station
+                    </h2>
+
+
+                    <p id="stationDistrictName">
+                        District
+                    </p>
+
+                </div>
+
+
+                <button type="button"
+                        class="modal-close"
+                        onclick="closeStationModal()">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- STATION FORM -->
+
+            <form id="stationForm"
+                  method="post"
+                  action="/locations/station/save">
+
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <input type="hidden"
+                       id="stationDistrictId"
+                       name="districtId">
+
+
+                <div class="modal-body">
+
+
+                    <div class="form-group">
+
+                        <label for="stationName">
+                            Station Name
+                        </label>
+
+                        <input type="text"
+                               id="stationName"
+                               name="name"
+                               placeholder="e.g. Germiston Station"
+                               maxlength="100"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="stationCode">
+                            Station Code
+                        </label>
+
+                        <input type="text"
+                               id="stationCode"
+                               name="code"
+                               placeholder="e.g. GER01"
+                               maxlength="30"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="modal-information">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            Station names and codes must be unique
+                            within the selected district.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="secondary-button"
+                            onclick="closeStationModal()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button type="submit"
+                            class="primary-button">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+
+                        Save Station
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="locations-footer">
+
+        <div>
+
+            <i class="fa-solid fa-headset"></i>
+
+            <span>
+                Gauteng EMS IT Support
+            </span>
+
+        </div>
+
+
+        <span>
+            Reliable. Responsive. Ready to Help.
+        </span>
+
+    </footer>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+    /* =====================================================
+       ADD DISTRICT
+       ===================================================== */
+
+    function openDistrictModal() {
+
+        const modal =
+            document.getElementById("districtModal");
+
+        const form =
+            document.getElementById("districtForm");
+
+        document.getElementById(
+            "districtModalTitle"
+        ).textContent = "Add District";
+
+        form.action =
+            "/locations/district/save";
+
+        document.getElementById(
+            "districtName"
+        ).value = "";
+
+        document.getElementById(
+            "districtCode"
+        ).value = "";
+
+        modal.classList.add("show");
+    }
+
+
+
+    /* =====================================================
+       EDIT DISTRICT
+       ===================================================== */
+
+    function openEditDistrictModal(
+        id,
+        name,
+        code
+    ) {
+
+        const modal =
+            document.getElementById("districtModal");
+
+        const form =
+            document.getElementById("districtForm");
+
+        document.getElementById(
+            "districtModalTitle"
+        ).textContent = "Edit District";
+
+        form.action =
+            "/locations/district/update/" + id;
+
+        document.getElementById(
+            "districtName"
+        ).value = name;
+
+        document.getElementById(
+            "districtCode"
+        ).value = code;
+
+        modal.classList.add("show");
+    }
+
+
+
+    /* =====================================================
+       EDIT DISTRICT FROM BUTTON
+       ===================================================== */
+
+    function openEditDistrictModalFromButton(button) {
+
+        const id =
+            button.dataset.districtId;
+
+        const name =
+            button.dataset.districtName;
+
+        const code =
+            button.dataset.districtCode;
+
+        openEditDistrictModal(
+            id,
+            name,
+            code
+        );
+    }
+
+
+
+    /* =====================================================
+       CLOSE DISTRICT MODAL
+       ===================================================== */
+
+    function closeDistrictModal() {
+
+        document.getElementById(
+            "districtModal"
+        ).classList.remove("show");
+    }
+
+
+
+    /* =====================================================
+       ADD STATION
+       ===================================================== */
+
+    function openStationModal(
+        districtId,
+        districtName
+    ) {
+
+        const modal =
+            document.getElementById("stationModal");
+
+        const form =
+            document.getElementById("stationForm");
+
+        document.getElementById(
+            "stationModalTitle"
+        ).textContent = "Add Station";
+
+        document.getElementById(
+            "stationDistrictName"
+        ).textContent = districtName;
+
+        form.action =
+            "/locations/station/save";
+
+        document.getElementById(
+            "stationDistrictId"
+        ).value = districtId;
+
+        document.getElementById(
+            "stationName"
+        ).value = "";
+
+        document.getElementById(
+            "stationCode"
+        ).value = "";
+
+        modal.classList.add("show");
+    }
+
+
+
+    /* =====================================================
+       ADD STATION FROM BUTTON
+       ===================================================== */
+
+    function openStationModalFromButton(button) {
+
+        const districtId =
+            button.dataset.districtId;
+
+        const districtName =
+            button.dataset.districtName;
+
+        openStationModal(
+            districtId,
+            districtName
+        );
+    }
+
+
+
+    /* =====================================================
+       EDIT STATION
+       ===================================================== */
+
+    function openEditStationModal(
+        stationId,
+        districtId,
+        stationName,
+        stationCode,
+        districtName
+    ) {
+
+        const modal =
+            document.getElementById("stationModal");
+
+        const form =
+            document.getElementById("stationForm");
+
+        document.getElementById(
+            "stationModalTitle"
+        ).textContent = "Edit Station";
+
+        document.getElementById(
+            "stationDistrictName"
+        ).textContent = districtName;
+
+        form.action =
+            "/locations/station/update/" + stationId;
+
+        document.getElementById(
+            "stationDistrictId"
+        ).value = districtId;
+
+        document.getElementById(
+            "stationName"
+        ).value = stationName;
+
+        document.getElementById(
+            "stationCode"
+        ).value = stationCode;
+
+        modal.classList.add("show");
+    }
+
+
+
+    /* =====================================================
+       EDIT STATION FROM BUTTON
+       ===================================================== */
+
+    function openEditStationModalFromButton(button) {
+
+        const stationId =
+            button.dataset.stationId;
+
+        const districtId =
+            button.dataset.districtId;
+
+        const stationName =
+            button.dataset.stationName;
+
+        const stationCode =
+            button.dataset.stationCode;
+
+        const districtName =
+            button.dataset.districtName;
+
+        openEditStationModal(
+            stationId,
+            districtId,
+            stationName,
+            stationCode,
+            districtName
+        );
+    }
+
+
+
+    /* =====================================================
+       CLOSE STATION MODAL
+       ===================================================== */
+
+    function closeStationModal() {
+
+        document.getElementById(
+            "stationModal"
+        ).classList.remove("show");
+    }
+
+
+
+    /* =====================================================
+       CLOSE MODALS WHEN CLICKING OUTSIDE
+       ===================================================== */
+
+    window.addEventListener(
+        "click",
+        function(event) {
+
+            const districtModal =
+                document.getElementById("districtModal");
+
+            const stationModal =
+                document.getElementById("stationModal");
+
+
+            if (event.target === districtModal) {
+
+                closeDistrictModal();
+
+            }
+
+
+            if (event.target === stationModal) {
+
+                closeStationModal();
+
+            }
+
+        }
+    );
+
+
+
+    /* =====================================================
+       ESC KEY
+       ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+
+                closeDistrictModal();
+
+                closeStationModal();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

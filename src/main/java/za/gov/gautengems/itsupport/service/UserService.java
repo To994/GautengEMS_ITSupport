@@ -2,11 +2,11 @@ package za.gov.gautengems.itsupport.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import za.gov.gautengems.itsupport.entity.User;
 import za.gov.gautengems.itsupport.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -14,36 +14,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
+
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    // =========================================================
-    // SAVE USER
-    // =========================================================
-
-    public User saveUser(User user) {
-
-        /*
-         * Only encode a password if it is not already BCrypt encoded.
-         * This prevents an already encrypted password from being
-         * encrypted again.
-         */
-        if (user.getPassword() != null
-                && !user.getPassword().startsWith("$2a$")
-                && !user.getPassword().startsWith("$2b$")
-                && !user.getPassword().startsWith("$2y$")) {
-
-            user.setPassword(
-                    passwordEncoder.encode(user.getPassword())
-            );
-        }
-
-        return userRepository.save(user);
     }
 
 
@@ -58,32 +39,139 @@ public class UserService {
 
 
     // =========================================================
-    // FIND BY USERNAME
+    // GET USER BY ID
     // =========================================================
 
-    public Optional<User> findByUsername(String username) {
+    public User getUserById(Long id) {
 
-        return userRepository.findByUsername(username);
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found with ID: " + id
+                        )
+                );
     }
 
 
     // =========================================================
-    // FIND BY EMAIL
+    // SAVE NEW USER
     // =========================================================
 
-    public Optional<User> findByEmail(String email) {
+    public User saveUser(User user) {
 
-        return userRepository.findByEmail(email);
+        // Encode the password before saving it to MySQL.
+        // NEVER store a plain-text password.
+
+        if (user.getPassword() != null
+                && !user.getPassword().isBlank()) {
+
+            user.setPassword(
+                    passwordEncoder.encode(
+                            user.getPassword()
+                    )
+            );
+        }
+
+        return userRepository.save(user);
     }
 
 
     // =========================================================
-    // FIND BY PERSONAL NUMBER
+    // UPDATE USER
     // =========================================================
 
-    public Optional<User> findByPersonalNumber(String personalNumber) {
+    public User updateUser(Long id, User updatedUser) {
 
-        return userRepository.findByPersonalNumber(personalNumber);
+        User existingUser = getUserById(id);
+
+
+        // -----------------------------------------------------
+        // PERSONAL INFORMATION
+        // -----------------------------------------------------
+
+        existingUser.setPersonalNumber(
+                updatedUser.getPersonalNumber()
+        );
+
+        existingUser.setFirstName(
+                updatedUser.getFirstName()
+        );
+
+        existingUser.setSurname(
+                updatedUser.getSurname()
+        );
+
+        existingUser.setEmail(
+                updatedUser.getEmail()
+        );
+
+        existingUser.setPhone(
+                updatedUser.getPhone()
+        );
+
+
+        // -----------------------------------------------------
+        // EMS INFORMATION
+        // -----------------------------------------------------
+
+        existingUser.setDepartment(
+                updatedUser.getDepartment()
+        );
+
+        existingUser.setDistrict(
+                updatedUser.getDistrict()
+        );
+
+        existingUser.setStationUnit(
+                updatedUser.getStationUnit()
+        );
+
+
+        // -----------------------------------------------------
+        // ACCOUNT INFORMATION
+        // -----------------------------------------------------
+
+        existingUser.setUsername(
+                updatedUser.getUsername()
+        );
+
+        existingUser.setRole(
+                updatedUser.getRole()
+        );
+
+        existingUser.setActive(
+                updatedUser.isActive()
+        );
+
+
+        // -----------------------------------------------------
+        // PASSWORD
+        // -----------------------------------------------------
+
+        /*
+         * Only change the password if the administrator
+         * entered a new password.
+         *
+         * The new password is BCrypt encoded before
+         * being stored in MySQL.
+         */
+
+        if (updatedUser.getPassword() != null
+                && !updatedUser.getPassword().isBlank()) {
+
+            existingUser.setPassword(
+                    passwordEncoder.encode(
+                            updatedUser.getPassword()
+                    )
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // SAVE UPDATED USER
+        // -----------------------------------------------------
+
+        return userRepository.save(existingUser);
     }
 
 
@@ -98,17 +186,33 @@ public class UserService {
 
 
     // =========================================================
-    // GET ACTIVE TECHNICIANS
+    // FIND USER BY USERNAME
     // =========================================================
 
-    public List<User> getActiveTechnicians() {
+    public User findByUsername(String username) {
 
-        return userRepository.findAll()
-                .stream()
-                .filter(user ->
-                        user.getRole() == User.Role.TECHNICIAN
-                                && user.isActive()
-                )
-                .toList();
+        return userRepository.findByUsername(username)
+                .orElse(null);
     }
+
+
+    // =========================================================
+    // FIND USER BY EMAIL
+    // =========================================================
+
+    public User findByEmail(String email) {
+
+        return userRepository.findByEmail(email)
+                .orElse(null);
+    }
+
+    // =========================================================
+    // SAVE USER WITHOUT RE-ENCODING PASSWORD
+    // =========================================================
+
+    public User saveUserWithoutEncoding(User user) {
+
+        return userRepository.save(user);
+    }
+
 }

@@ -1,60 +1,84 @@
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
 html,
 body {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+
     font-family: "Segoe UI", Arial, sans-serif;
 }
+
 
 body {
     overflow-x: hidden;
 }
 
-/* =========================
-   MAIN PAGE
-   ========================= */
+
+/* =========================================================
+   MAIN LOGIN PAGE
+   ========================================================= */
 
 .login-page {
+
     min-height: 100vh;
+
     width: 100%;
+
     position: relative;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    padding: 40px 20px;
+    padding: 15px 20px 65px;
 
     background-image:
+
         linear-gradient(
             90deg,
             rgba(4, 35, 76, 0.35),
             rgba(3, 32, 70, 0.86)
         ),
+
         url("/images/gauteng-ems-flag.jpeg");
 
     background-size: cover;
+
     background-position: center;
+
     background-repeat: no-repeat;
 }
 
-/* Dark blue overlay */
+
+/* =========================================================
+   BACKGROUND OVERLAY
+   ========================================================= */
 
 .background-overlay {
+
     position: absolute;
+
     inset: 0;
 
     background:
+
         radial-gradient(
             circle at 50% 45%,
             rgba(0, 119, 255, 0.12),
             transparent 45%
         ),
+
         linear-gradient(
             90deg,
             transparent 0%,
@@ -66,73 +90,94 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN CARD
-   ========================= */
+   ========================================================= */
 
 .login-card {
+
     position: relative;
+
     z-index: 2;
 
-    width: 540px;
-    max-width: 95vw;
+    width: 500px;
 
-    padding: 38px 58px 32px;
+    max-width: 94vw;
 
-    border-radius: 22px;
+    padding: 22px 42px 20px;
+
+    border-radius: 18px;
 
     background:
+
         linear-gradient(
             145deg,
             rgba(8, 57, 112, 0.86),
             rgba(3, 31, 69, 0.94)
         );
 
-    border: 1px solid rgba(148, 201, 255, 0.45);
+    border: 1px solid
+        rgba(148, 201, 255, 0.45);
 
     box-shadow:
-        0 30px 70px rgba(0, 0, 0, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+        0 30px 70px
+        rgba(0, 0, 0, 0.45),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.08);
 
     backdrop-filter: blur(12px);
 }
 
 
-/* =========================
+/* =========================================================
    LOGO
-   ========================= */
+   ========================================================= */
 
 .logo-container {
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
 
-    margin-bottom: 13px;
+    margin-bottom: 5px;
 }
 
+
 .ems-logo {
-    width: 112px;
-    height: 112px;
+
+    width: 78px;
+
+    height: 78px;
 
     object-fit: contain;
 
     border-radius: 50%;
 
     filter:
-        drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+
+        drop-shadow(
+            0 8px 12px
+            rgba(0, 0, 0, 0.35)
+        );
 }
 
 
-/* =========================
+/* =========================================================
    TITLES
-   ========================= */
+   ========================================================= */
 
 .login-card h1 {
+
     text-align: center;
 
     color: #ffffff;
 
-    font-size: 32px;
+    font-size: 27px;
+
     font-weight: 800;
 
     letter-spacing: 2px;
@@ -140,134 +185,171 @@ body {
     line-height: 1.1;
 }
 
+
 .login-card h2 {
+
     text-align: center;
 
     color: #ffd400;
 
-    font-size: 21px;
+    font-size: 17px;
+
     font-weight: 800;
 
     letter-spacing: 3px;
 
-    margin-top: 7px;
+    margin-top: 4px;
 }
 
 
-/* =========================
+/* =========================================================
    HEADING LINE
-   ========================= */
+   ========================================================= */
 
 .heading-line {
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 14px;
 
-    margin: 22px 0 18px;
+    margin: 12px 0 10px;
 }
+
 
 .heading-line span {
-    height: 1px;
-    width: 125px;
 
-    background: rgba(255, 255, 255, 0.35);
+    height: 1px;
+
+    width: 105px;
+
+    background:
+        rgba(255, 255, 255, 0.35);
 }
 
+
 .heading-line i {
+
     color: #1596ff;
 
     font-size: 22px;
 }
 
 
-/* =========================
+/* =========================================================
    DESCRIPTION
-   ========================= */
+   ========================================================= */
 
 .login-description {
+
     text-align: center;
 
-    color: rgba(255, 255, 255, 0.88);
+    color:
+        rgba(255, 255, 255, 0.88);
 
-    font-size: 15px;
+    font-size: 13px;
 
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
 
 
-/* =========================
-   INPUTS
-   ========================= */
+/* =========================================================
+   INPUT GROUP
+   ========================================================= */
 
 .input-group {
+
     position: relative;
 
     display: flex;
+
     align-items: center;
 
     width: 100%;
 
-    height: 64px;
+    height: 51px;
 
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 
-    border: 1px solid rgba(157, 211, 255, 0.55);
+    border: 1px solid
+        rgba(157, 211, 255, 0.55);
 
     border-radius: 12px;
 
-    background: rgba(18, 78, 137, 0.35);
+    background:
+        rgba(18, 78, 137, 0.35);
 
-    transition: all 0.25s ease;
+    transition:
+        all 0.25s ease;
 }
 
+
 .input-group:focus-within {
+
     border-color: #1799ff;
 
     box-shadow:
-        0 0 0 3px rgba(23, 153, 255, 0.16),
-        0 5px 20px rgba(0, 110, 220, 0.15);
+
+        0 0 0 3px
+        rgba(23, 153, 255, 0.16),
+
+        0 5px 20px
+        rgba(0, 110, 220, 0.15);
 }
 
+
 .input-group > i {
-    width: 58px;
+
+    width: 48px;
 
     text-align: center;
 
     color: #ffffff;
 
-    font-size: 21px;
+    font-size: 18px;
+
+    flex-shrink: 0;
 }
 
+
 .input-group input {
+
     flex: 1;
 
     height: 100%;
 
     border: none;
+
     outline: none;
 
     background: transparent;
 
     color: #ffffff;
 
-    font-size: 16px;
+    font-size: 14px;
 
     padding: 0 14px 0 0;
 }
 
+
 .input-group input::placeholder {
-    color: rgba(255, 255, 255, 0.78);
+
+    color:
+        rgba(255, 255, 255, 0.78);
 }
 
 
-/* =========================
-   PASSWORD EYE
-   ========================= */
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
 
 .password-toggle {
-    width: 58px;
+
+    width: 48px;
+
     height: 100%;
 
     border: none;
@@ -281,46 +363,65 @@ body {
     font-size: 20px;
 
     transition: 0.2s;
+
+    flex-shrink: 0;
 }
 
+
 .password-toggle:hover {
+
     color: #ffd400;
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN OPTIONS
-   ========================= */
+   ========================================================= */
 
 .login-options {
+
     display: flex;
 
     justify-content: space-between;
+
     align-items: center;
 
-    margin: 9px 2px 25px;
+    margin: 6px 2px 14px;
 }
 
+
+/* =========================================================
+   REMEMBER ME
+   ========================================================= */
+
 .remember-me {
+
     display: flex;
+
     align-items: center;
 
     gap: 9px;
 
-    color: rgba(255, 255, 255, 0.9);
+    color:
+        rgba(255, 255, 255, 0.9);
 
-    font-size: 14px;
+    font-size: 13px;
 
     cursor: pointer;
 }
 
+
 .remember-me input {
+
     appearance: none;
 
     width: 21px;
+
     height: 21px;
 
-    border: 1px solid rgba(255, 255, 255, 0.65);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.65);
 
     border-radius: 5px;
 
@@ -329,18 +430,23 @@ body {
     position: relative;
 }
 
+
 .remember-me input:checked {
+
     background: #087fea;
 
     border-color: #087fea;
 }
 
+
 .remember-me input:checked::after {
+
     content: "✓";
 
     position: absolute;
 
     left: 4px;
+
     top: -1px;
 
     color: white;
@@ -350,35 +456,119 @@ body {
     font-weight: bold;
 }
 
+
+/* =========================================================
+   FORGOT PASSWORD
+   ========================================================= */
+
 .forgot-password {
+
     color: #1ca0ff;
 
     text-decoration: none;
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 600;
+
+    cursor: pointer;
 }
 
+
 .forgot-password:hover {
+
     color: #ffd400;
 }
 
 
-/* =========================
-   LOGIN BUTTON
-   ========================= */
+/* =========================================================
+   LOGIN HINT
+   ========================================================= */
 
-.login-button {
+.login-hint {
+
     width: 100%;
 
-    height: 62px;
+    min-height: 51px;
 
-    border: 1px solid rgba(83, 190, 255, 0.55);
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    color:
+        rgba(255, 255, 255, 0.92);
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    overflow: hidden;
+
+    opacity: 1;
+
+    max-height: 51px;
+
+    transform: translateY(0);
+
+    transition:
+
+        opacity 0.25s ease,
+
+        max-height 0.25s ease,
+
+        transform 0.25s ease;
+}
+
+
+.login-hint i {
+
+    color: #1596ff;
+
+    font-size: 18px;
+}
+
+
+/*
+ * =========================================================
+ * HIDE LOGIN HINT AFTER USER STARTS TYPING
+ * =========================================================
+ */
+
+.login-hint.hidden {
+
+    opacity: 0;
+
+    max-height: 0;
+
+    min-height: 0;
+
+    transform: translateY(-5px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-button {
+
+    width: 100%;
+
+    height: 51px;
+
+    border: 1px solid
+        rgba(83, 190, 255, 0.55);
 
     border-radius: 12px;
 
     background:
+
         linear-gradient(
             180deg,
             #128df0,
@@ -388,12 +578,14 @@ body {
     color: white;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 13px;
 
-    font-size: 20px;
+    font-size: 17px;
 
     font-weight: 800;
 
@@ -402,19 +594,69 @@ body {
     cursor: pointer;
 
     box-shadow:
-        0 8px 20px rgba(0, 105, 220, 0.3);
 
-    transition: all 0.25s ease;
+        0 8px 20px
+        rgba(0, 105, 220, 0.3);
+
+    transition:
+
+        opacity 0.25s ease,
+
+        visibility 0.25s ease,
+
+        transform 0.25s ease,
+
+        box-shadow 0.25s ease;
+
+
+    /*
+     * =====================================================
+     * IMPORTANT
+     *
+     * LOGIN IS HIDDEN WHEN PAGE FIRST LOADS.
+     * =====================================================
+     */
+
+    opacity: 0 !important;
+
+    visibility: hidden !important;
+
+    pointer-events: none;
+
+    transform: translateY(5px);
 }
 
+
+/*
+ * =========================================================
+ * LOGIN APPEARS AFTER USER STARTS TYPING
+ * =========================================================
+ */
+
+.login-button.visible {
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    pointer-events: auto;
+
+    transform: translateY(0);
+}
+
+
 .login-button i {
+
     font-size: 21px;
 }
 
+
 .login-button:hover {
+
     transform: translateY(-2px);
 
     background:
+
         linear-gradient(
             180deg,
             #1b9cff,
@@ -422,50 +664,60 @@ body {
         );
 
     box-shadow:
-        0 12px 28px rgba(0, 130, 255, 0.4);
+
+        0 12px 28px
+        rgba(0, 130, 255, 0.4);
 }
 
+
 .login-button:active {
+
     transform: translateY(0);
 }
 
 
-/* =========================
+/* =========================================================
    SUPPORT MESSAGE
-   ========================= */
+   ========================================================= */
 
 .support-message {
+
     display: flex;
 
     justify-content: center;
+
     align-items: center;
 
     gap: 11px;
 
-    margin-top: 28px;
+    margin-top: 14px;
 
-    color: rgba(255, 255, 255, 0.92);
+    color:
+        rgba(255, 255, 255, 0.92);
 
-    font-size: 14px;
+    font-size: 12px;
 }
+
 
 .support-message i {
+
     color: #ffd400;
 
-    font-size: 22px;
+    font-size: 18px;
 }
 
 
-/* =========================
+/* =========================================================
    BOTTOM TEXT
-   ========================= */
+   ========================================================= */
 
 .bottom-text {
+
     position: absolute;
 
     z-index: 3;
 
-    bottom: 30px;
+    bottom: 15px;
 
     left: 50%;
 
@@ -480,78 +732,385 @@ body {
     gap: 12px;
 
     width: max-content;
+
     max-width: 90vw;
 
-    color: rgba(255, 255, 255, 0.94);
+    color:
+        rgba(255, 255, 255, 0.94);
 
-    font-size: 15px;
+    font-size: 12px;
 }
 
+
 .bottom-text i {
+
     color: #ffd400;
 
     font-size: 21px;
 }
 
+
 .bottom-text strong {
+
     color: #ffd400;
 }
 
 
-/* =========================
+/* =========================================================
+   WRONG LOGIN POPUP OVERLAY
+   ========================================================= */
+
+.login-error-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(1, 17, 39, 0.72);
+
+    backdrop-filter: blur(7px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+
+/*
+ * ONLY SHOW WHEN .show IS ADDED BY JAVASCRIPT
+ */
+
+.login-error-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   ERROR BOX
+   ========================================================= */
+
+.login-error-box {
+
+    width: 680px;
+
+    max-width: 94vw;
+
+    padding: 30px 34px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(9, 71, 143, 0.97),
+            rgba(3, 35, 79, 0.98)
+        );
+
+    border:
+        1px solid
+        rgba(121, 197, 255, 0.55);
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(0, 0, 0, 0.55),
+
+        inset 0 1px 0
+        rgba(255, 255, 255, 0.08);
+
+    transform: scale(0.94);
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.login-error-modal.show
+.login-error-box {
+
+    transform: scale(1);
+}
+
+
+/* =========================================================
+   ERROR ICON
+   ========================================================= */
+
+.error-icon {
+
+    width: 72px;
+
+    height: 72px;
+
+    margin:
+        0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #ffd400;
+
+    font-size: 28px;
+
+    background:
+        rgba(255, 212, 0, 0.10);
+
+    border:
+        1px solid
+        rgba(255, 212, 0, 0.40);
+
+    box-shadow:
+
+        0 0 0 8px
+        rgba(255, 212, 0, 0.04);
+}
+
+
+/* =========================================================
+   ERROR TITLE
+   ========================================================= */
+
+.login-error-box h3 {
+
+    color: #ffffff;
+
+    font-size: 27px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   ERROR DESCRIPTION
+   ========================================================= */
+
+.login-error-box > p {
+
+    color:
+        rgba(255, 255, 255, 0.88);
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    max-width: 520px;
+
+    margin:
+        0 auto 20px;
+}
+
+
+/* =========================================================
+   ERROR HELP
+   ========================================================= */
+
+.error-help {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    text-align: left;
+
+    padding: 15px 18px;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    color:
+        rgba(255, 255, 255, 0.88);
+
+    background:
+        rgba(21, 150, 255, 0.10);
+
+    border:
+        1px solid
+        rgba(121, 197, 255, 0.25);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.error-help i {
+
+    color: #58bdff;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+}
+
+
+.error-help strong {
+
+    color: #ffd400;
+}
+
+
+/* =========================================================
+   TRY AGAIN BUTTON
+   ========================================================= */
+
+.error-close-button {
+
+    width: 100%;
+
+    height: 54px;
+
+    border:
+        1px solid
+        rgba(83, 190, 255, 0.55);
+
+    border-radius: 12px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #16a1f5,
+            #0874df
+        );
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        all 0.25s ease;
+}
+
+
+.error-close-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 10px 25px
+        rgba(0, 130, 255, 0.35);
+}
+
+
+/* =========================================================
    RESPONSIVE
-   ========================= */
+   ========================================================= */
 
 @media (max-width: 700px) {
 
     .login-page {
-        padding: 25px 15px 100px;
+
+        padding:
+            25px 15px 100px;
     }
+
 
     .login-card {
+
         width: 100%;
 
-        padding: 30px 25px;
+        padding:
+            30px 25px;
     }
 
+
     .ems-logo {
+
         width: 90px;
+
         height: 90px;
     }
 
+
     .login-card h1 {
+
         font-size: 25px;
     }
 
+
     .login-card h2 {
+
         font-size: 17px;
 
         letter-spacing: 2px;
     }
 
+
     .heading-line span {
+
         width: 75px;
     }
 
+
     .input-group {
+
         height: 58px;
     }
+
 
     .login-button {
+
         height: 58px;
     }
 
-    .bottom-text {
-        bottom: 20px;
 
-        font-size: 12px;
+    .login-error-box {
+
+        padding:
+            25px 20px;
     }
+
 }
 
 
 @media (max-width: 430px) {
 
     .login-options {
+
         flex-direction: column;
 
         align-items: flex-start;
@@ -559,114 +1118,36 @@ body {
         gap: 13px;
     }
 
+
     .forgot-password {
+
         margin-left: 30px;
     }
 
+
     .bottom-text {
+
         flex-wrap: wrap;
 
         text-align: center;
     }
-}
-/* =========================
-   ONE-SCREEN LOGIN
-   ========================= */
 
-html,
-body {
-    height: 100%;
-    overflow: hidden;
-}
 
-.login-page {
-    height: 100vh;
-    min-height: 600px;
-    padding: 15px 20px 65px;
-}
+    .login-hint {
 
-.login-card {
-    width: 500px;
-    max-width: 94vw;
+        font-size: 12px;
+    }
 
-    padding: 22px 42px 20px;
 
-    border-radius: 18px;
-}
+    .login-error-box h3 {
 
-.logo-container {
-    margin-bottom: 5px;
-}
+        font-size: 23px;
+    }
 
-.ems-logo {
-    width: 78px;
-    height: 78px;
-}
 
-.login-card h1 {
-    font-size: 27px;
-}
+    .login-error-box > p {
 
-.login-card h2 {
-    font-size: 17px;
-    margin-top: 4px;
-}
+        font-size: 13px;
+    }
 
-.heading-line {
-    margin: 12px 0 10px;
-}
-
-.heading-line span {
-    width: 105px;
-}
-
-.login-description {
-    font-size: 13px;
-    margin-bottom: 14px;
-}
-
-.input-group {
-    height: 51px;
-    margin-bottom: 10px;
-}
-
-.input-group > i {
-    width: 48px;
-    font-size: 18px;
-}
-
-.input-group input {
-    font-size: 14px;
-}
-
-.password-toggle {
-    width: 48px;
-}
-
-.login-options {
-    margin: 6px 2px 14px;
-}
-
-.remember-me,
-.forgot-password {
-    font-size: 13px;
-}
-
-.login-button {
-    height: 51px;
-    font-size: 17px;
-}
-
-.support-message {
-    margin-top: 14px;
-    font-size: 12px;
-}
-
-.support-message i {
-    font-size: 18px;
-}
-
-.bottom-text {
-    bottom: 15px;
-    font-size: 12px;
 }

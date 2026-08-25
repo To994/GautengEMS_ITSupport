@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Gauteng EMS IT Support System</title>
 
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet"
+          href="/css/login.css">
 
-    <!-- Icons -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
@@ -19,37 +25,75 @@
 
     <div class="background-overlay"></div>
 
-    <!-- LOGIN CARD -->
+
+    <!-- =====================================================
+         LOGIN CARD
+         ===================================================== -->
+
     <div class="login-card">
 
-        <!-- LOGO -->
+
+        <!-- =================================================
+             LOGO
+             ================================================= -->
+
         <div class="logo-container">
+
             <img
                     src="/images/gauteng-ems-logo.jpeg"
                     alt="Gauteng EMS Logo"
                     class="ems-logo">
+
         </div>
 
-        <!-- TITLE -->
+
+        <!-- =================================================
+             TITLE
+             ================================================= -->
+
         <h1>GAUTENG EMS</h1>
 
         <h2>IT SUPPORT SYSTEM</h2>
 
-        <!-- DIVIDER -->
+
+        <!-- =================================================
+             DIVIDER
+             ================================================= -->
+
         <div class="heading-line">
+
             <span></span>
+
             <i class="fa-solid fa-headset"></i>
+
             <span></span>
+
         </div>
 
+
+        <!-- =================================================
+             DESCRIPTION
+             ================================================= -->
+
         <p class="login-description">
+
             Sign in to access the IT Support Portal
+
         </p>
 
-        <!-- LOGIN FORM -->
-        <form action="/login" method="post">
 
-            <!-- USERNAME -->
+        <!-- =================================================
+             LOGIN FORM
+             ================================================= -->
+
+        <form action="/login"
+              method="post">
+
+
+            <!-- =================================================
+                 USERNAME
+                 ================================================= -->
+
             <div class="input-group">
 
                 <i class="fa-solid fa-user"></i>
@@ -57,6 +101,7 @@
                 <input
                         type="text"
                         name="username"
+                        id="username"
                         placeholder="Email ID / Username"
                         autocomplete="username"
                         required>
@@ -64,7 +109,10 @@
             </div>
 
 
-            <!-- PASSWORD -->
+            <!-- =================================================
+                 PASSWORD
+                 ================================================= -->
+
             <div class="input-group">
 
                 <i class="fa-solid fa-lock"></i>
@@ -76,6 +124,9 @@
                         placeholder="Password"
                         autocomplete="current-password"
                         required>
+
+
+                <!-- PASSWORD SHOW / HIDE -->
 
                 <button
                         type="button"
@@ -93,8 +144,14 @@
             </div>
 
 
-            <!-- OPTIONS -->
+            <!-- =================================================
+                 OPTIONS
+                 ================================================= -->
+
             <div class="login-options">
+
+
+                <!-- REMEMBER ME -->
 
                 <label class="remember-me">
 
@@ -102,34 +159,76 @@
                             type="checkbox"
                             name="remember-me">
 
-                    <span>Remember me</span>
+                    <span>
+                        Remember me
+                    </span>
 
                 </label>
 
+
+                <!-- FORGOT PASSWORD -->
+
                 <a
-                        href="#"
+                        href="/forgot-password"
                         class="forgot-password">
+
                     Forgot Password?
+
                 </a>
 
             </div>
 
 
-            <!-- LOGIN BUTTON -->
+            <!-- =================================================
+                 LOGIN HINT
+
+                 VISIBLE WHEN PAGE LOADS
+
+                 DISAPPEARS WHEN USER STARTS TYPING
+                 ================================================= -->
+
+            <div
+                    id="login-hint"
+                    class="login-hint">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                <span>
+                    Enter your login details to continue
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOGIN BUTTON
+
+                 HIDDEN WHEN PAGE LOADS
+
+                 APPEARS WHEN USER STARTS TYPING
+                 ================================================= -->
+
             <button
                     type="submit"
+                    id="login-button"
                     class="login-button">
 
                 <i class="fa-solid fa-right-to-bracket"></i>
 
-                <span>LOGIN</span>
+                <span>
+                    LOGIN
+                </span>
 
             </button>
+
 
         </form>
 
 
-        <!-- SUPPORT MESSAGE -->
+        <!-- =================================================
+             SUPPORT MESSAGE
+             ================================================= -->
+
         <div class="support-message">
 
             <i class="fa-solid fa-shield-halved"></i>
@@ -140,26 +239,114 @@
 
         </div>
 
+
     </div>
 
 
-    <!-- BOTTOM -->
+    <!-- =====================================================
+         BOTTOM TEXT
+         ===================================================== -->
+
     <div class="bottom-text">
 
         <i class="fa-solid fa-headset"></i>
 
-        <span><strong>IT Support</strong></span>
+        <span>
+            <strong>IT Support</strong>
+        </span>
 
         <span>|</span>
 
-        <span>Reliable. Responsive. Ready to Help.</span>
+        <span>
+            Reliable. Responsive. Ready to Help.
+        </span>
 
     </div>
+
+
+    <!-- =====================================================
+         WRONG LOGIN POPUP
+
+         ONLY APPEARS WHEN SPRING SECURITY SENDS:
+
+         /login?error=true
+         ===================================================== -->
+
+    <div
+            id="login-error-modal"
+            class="login-error-modal">
+
+
+        <div class="login-error-box">
+
+
+            <!-- ERROR ICON -->
+
+            <div class="error-icon">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h3>
+                Login Failed
+            </h3>
+
+
+            <!-- MESSAGE -->
+
+            <p>
+                The username or password you entered is incorrect.
+                Please check your credentials and try again.
+            </p>
+
+
+            <!-- FORGOT PASSWORD MESSAGE -->
+
+            <div class="error-help">
+
+                <i class="fa-solid fa-key"></i>
+
+                <span>
+
+                    You can also use
+                    <strong>Forgot Password?</strong>
+                    if you cannot remember your password.
+
+                </span>
+
+            </div>
+
+
+            <!-- TRY AGAIN -->
+
+            <button
+                    type="button"
+                    class="error-close-button"
+                    onclick="closeLoginError()">
+
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                TRY AGAIN
+
+            </button>
+
+
+        </div>
+
+    </div>
+
 
 </div>
 
 
-<!-- SHOW / HIDE PASSWORD -->
+<!-- =========================================================
+     PASSWORD SHOW / HIDE
+     ========================================================= -->
+
 <script>
 
     function togglePassword() {
@@ -170,6 +357,7 @@
         const eye =
             document.getElementById("password-eye");
 
+
         if (password.type === "password") {
 
             password.type = "text";
@@ -178,7 +366,9 @@
 
             eye.classList.add("fa-eye-slash");
 
-        } else {
+        }
+
+        else {
 
             password.type = "password";
 
@@ -187,9 +377,230 @@
             eye.classList.add("fa-eye");
 
         }
+
     }
 
 </script>
 
+
+<!-- =========================================================
+     LOGIN BUTTON / LOGIN HINT
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+
+            const username =
+                document.getElementById("username");
+
+
+            const password =
+                document.getElementById("password");
+
+
+            const loginHint =
+                document.getElementById("login-hint");
+
+
+            const loginButton =
+                document.getElementById("login-button");
+
+
+            /*
+             * =================================================
+             * INITIAL STATE
+             *
+             * Page opens:
+             *
+             * HINT  = SHOW
+             * LOGIN = HIDDEN
+             * =================================================
+             */
+
+            loginHint.classList.remove("hidden");
+
+            loginButton.classList.remove("visible");
+
+
+            /*
+             * =================================================
+             * USER STARTED TYPING
+             * =================================================
+             */
+
+            function showLoginButton() {
+
+                /*
+                 * Hide instruction.
+                 */
+
+                loginHint.classList.add("hidden");
+
+
+                /*
+                 * Show LOGIN button.
+                 */
+
+                loginButton.classList.add("visible");
+
+            }
+
+
+            /*
+             * =================================================
+             * USERNAME INPUT
+             *
+             * Clicking username does NOT show button.
+             *
+             * Typing shows button.
+             * =================================================
+             */
+
+            username.addEventListener(
+                "input",
+                function () {
+
+                    if (username.value.length > 0) {
+
+                        showLoginButton();
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * =================================================
+             * PASSWORD INPUT
+             *
+             * Clicking password does NOT show button.
+             *
+             * Typing shows button.
+             * =================================================
+             */
+
+            password.addEventListener(
+                "input",
+                function () {
+
+                    if (password.value.length > 0) {
+
+                        showLoginButton();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+</script>
+
+
+<!-- =========================================================
+     LOGIN ERROR POPUP
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+
+            /*
+             * Read the URL.
+             *
+             * Spring Security sends:
+             *
+             * /login?error=true
+             *
+             * ONLY when authentication fails.
+             */
+
+            const urlParams =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const loginError =
+                urlParams.get("error");
+
+
+            const errorModal =
+                document.getElementById(
+                    "login-error-modal"
+                );
+
+
+            /*
+             * Popup is NOT shown normally.
+             *
+             * It appears ONLY when:
+             *
+             * error=true
+             */
+
+            if (loginError === "true") {
+
+                errorModal.classList.add("show");
+
+            }
+
+        }
+    );
+
+
+    /*
+     * =========================================================
+     * CLOSE LOGIN ERROR
+     * =========================================================
+     */
+
+    function closeLoginError() {
+
+
+        const errorModal =
+            document.getElementById(
+                "login-error-modal"
+            );
+
+
+        errorModal.classList.remove("show");
+
+
+        /*
+         * Remove ?error=true
+         * from the browser URL.
+         */
+
+        window.history.replaceState(
+            {},
+            document.title,
+            "/login"
+        );
+
+
+        /*
+         * Return to username field.
+         */
+
+        document
+            .getElementById("username")
+            .focus();
+
+    }
+
+</script>
+
+
 </body>
+
 </html>

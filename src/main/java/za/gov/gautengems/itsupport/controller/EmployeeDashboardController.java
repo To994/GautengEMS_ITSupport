@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import za.gov.gautengems.itsupport.entity.Ticket;
 import za.gov.gautengems.itsupport.entity.User;
@@ -11,12 +12,19 @@ import za.gov.gautengems.itsupport.service.TicketService;
 import za.gov.gautengems.itsupport.service.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping("/employee")
 public class EmployeeDashboardController {
 
     private final UserService userService;
     private final TicketService ticketService;
+
+
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
 
     public EmployeeDashboardController(
             UserService userService,
@@ -28,78 +36,162 @@ public class EmployeeDashboardController {
 
 
     // =========================================================
-    // EMPLOYEE DASHBOARD
+    // STATION MANAGER DASHBOARD
+    // URL:
+    //
+    // /employee/dashboard
     // =========================================================
 
-    @GetMapping("/employee-dashboard")
+    @GetMapping("/dashboard")
     public String dashboard(
-            Authentication authentication,
-            Model model) {
+            Model model,
+            Authentication authentication) {
 
-        // -----------------------------------------------------
-        // GET LOGGED-IN EMPLOYEE
-        // -----------------------------------------------------
 
-        User employee = userService
-                .findByUsername(authentication.getName())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Logged-in employee not found."
+        // =====================================================
+        // CHECK AUTHENTICATION
+        // =====================================================
+
+        if (authentication == null
+                || authentication.getName() == null) {
+
+            throw new RuntimeException(
+                    "No authenticated user found."
+            );
+        }
+
+
+        // =====================================================
+        // GET LOGGED-IN USER
+        // =====================================================
+
+        User employee =
+                userService.findByUsername(
+                        authentication.getName()
+                );
+
+
+        if (employee == null) {
+
+            throw new RuntimeException(
+                    "Logged-in employee not found."
+            );
+        }
+
+
+        // =====================================================
+        // ONLY STATION MANAGERS
+        // =====================================================
+
+        if (employee.getRole()
+                != User.Role.STATION_MANAGER) {
+
+            throw new RuntimeException(
+                    "You are not authorised to access the Station Manager dashboard."
+            );
+        }
+
+
+        // =====================================================
+        // GET ALL TICKETS
+        // =====================================================
+
+        List<Ticket> allTickets =
+                ticketService.getAllTickets();
+
+
+        // =====================================================
+        // ONLY THIS STATION MANAGER'S TICKETS
+        //
+        // We identify the owner using the requester's email.
+        //
+        // Email is unique for every user, so this prevents
+        // another Station Manager's tickets from appearing.
+        // =====================================================
+
+        String employeeEmail =
+                employee.getEmail();
+
+
+        List<Ticket> myTickets =
+                allTickets
+                        .stream()
+                        .filter(ticket ->
+                                ticket != null
+                                        && ticket.getRequesterEmail() != null
+                                        && employeeEmail != null
+                                        && ticket.getRequesterEmail()
+                                        .equalsIgnoreCase(
+                                                employeeEmail
+                                        )
                         )
-                );
+                        .collect(Collectors.toList());
 
 
-        // -----------------------------------------------------
-        // GET EMPLOYEE'S TICKETS
-        // -----------------------------------------------------
+        // =====================================================
+        // TICKET COUNTS
+        // =====================================================
 
-        List<Ticket> tickets =
-                ticketService.getTicketsByRequesterEmail(
-                        employee.getEmail()
-                );
+        long totalTickets =
+                myTickets.size();
 
 
-        // -----------------------------------------------------
-        // REAL TICKET COUNTS
-        // -----------------------------------------------------
-
-        long totalTickets = tickets.size();
-
-        long openTickets = tickets.stream()
-                .filter(ticket ->
-                        "OPEN".equalsIgnoreCase(
-                                ticket.getStatus()
-                        ))
-                .count();
-
-        long inProgressTickets = tickets.stream()
-                .filter(ticket ->
-                        "IN_PROGRESS".equalsIgnoreCase(
-                                ticket.getStatus()
-                        ))
-                .count();
-
-        long resolvedTickets = tickets.stream()
-                .filter(ticket ->
-                        "RESOLVED".equalsIgnoreCase(
-                                ticket.getStatus()
-                        ))
-                .count();
+        long openTickets =
+                myTickets
+                        .stream()
+                        .filter(ticket ->
+                                "OPEN".equalsIgnoreCase(
+                                        ticket.getStatus()
+                                )
+                        )
+                        .count();
 
 
-        // -----------------------------------------------------
-        // SEND DATA TO EMPLOYEE DASHBOARD
-        // -----------------------------------------------------
+        long inProgressTickets =
+                myTickets
+                        .stream()
+                        .filter(ticket ->
+                                "IN_PROGRESS".equalsIgnoreCase(
+                                        ticket.getStatus()
+                                )
+                        )
+                        .count();
+
+
+        long resolvedTickets =
+                myTickets
+                        .stream()
+                        .filter(ticket ->
+                                "RESOLVED".equalsIgnoreCase(
+                                        ticket.getStatus()
+                                )
+                        )
+                        .count();
+
+
+        // =====================================================
+        // ADD EMPLOYEE
+        // =====================================================
 
         model.addAttribute(
                 "employee",
                 employee
         );
 
+
+        // =====================================================
+        // ADD ONLY MY TICKETS
+        // =====================================================
+
         model.addAttribute(
                 "tickets",
-                tickets
+                myTickets
         );
+
+
+        // =====================================================
+        // STATISTICS
+        // =====================================================
 
         model.addAttribute(
                 "totalTickets",
@@ -121,6 +213,10 @@ public class EmployeeDashboardController {
                 resolvedTickets
         );
 
+
+        // =====================================================
+        // RETURN DASHBOARD
+        // =====================================================
 
         return "employee-dashboard";
     }

@@ -9,7 +9,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Employee Dashboard | Gauteng EMS IT Support</title>
+    <title>
+        Station Manager Dashboard | Gauteng EMS IT Support
+    </title>
 
     <link rel="stylesheet"
           href="/css/employee-dashboard.css">
@@ -22,6 +24,7 @@
 
 <body>
 
+
 <!-- =========================================================
      FIXED TOP NAVIGATION
      ========================================================= -->
@@ -32,13 +35,16 @@
 
         <div class="header-icon">
 
-            <i class="fa-solid fa-headset"></i>
+            <i class="fa-solid fa-building-shield"></i>
 
         </div>
 
+
         <div class="header-title">
 
-            <h1>Employee Dashboard</h1>
+            <h1>
+                Station Manager Dashboard
+            </h1>
 
             <p>
                 Gauteng EMS IT Support Management System
@@ -49,7 +55,12 @@
     </div>
 
 
+    <!-- =====================================================
+         RIGHT SIDE
+         ===================================================== -->
+
     <div class="header-right">
+
 
         <!-- EMS BRAND -->
 
@@ -60,29 +71,37 @@
 
             <div>
 
-                <strong>GAUTENG EMS</strong>
+                <strong>
+                    GAUTENG EMS
+                </strong>
 
-                <span>IT SUPPORT</span>
+                <span>
+                    IT SUPPORT
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- EMPLOYEE -->
+        <!-- LOGGED-IN USER -->
 
         <div class="header-user">
 
-            <i class="fa-solid fa-user-circle"></i>
+            <i class="fa-solid fa-user-tie"></i>
 
             <div>
 
                 <strong
                         th:text="${employee.firstName + ' ' + employee.surname}">
-                    Employee
+
+                    Station Manager
+
                 </strong>
 
-                <span>EMS Employee</span>
+                <span>
+                    Station Manager
+                </span>
 
             </div>
 
@@ -91,6 +110,7 @@
     </div>
 
 </header>
+
 
 
 <!-- =========================================================
@@ -111,32 +131,35 @@
             <div>
 
                 <span class="section-label">
-                    EMPLOYEE PORTAL
+                    STATION MANAGER PORTAL
                 </span>
+
 
                 <h2>
 
-                    Welcome back,
+                    Welcome,
 
                     <span th:text="${employee.firstName}">
-                        Employee
+                        Manager
                     </span>
 
                     👋
 
                 </h2>
 
+
                 <p>
 
-                    Submit IT support requests and keep track
-                    of your support tickets.
+                    Report IT problems affecting your EMS station
+                    and monitor the support requests submitted
+                    to the IT Support team.
 
                 </p>
 
             </div>
 
 
-            <!-- DATE -->
+            <!-- TODAY -->
 
             <div class="date-card">
 
@@ -144,12 +167,14 @@
 
                 <div>
 
-                    <span>Today</span>
+                    <span>
+                        Today
+                    </span>
 
                     <strong
                             th:text="${#temporals.format(T(java.time.LocalDate).now(), 'dd MMMM yyyy')}">
 
-                        15 August 2026
+                        23 August 2026
 
                     </strong>
 
@@ -160,53 +185,187 @@
         </section>
 
 
+
         <!-- =================================================
-             EMPLOYEE INFORMATION
+             STATION MANAGER INFORMATION
              ================================================= -->
 
         <section class="employee-info-card">
 
+
+            <!-- USER ICON -->
+
             <div class="info-icon">
 
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-user-tie"></i>
 
             </div>
 
+
+            <!-- MANAGER DETAILS -->
+
             <div class="info-content">
 
-                <span>Logged in as</span>
+                <span>
+                    Logged in as Station Manager
+                </span>
+
 
                 <strong
                         th:text="${employee.firstName + ' ' + employee.surname}">
 
-                    Employee Name
+                    Station Manager Name
 
                 </strong>
+
 
                 <small
                         th:text="${employee.email}">
 
-                    employee@gauteng.gov.za
+                    manager@gautengems.gov.za
 
                 </small>
 
             </div>
 
 
+
+            <!-- =================================================
+                 DEPARTMENT
+                 ================================================= -->
+
             <div class="department-info">
 
-                <span>Department</span>
+                <span>
+                    Department
+                </span>
+
 
                 <strong
                         th:text="${employee.department}">
 
-                    Department
+                    Supply Chain Management
 
                 </strong>
 
             </div>
 
+
+
+            <!-- =================================================
+                 STATION LOCATION
+                 ================================================= -->
+
+            <div class="location-info">
+
+
+                <div class="location-icon">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                </div>
+
+
+                <div class="location-details">
+
+                    <span>
+                        Station Location
+                    </span>
+
+
+                    <strong
+                            th:text="${employee.stationUnit}">
+
+                        EMS Station
+
+                    </strong>
+
+
+                    <small>
+
+                        <i class="fa-solid fa-map-location-dot"></i>
+
+                        District:
+
+                        <b th:text="${employee.district}">
+                            District
+                        </b>
+
+                    </small>
+
+                </div>
+
+            </div>
+
         </section>
+
+
+
+        <!-- =================================================
+             CURRENT LOCATION BANNER
+             ================================================= -->
+
+        <section class="station-location-banner">
+
+
+            <div class="station-location-banner-icon">
+
+                <i class="fa-solid fa-location-crosshairs"></i>
+
+            </div>
+
+
+            <div class="station-location-banner-content">
+
+                <span>
+                    YOUR CURRENT EMS LOCATION
+                </span>
+
+
+                <h3>
+
+                    You are connecting from
+
+                    <strong
+                            th:text="${employee.stationUnit}">
+
+                        EMS Station
+
+                    </strong>
+
+                </h3>
+
+
+                <p>
+
+                    <i class="fa-solid fa-map-pin"></i>
+
+                    District:
+
+                    <strong
+                            th:text="${employee.district}">
+
+                        District
+
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <div class="location-status">
+
+                <i class="fa-solid fa-circle"></i>
+
+                <span>
+                    LOCATION ACTIVE
+                </span>
+
+            </div>
+
+        </section>
+
 
 
         <!-- =================================================
@@ -215,15 +374,19 @@
 
         <section class="section-block">
 
+
             <div class="section-heading">
 
                 <div>
 
                     <span class="section-label">
-                        QUICK ACTIONS
+                        STATION IT SUPPORT
                     </span>
 
-                    <h3>IT Support</h3>
+
+                    <h3>
+                        Report & Manage IT Problems
+                    </h3>
 
                 </div>
 
@@ -233,33 +396,39 @@
             <div class="quick-actions">
 
 
-                <!-- CREATE TICKET -->
+                <!-- REPORT IT PROBLEM -->
 
                 <a href="/tickets/new"
                    class="quick-action primary-action">
 
                     <div class="quick-icon blue">
 
-                        <i class="fa-solid fa-plus"></i>
+                        <i class="fa-solid fa-circle-exclamation"></i>
 
                     </div>
+
 
                     <div>
 
-                        <strong>Create IT Ticket</strong>
+                        <strong>
+                            Report IT Problem
+                        </strong>
+
 
                         <span>
-                            Report a new IT problem
+                            Report a problem affecting your station
                         </span>
 
                     </div>
+
 
                     <i class="fa-solid fa-chevron-right arrow"></i>
 
                 </a>
 
 
-                <!-- MY TICKETS -->
+
+                <!-- VIEW TICKETS -->
 
                 <a href="#my-tickets"
                    class="quick-action">
@@ -270,15 +439,20 @@
 
                     </div>
 
+
                     <div>
 
-                        <strong>My Tickets</strong>
+                        <strong>
+                            Station IT Tickets
+                        </strong>
+
 
                         <span>
-                            View your submitted support requests
+                            View support requests reported by you
                         </span>
 
                     </div>
+
 
                     <i class="fa-solid fa-chevron-right arrow"></i>
 
@@ -289,21 +463,26 @@
         </section>
 
 
+
         <!-- =================================================
              TICKET STATISTICS
              ================================================= -->
 
         <section class="section-block">
 
+
             <div class="section-heading">
 
                 <div>
 
                     <span class="section-label">
-                        SUPPORT REQUESTS
+                        STATION SUPPORT REQUESTS
                     </span>
 
-                    <h3>My Ticket Overview</h3>
+
+                    <h3>
+                        Ticket Overview
+                    </h3>
 
                 </div>
 
@@ -323,9 +502,13 @@
 
                     </div>
 
+
                     <div>
 
-                        <span>Total Tickets</span>
+                        <span>
+                            Total Tickets
+                        </span>
+
 
                         <strong th:text="${totalTickets}">
                             0
@@ -334,6 +517,7 @@
                     </div>
 
                 </div>
+
 
 
                 <!-- OPEN -->
@@ -346,9 +530,13 @@
 
                     </div>
 
+
                     <div>
 
-                        <span>Open</span>
+                        <span>
+                            Open
+                        </span>
+
 
                         <strong th:text="${openTickets}">
                             0
@@ -357,6 +545,7 @@
                     </div>
 
                 </div>
+
 
 
                 <!-- IN PROGRESS -->
@@ -369,9 +558,13 @@
 
                     </div>
 
+
                     <div>
 
-                        <span>In Progress</span>
+                        <span>
+                            In Progress
+                        </span>
+
 
                         <strong th:text="${inProgressTickets}">
                             0
@@ -380,6 +573,7 @@
                     </div>
 
                 </div>
+
 
 
                 <!-- RESOLVED -->
@@ -392,9 +586,13 @@
 
                     </div>
 
+
                     <div>
 
-                        <span>Resolved</span>
+                        <span>
+                            Resolved
+                        </span>
+
 
                         <strong th:text="${resolvedTickets}">
                             0
@@ -409,35 +607,43 @@
         </section>
 
 
+
         <!-- =================================================
-             MY TICKETS
+             STATION TICKETS
              ================================================= -->
 
         <section class="section-block"
                  id="my-tickets">
 
-            <div class="section-heading">
+
+            <div class="section-heading ticket-heading">
+
 
                 <div>
 
                     <span class="section-label">
-                        MY SUPPORT REQUESTS
+                        STATION SUPPORT REQUESTS
                     </span>
 
-                    <h3>My Tickets</h3>
+
+                    <h3>
+                        Reported IT Problems
+                    </h3>
 
                 </div>
+
 
                 <a href="/tickets/new"
                    class="view-all-button">
 
                     <i class="fa-solid fa-plus"></i>
 
-                    New Ticket
+                    Report Problem
 
                 </a>
 
             </div>
+
 
 
             <!-- =================================================
@@ -452,7 +658,7 @@
                      th:each="ticket : ${tickets}">
 
 
-                    <!-- TICKET ICON -->
+                    <!-- ICON -->
 
                     <div class="ticket-icon">
 
@@ -461,9 +667,11 @@
                     </div>
 
 
-                    <!-- TICKET INFORMATION -->
+
+                    <!-- INFORMATION -->
 
                     <div class="ticket-content">
+
 
                         <span class="ticket-number"
                               th:text="${ticket.ticketNumber}">
@@ -472,6 +680,7 @@
 
                         </span>
 
+
                         <strong
                                 th:text="${ticket.title}">
 
@@ -479,14 +688,31 @@
 
                         </strong>
 
-                        <small
-                                th:text="${ticket.category}">
 
-                            Category
+                        <small>
+
+
+                            <span
+                                    th:if="${ticket.category != null}"
+                                    th:text="${ticket.category}">
+
+                                Category
+
+                            </span>
+
+
+                            <span
+                                    th:if="${ticket.category == null}">
+
+                                IT Support
+
+                            </span>
+
 
                         </small>
 
                     </div>
+
 
 
                     <!-- STATUS -->
@@ -501,6 +727,7 @@
                         </span>
 
                     </div>
+
 
 
                     <!-- VIEW -->
@@ -519,12 +746,14 @@
             </div>
 
 
+
             <!-- =================================================
-                 NO TICKETS
+                 EMPTY STATE
                  ================================================= -->
 
             <div class="empty-tickets"
                  th:if="${tickets == null or tickets.isEmpty()}">
+
 
                 <div class="empty-icon">
 
@@ -532,18 +761,26 @@
 
                 </div>
 
-                <h3>No Support Tickets Yet</h3>
+
+                <h3>
+                    No IT Problems Reported
+                </h3>
+
 
                 <p>
-                    You haven't submitted any IT support requests.
+
+                    IT problems reported for your station
+                    will appear here.
+
                 </p>
+
 
                 <a href="/tickets/new"
                    class="create-ticket-button">
 
-                    <i class="fa-solid fa-plus"></i>
+                    <i class="fa-solid fa-circle-exclamation"></i>
 
-                    Create Your First Ticket
+                    Report First IT Problem
 
                 </a>
 
@@ -552,11 +789,13 @@
         </section>
 
 
+
         <!-- =================================================
-             EMPLOYEE NOTICE
+             STATION MANAGER NOTICE
              ================================================= -->
 
         <section class="notice-card">
+
 
             <div class="notice-icon">
 
@@ -564,18 +803,29 @@
 
             </div>
 
+
             <div>
 
-                <strong>Need IT assistance?</strong>
+                <strong>
+                    Station IT Support
+                </strong>
+
 
                 <p>
-                    Create a support ticket and the IT Support
-                    team will review and assist with your request.
+
+                    Report IT problems affecting computers,
+                    laptops, tablets, phones, printers,
+                    network equipment and other IT devices
+                    at your EMS station. Provide as much
+                    information as possible so that the
+                    IT Support team can assist quickly.
+
                 </p>
 
             </div>
 
         </section>
+
 
 
         <!-- =================================================
@@ -584,12 +834,15 @@
 
         <section class="logout-section">
 
+
             <form action="/logout"
                   method="post">
+
 
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}">
+
 
                 <button type="submit"
                         class="logout-button">
@@ -605,6 +858,7 @@
         </section>
 
 
+
         <!-- =================================================
              FOOTER
              ================================================= -->
@@ -613,11 +867,16 @@
 
             <i class="fa-solid fa-headset"></i>
 
+
             <span>
                 Gauteng EMS IT Support
             </span>
 
-            <span>|</span>
+
+            <span>
+                |
+            </span>
+
 
             <span>
                 Reliable. Responsive. Ready to Help.
@@ -625,9 +884,11 @@
 
         </footer>
 
+
     </div>
 
 </main>
+
 
 </body>
 

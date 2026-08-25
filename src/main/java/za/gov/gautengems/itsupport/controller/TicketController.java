@@ -1,5 +1,7 @@
 package za.gov.gautengems.itsupport.controller;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +12,20 @@ import za.gov.gautengems.itsupport.entity.User;
 import za.gov.gautengems.itsupport.service.TicketService;
 import za.gov.gautengems.itsupport.service.UserService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService ticketService;
     private final UserService userService;
+
+
+    // =========================================================
+    // CONSTRUCTOR
+    // =========================================================
 
     public TicketController(
             TicketService ticketService,
@@ -27,99 +37,688 @@ public class TicketController {
 
 
     // =========================================================
-    // VIEW ALL TICKETS
+    // VIEW IT TICKETS
     // =========================================================
 
     @GetMapping
-    public String tickets(Model model) {
+    public String tickets(
+            Model model,
+            Authentication authentication,
+            HttpSession session) {
+
+        User currentUser =
+                getLoggedInUser(authentication);
+
+        List<Ticket> tickets;
+
+        boolean standbyMode = false;
+
+
+        // =====================================================
+        // STATION MANAGER
+        //
+        // ONLY THEIR OWN REPORTED TICKETS
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            String email =
+                    currentUser.getEmail();
+
+            tickets =
+                    ticketService
+                            .getAllTickets()
+                            .stream()
+                            .filter(ticket ->
+                                    ticket != null
+                                            && ticket.getRequesterEmail() != null
+                                            && email != null
+                                            && ticket.getRequesterEmail()
+                                            .equalsIgnoreCase(email))
+                            .collect(Collectors.toList());
+        }
+
+
+        // =====================================================
+        // TECHNICIAN
+        // =====================================================
+
+        else if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            standbyMode =
+                    Boolean.TRUE.equals(
+                            session.getAttribute(
+                                    "TECHNICIAN_STANDBY"
+                            )
+                    );
+
+            tickets =
+                    getTechnicianVisibleTickets(
+                            currentUser,
+                            standbyMode
+                    );
+        }
+
+
+        // =====================================================
+        // ADMIN
+        // =====================================================
+
+        else {
+
+            tickets =
+                    ticketService.getAllTickets();
+        }
+
+
+        // =====================================================
+        // SEND TICKETS
+        // =====================================================
 
         model.addAttribute(
                 "tickets",
-                ticketService.getAllTickets()
+                tickets
         );
+
+
+        // =====================================================
+        // ROLE FLAGS
+        // =====================================================
+
+        model.addAttribute(
+                "isStationManager",
+                currentUser.getRole()
+                        == User.Role.STATION_MANAGER
+        );
+
+
+        model.addAttribute(
+                "isTechnician",
+                currentUser.getRole()
+                        == User.Role.TECHNICIAN
+        );
+
+
+        model.addAttribute(
+                "isAdmin",
+                currentUser.getRole()
+                        == User.Role.ADMIN
+        );
+
+
+        // =====================================================
+        // STANDBY MODE
+        // =====================================================
+
+        model.addAttribute(
+                "standbyMode",
+                standbyMode
+        );
+
+
+        // =====================================================
+        // CURRENT ROLE
+        // =====================================================
+
+        model.addAttribute(
+                "currentUserRole",
+                currentUser.getRole().name()
+        );
+
+
+        // =====================================================
+        // CREATE TICKET PERMISSION
+        // =====================================================
+
+        model.addAttribute(
+                "canCreateTicket",
+                currentUser.getRole()
+                        == User.Role.ADMIN
+                        || currentUser.getRole()
+                        == User.Role.STATION_MANAGER
+        );
+
+
+        // =====================================================
+        // BACK URL
+        // =====================================================
+
+        String backUrl;
+
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            backUrl =
+                    "/employee/dashboard";
+
+        } else if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            backUrl =
+                    "/technician-dashboard";
+
+        } else {
+
+            backUrl =
+                    "/dashboard";
+        }
+
+
+        model.addAttribute(
+                "backUrl",
+                backUrl
+        );
+
 
         return "tickets";
     }
 
 
     // =========================================================
-    // CREATE NEW TICKET
+    // TECHNICIAN TICKET VISIBILITY
+    // =========================================================
+
+    private List<Ticket> getTechnicianVisibleTickets(
+            User technician,
+            boolean standbyMode) {
+
+        String technicianName =
+                technician.getFirstName()
+                        + " "
+                        + technician.getSurname();
+
+
+        String technicianDistrict =
+                normalise(
+                        technician.getDistrict()
+                );
+
+
+        String technicianStation =
+                normalise(
+                        technician.getStationUnit()
+                );
+
+
+        return ticketService
+                .getAllTickets()
+                .stream()
+                .filter(ticket -> {
+
+                    if (ticket == null) {
+                        return false;
+                    }
+
+
+                    // =================================================
+                    // CHECK WHETHER ASSIGNED
+                    // =================================================
+
+                    boolean assigned =
+                            ticket.getAssignedTechnician() != null
+                                    && !ticket
+                                    .getAssignedTechnician()
+                                    .isBlank();
+
+
+                    // =================================================
+                    // ASSIGNED TO CURRENT TECHNICIAN
+                    // =================================================
+
+                    boolean assignedToMe =
+                            assigned
+                                    && ticket
+                                    .getAssignedTechnician()
+                                    .equalsIgnoreCase(
+                                            technicianName
+                                    );
+
+
+                    /*
+                     * A technician can ALWAYS see tickets
+                     * assigned to themselves.
+                     */
+
+                    if (assignedToMe) {
+                        return true;
+                    }
+
+
+                    /*
+                     * Tickets assigned to another technician
+                     * are completely hidden.
+                     */
+
+                    if (assigned) {
+                        return false;
+                    }
+
+
+                    // =================================================
+                    // FROM HERE:
+                    // TICKET IS UNASSIGNED
+                    // =================================================
+
+                    String ticketDistrict =
+                            normalise(
+                                    ticket.getDistrict()
+                            );
+
+
+                    String ticketStation =
+                            normalise(
+                                    ticket.getStationUnit()
+                            );
+
+
+                    // =================================================
+                    // NORMAL MODE
+                    //
+                    // ONLY SAME DISTRICT + SAME STATION
+                    // =================================================
+
+                    if (!standbyMode) {
+
+                        return ticketDistrict.equals(
+                                technicianDistrict
+                        )
+                                && ticketStation.equals(
+                                technicianStation
+                        );
+                    }
+
+
+                    // =================================================
+                    // STANDBY MODE
+                    //
+                    // ALL UNASSIGNED TICKETS
+                    // =================================================
+
+                    return true;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    // =========================================================
+    // TECHNICIAN STANDBY MODE
+    // =========================================================
+
+    @PostMapping("/standby")
+    public String toggleStandby(
+            Authentication authentication,
+            HttpSession session) {
+
+        User currentUser =
+                getLoggedInUser(authentication);
+
+
+        if (currentUser.getRole()
+                != User.Role.TECHNICIAN) {
+
+            throw new RuntimeException(
+                    "Only technicians can use standby mode."
+            );
+        }
+
+
+        Boolean current =
+                (Boolean) session.getAttribute(
+                        "TECHNICIAN_STANDBY"
+                );
+
+
+        boolean newStatus =
+                !Boolean.TRUE.equals(current);
+
+
+        session.setAttribute(
+                "TECHNICIAN_STANDBY",
+                newStatus
+        );
+
+
+        return "redirect:/tickets";
+    }
+
+
+    // =========================================================
+    // CREATE NEW TICKET PAGE
     // =========================================================
 
     @GetMapping("/new")
-    public String newTicket(Model model) {
+    public String newTicket(
+            Model model,
+            Authentication authentication) {
+
+        User currentUser =
+                getLoggedInUser(authentication);
+
+
+        // =====================================================
+        // TECHNICIANS CANNOT CREATE TICKETS
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            return "redirect:/tickets";
+        }
+
 
         model.addAttribute(
                 "ticket",
                 new Ticket()
         );
 
+
+        model.addAttribute(
+                "isAdmin",
+                currentUser.getRole()
+                        == User.Role.ADMIN
+        );
+
+
+        model.addAttribute(
+                "isTechnician",
+                false
+        );
+
+
+        model.addAttribute(
+                "isStationManager",
+                currentUser.getRole()
+                        == User.Role.STATION_MANAGER
+        );
+
+
+        // =====================================================
+        // ADMIN TECHNICIANS
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.ADMIN) {
+
+            model.addAttribute(
+                    "technicians",
+                    getActiveTechnicians()
+            );
+        }
+
+
         return "ticket-form";
     }
 
 
     // =========================================================
-    // SAVE NEW OR UPDATED TICKET
+    // CANCEL TICKET CREATION
+    // =========================================================
+
+    @GetMapping("/cancel")
+    public String cancelTicketCreation(
+            Authentication authentication) {
+
+        User currentUser =
+                getLoggedInUser(authentication);
+
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            return "redirect:/employee/dashboard";
+        }
+
+
+        if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            return "redirect:/technician-dashboard";
+        }
+
+
+        if (currentUser.getRole()
+                == User.Role.ADMIN) {
+
+            return "redirect:/dashboard";
+        }
+
+
+        return "redirect:/login";
+    }
+
+
+    // =========================================================
+    // SAVE TICKET
     // =========================================================
 
     @PostMapping("/save")
     public String saveTicket(
-            @ModelAttribute Ticket ticket,
+            @ModelAttribute("ticket") Ticket ticket,
             Authentication authentication) {
 
-        // -----------------------------------------------------
+        User currentUser =
+                getLoggedInUser(authentication);
+
+
+        // =====================================================
+        // TECHNICIAN PROTECTION
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            throw new RuntimeException(
+                    "Technicians are not authorised to create tickets."
+            );
+        }
+
+
+        // =====================================================
         // NEW TICKET
-        // -----------------------------------------------------
+        // =====================================================
 
         if (ticket.getId() == null) {
 
-            if (ticket.getTicketNumber() == null ||
-                    ticket.getTicketNumber().isBlank()) {
+            // =================================================
+            // GENERATE TICKET NUMBER
+            // =================================================
+
+            if (ticket.getTicketNumber() == null
+                    || ticket.getTicketNumber().isBlank()) {
 
                 ticket.setTicketNumber(
                         "EMS-" + System.currentTimeMillis()
                 );
             }
 
+
+            // =================================================
+            // STATION MANAGER
+            //
+            // ALL IMPORTANT INFORMATION COMES FROM
+            // THE LOGGED-IN USER, NOT THE HTML FORM.
+            // =================================================
+
+            if (currentUser.getRole()
+                    == User.Role.STATION_MANAGER) {
+
+                String managerName =
+                        currentUser.getFirstName()
+                                + " "
+                                + currentUser.getSurname();
+
+
+                // =================================================
+                // REQUESTER
+                // =================================================
+
+                ticket.setRequesterName(
+                        managerName
+                );
+
+
+                ticket.setRequesterEmail(
+                        currentUser.getEmail()
+                );
+
+
+                // =================================================
+                // MANAGER INFORMATION
+                // =================================================
+
+                ticket.setManagerFirstName(
+                        currentUser.getFirstName()
+                );
+
+
+                ticket.setManagerSurname(
+                        currentUser.getSurname()
+                );
+
+
+                ticket.setManagerEmail(
+                        currentUser.getEmail()
+                );
+
+
+                ticket.setManagerPhone(
+                        currentUser.getPhone()
+                );
+
+
+                ticket.setManagerRole(
+                        "STATION_MANAGER"
+                );
+
+
+                // =================================================
+                // LOCATION
+                // =================================================
+
+                ticket.setDistrict(
+                        currentUser.getDistrict()
+                );
+
+
+                ticket.setStationUnit(
+                        currentUser.getStationUnit()
+                );
+
+
+                ticket.setDepartment(
+                        currentUser.getDepartment()
+                );
+
+
+                // =================================================
+                // STATION MANAGER CANNOT ASSIGN TECHNICIAN
+                // =================================================
+
+                ticket.setAssignedTechnician(null);
+            }
+
+
+            // =================================================
+            // ADMIN
+            // =================================================
+
+            else if (currentUser.getRole()
+                    == User.Role.ADMIN) {
+
+                validateTechnicianAssignment(
+                        ticket.getAssignedTechnician()
+                );
+            }
+
+
+            // =================================================
+            // SAVE
+            // =================================================
+
             ticketService.saveTicket(ticket);
+
+
+            // =================================================
+            // STATION MANAGER → DASHBOARD
+            // =================================================
+
+            if (currentUser.getRole()
+                    == User.Role.STATION_MANAGER) {
+
+                return "redirect:/employee/dashboard";
+            }
+
 
             return "redirect:/tickets";
         }
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // EXISTING TICKET
-        // -----------------------------------------------------
+        // =====================================================
 
-        Ticket existingTicket = ticketService
-                .getTicketById(ticket.getId())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket not found"
-                        ));
+        Ticket existingTicket =
+                ticketService
+                        .getTicketById(ticket.getId())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
 
 
-        // -----------------------------------------------------
-        // ADMIN CAN EDIT ANY TICKET
-        // -----------------------------------------------------
+        // =====================================================
+        // ADMIN
+        // =====================================================
 
         if (isAdmin(authentication)) {
 
+            validateTechnicianAssignment(
+                    ticket.getAssignedTechnician()
+            );
+
+
             ticketService.saveTicket(ticket);
 
-            return "redirect:/tickets/" + ticket.getId();
+
+            return "redirect:/tickets/"
+                    + ticket.getId();
         }
 
 
-        // -----------------------------------------------------
-        // TECHNICIAN
-        // -----------------------------------------------------
-
-        User currentUser =
-                getLoggedInUser(authentication);
+        // =====================================================
+        // STATION MANAGER
+        // =====================================================
 
         if (currentUser.getRole()
-                != User.Role.TECHNICIAN) {
+                == User.Role.STATION_MANAGER) {
+
+            if (!isOwnedByUser(
+                    existingTicket,
+                    currentUser)) {
+
+                throw new RuntimeException(
+                        "You are not authorised to edit this ticket."
+                );
+            }
+
+
+            throw new RuntimeException(
+                    "Station Managers are not authorised to edit tickets."
+            );
+        }
+
+
+        // =====================================================
+        // TECHNICIAN
+        // =====================================================
+
+        if (!isAssignedToUser(
+                existingTicket,
+                currentUser)) {
 
             throw new RuntimeException(
                     "You are not authorised to edit this ticket."
@@ -127,23 +726,9 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // TECHNICIAN MUST BE ASSIGNED
-        // -----------------------------------------------------
-
-        if (!isAssignedToUser(
-                existingTicket,
-                currentUser)) {
-
-            throw new RuntimeException(
-                    "You are not assigned to this ticket."
-            );
-        }
-
-
-        // -----------------------------------------------------
-        // KEEP ORIGINAL ASSIGNMENT
-        // -----------------------------------------------------
+        // =====================================================
+        // KEEP ORIGINAL TECHNICIAN
+        // =====================================================
 
         ticket.setAssignedTechnician(
                 existingTicket.getAssignedTechnician()
@@ -152,7 +737,9 @@ public class TicketController {
 
         ticketService.saveTicket(ticket);
 
-        return "redirect:/tickets/" + ticket.getId();
+
+        return "redirect:/tickets/"
+                + ticket.getId();
     }
 
 
@@ -164,32 +751,79 @@ public class TicketController {
     public String viewTicket(
             @PathVariable Long id,
             Model model,
-            Authentication authentication) {
+            Authentication authentication,
+            HttpSession session) {
 
-        Ticket ticket = ticketService
-                .getTicketById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket not found"
-                        ));
+        Ticket ticket =
+                ticketService
+                        .getTicketById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
 
 
         User currentUser =
                 getLoggedInUser(authentication);
 
 
-        // -----------------------------------------------------
-        // CHECK ADMIN
-        // -----------------------------------------------------
+        // =====================================================
+        // STATION MANAGER SECURITY
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            if (!isOwnedByUser(
+                    ticket,
+                    currentUser)) {
+
+                throw new RuntimeException(
+                        "Access denied."
+                );
+            }
+        }
+
+
+        // =====================================================
+        // TECHNICIAN SECURITY
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            boolean standbyMode =
+                    Boolean.TRUE.equals(
+                            session.getAttribute(
+                                    "TECHNICIAN_STANDBY"
+                            )
+                    );
+
+
+            if (!canTechnicianViewTicket(
+                    ticket,
+                    currentUser,
+                    standbyMode)) {
+
+                throw new RuntimeException(
+                        "Access denied. "
+                                + "This ticket is outside your "
+                                + "current work area or is assigned "
+                                + "to another technician."
+                );
+            }
+        }
+
+
+        // =====================================================
+        // ROLE FLAGS
+        // =====================================================
 
         boolean admin =
                 currentUser.getRole()
                         == User.Role.ADMIN;
 
-
-        // -----------------------------------------------------
-        // CHECK ASSIGNMENT
-        // -----------------------------------------------------
 
         boolean assignedToCurrentUser =
                 isAssignedToUser(
@@ -198,19 +832,10 @@ public class TicketController {
                 );
 
 
-        // -----------------------------------------------------
-        // CHECK IF UNASSIGNED
-        // -----------------------------------------------------
-
         boolean unassigned =
                 ticket.getAssignedTechnician() == null
-                        ||
-                        ticket.getAssignedTechnician().isBlank();
+                        || ticket.getAssignedTechnician().isBlank();
 
-
-        // -----------------------------------------------------
-        // PERMISSIONS
-        // -----------------------------------------------------
 
         boolean canEdit =
                 admin || assignedToCurrentUser;
@@ -222,9 +847,9 @@ public class TicketController {
                         && unassigned;
 
 
-        // -----------------------------------------------------
-        // SEND DATA TO THYMELEAF
-        // -----------------------------------------------------
+        // =====================================================
+        // SEND TICKET TO VIEW
+        // =====================================================
 
         model.addAttribute(
                 "ticket",
@@ -250,7 +875,146 @@ public class TicketController {
         );
 
 
+        model.addAttribute(
+                "isStationManager",
+                currentUser.getRole()
+                        == User.Role.STATION_MANAGER
+        );
+
+
+        // =====================================================
+        // BACK URL
+        //
+        // This is required by ticket-view.html.
+        //
+        // It makes the top-left arrow and the
+        // "Back to My Dashboard" button functional.
+        // =====================================================
+
+        String backUrl;
+
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            backUrl =
+                    "/employee/dashboard";
+
+        } else if (currentUser.getRole()
+                == User.Role.TECHNICIAN) {
+
+            backUrl =
+                    "/technician-dashboard";
+
+        } else if (currentUser.getRole()
+                == User.Role.ADMIN) {
+
+            backUrl =
+                    "/dashboard";
+
+        } else {
+
+            backUrl =
+                    "/login";
+        }
+
+
+        model.addAttribute(
+                "backUrl",
+                backUrl
+        );
+
+
         return "ticket-view";
+    }
+
+
+    // =========================================================
+    // TECHNICIAN VIEW PERMISSION
+    // =========================================================
+
+    private boolean canTechnicianViewTicket(
+            Ticket ticket,
+            User technician,
+            boolean standbyMode) {
+
+        if (ticket == null
+                || technician == null) {
+
+            return false;
+        }
+
+
+        String technicianName =
+                technician.getFirstName()
+                        + " "
+                        + technician.getSurname();
+
+
+        boolean assigned =
+                ticket.getAssignedTechnician() != null
+                        && !ticket
+                        .getAssignedTechnician()
+                        .isBlank();
+
+
+        // =====================================================
+        // ASSIGNED TO ME
+        // =====================================================
+
+        if (assigned
+                && ticket
+                .getAssignedTechnician()
+                .equalsIgnoreCase(
+                        technicianName
+                )) {
+
+            return true;
+        }
+
+
+        // =====================================================
+        // ASSIGNED TO SOMEONE ELSE
+        // =====================================================
+
+        if (assigned) {
+
+            return false;
+        }
+
+
+        // =====================================================
+        // UNASSIGNED + STANDBY
+        // =====================================================
+
+        if (standbyMode) {
+
+            return true;
+        }
+
+
+        // =====================================================
+        // UNASSIGNED + NORMAL MODE
+        //
+        // SAME DISTRICT + SAME STATION
+        // =====================================================
+
+        return normalise(
+                ticket.getDistrict()
+        ).equals(
+                normalise(
+                        technician.getDistrict()
+                )
+        )
+                &&
+
+                normalise(
+                        ticket.getStationUnit()
+                ).equals(
+                        normalise(
+                                technician.getStationUnit()
+                        )
+                );
     }
 
 
@@ -264,30 +1028,33 @@ public class TicketController {
             Model model,
             Authentication authentication) {
 
-        Ticket ticket = ticketService
-                .getTicketById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket not found"
-                        ));
+        Ticket ticket =
+                ticketService
+                        .getTicketById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
 
 
         User currentUser =
                 getLoggedInUser(authentication);
 
 
-        // -----------------------------------------------------
-        // ADMIN CAN EDIT ANYTHING
-        // -----------------------------------------------------
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            throw new RuntimeException(
+                    "Station Managers are not authorised to edit tickets."
+            );
+        }
+
 
         boolean admin =
                 currentUser.getRole()
                         == User.Role.ADMIN;
 
-
-        // -----------------------------------------------------
-        // TECHNICIAN MUST BE ASSIGNED
-        // -----------------------------------------------------
 
         boolean assigned =
                 isAssignedToUser(
@@ -310,14 +1077,13 @@ public class TicketController {
         );
 
 
-        // -----------------------------------------------------
-        // ACTIVE TECHNICIANS
-        // -----------------------------------------------------
+        if (admin) {
 
-        model.addAttribute(
-                "technicians",
-                userService.getActiveTechnicians()
-        );
+            model.addAttribute(
+                    "technicians",
+                    getActiveTechnicians()
+            );
+        }
 
 
         model.addAttribute(
@@ -326,26 +1092,34 @@ public class TicketController {
         );
 
 
+        model.addAttribute(
+                "isTechnician",
+                currentUser.getRole()
+                        == User.Role.TECHNICIAN
+        );
+
+
         return "ticket-edit";
     }
 
 
     // =========================================================
-    // TECHNICIAN TAKES UNASSIGNED TICKET
+    // TECHNICIAN TAKES TICKET
     // =========================================================
 
     @PostMapping("/{id}/take")
     public String takeTicket(
             @PathVariable Long id,
-            Authentication authentication) {
+            Authentication authentication,
+            HttpSession session) {
 
         User currentUser =
                 getLoggedInUser(authentication);
 
 
-        // -----------------------------------------------------
+        // =====================================================
         // ONLY TECHNICIANS
-        // -----------------------------------------------------
+        // =====================================================
 
         if (currentUser.getRole()
                 != User.Role.TECHNICIAN) {
@@ -356,19 +1130,67 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // TECHNICIAN NAME
-        // -----------------------------------------------------
+        Ticket ticket =
+                ticketService
+                        .getTicketById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
+
+
+        // =====================================================
+        // MUST STILL BE UNASSIGNED
+        // =====================================================
+
+        if (ticket.getAssignedTechnician() != null
+                && !ticket
+                .getAssignedTechnician()
+                .isBlank()) {
+
+            throw new RuntimeException(
+                    "This ticket has already been assigned."
+            );
+        }
+
+
+        // =====================================================
+        // CHECK TECHNICIAN'S CURRENT VISIBILITY
+        //
+        // This prevents a technician from manually taking
+        // a ticket outside their allowed area.
+        // =====================================================
+
+        boolean standbyMode =
+                Boolean.TRUE.equals(
+                        session.getAttribute(
+                                "TECHNICIAN_STANDBY"
+                        )
+                );
+
+
+        if (!canTechnicianViewTicket(
+                ticket,
+                currentUser,
+                standbyMode)) {
+
+            throw new RuntimeException(
+                    "You are not authorised to take "
+                            + "this ticket."
+            );
+        }
+
+
+        // =====================================================
+        // ASSIGN TO CURRENT TECHNICIAN
+        // =====================================================
 
         String technicianName =
                 currentUser.getFirstName()
                         + " "
                         + currentUser.getSurname();
 
-
-        // -----------------------------------------------------
-        // TAKE TICKET
-        // -----------------------------------------------------
 
         ticketService.takeTicket(
                 id,
@@ -390,10 +1212,6 @@ public class TicketController {
             @RequestParam String technician,
             Authentication authentication) {
 
-        // -----------------------------------------------------
-        // ONLY ADMIN
-        // -----------------------------------------------------
-
         if (!isAdmin(authentication)) {
 
             throw new RuntimeException(
@@ -402,22 +1220,20 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // FIND TECHNICIAN
-        // -----------------------------------------------------
-
         User selectedTechnician =
-                userService
-                        .findByUsername(technician)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Technician not found"
-                                ));
+                userService.findByUsername(
+                        technician
+                );
 
 
-        // -----------------------------------------------------
-        // CHECK ROLE
-        // -----------------------------------------------------
+        if (selectedTechnician == null) {
+
+            throw new RuntimeException(
+                    "Technician not found: "
+                            + technician
+            );
+        }
+
 
         if (selectedTechnician.getRole()
                 != User.Role.TECHNICIAN) {
@@ -428,10 +1244,6 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // CHECK ACTIVE
-        // -----------------------------------------------------
-
         if (!selectedTechnician.isActive()) {
 
             throw new RuntimeException(
@@ -440,19 +1252,11 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // TECHNICIAN FULL NAME
-        // -----------------------------------------------------
-
         String technicianName =
                 selectedTechnician.getFirstName()
                         + " "
                         + selectedTechnician.getSurname();
 
-
-        // -----------------------------------------------------
-        // ASSIGN
-        // -----------------------------------------------------
 
         ticketService.assignTicket(
                 id,
@@ -465,7 +1269,7 @@ public class TicketController {
 
 
     // =========================================================
-    // UPDATE TICKET STATUS
+    // UPDATE STATUS
     // =========================================================
 
     @PostMapping("/{id}/status")
@@ -474,38 +1278,38 @@ public class TicketController {
             @RequestParam String status,
             Authentication authentication) {
 
-        // -----------------------------------------------------
-        // FIND TICKET
-        // -----------------------------------------------------
+        Ticket ticket =
+                ticketService
+                        .getTicketById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
 
-        Ticket ticket = ticketService
-                .getTicketById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket not found"
-                        ));
-
-
-        // -----------------------------------------------------
-        // GET CURRENT USER
-        // -----------------------------------------------------
 
         User currentUser =
                 getLoggedInUser(authentication);
 
 
-        // -----------------------------------------------------
-        // CHECK ADMIN
-        // -----------------------------------------------------
+        // =====================================================
+        // STATION MANAGER CANNOT UPDATE
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            throw new RuntimeException(
+                    "Station Managers are not authorised "
+                            + "to update ticket status."
+            );
+        }
+
 
         boolean admin =
                 currentUser.getRole()
                         == User.Role.ADMIN;
 
-
-        // -----------------------------------------------------
-        // CHECK TECHNICIAN ASSIGNMENT
-        // -----------------------------------------------------
 
         boolean assigned =
                 isAssignedToUser(
@@ -514,10 +1318,6 @@ public class TicketController {
                 );
 
 
-        // -----------------------------------------------------
-        // AUTHORISATION
-        // -----------------------------------------------------
-
         if (!admin && !assigned) {
 
             throw new RuntimeException(
@@ -525,10 +1325,6 @@ public class TicketController {
             );
         }
 
-
-        // -----------------------------------------------------
-        // VALIDATE STATUS
-        // -----------------------------------------------------
 
         if (!isValidStatus(status)) {
 
@@ -538,25 +1334,17 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // UPDATE STATUS
-        // -----------------------------------------------------
-
         ticket.setStatus(status);
 
         ticketService.saveTicket(ticket);
 
-
-        // -----------------------------------------------------
-        // RETURN TO TICKET
-        // -----------------------------------------------------
 
         return "redirect:/tickets/" + id;
     }
 
 
     // =========================================================
-    // UPDATE TICKET PRIORITY
+    // UPDATE PRIORITY
     // =========================================================
 
     @PostMapping("/{id}/priority")
@@ -565,38 +1353,38 @@ public class TicketController {
             @RequestParam String priority,
             Authentication authentication) {
 
-        // -----------------------------------------------------
-        // FIND TICKET
-        // -----------------------------------------------------
+        Ticket ticket =
+                ticketService
+                        .getTicketById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Ticket not found."
+                                )
+                        );
 
-        Ticket ticket = ticketService
-                .getTicketById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Ticket not found"
-                        ));
-
-
-        // -----------------------------------------------------
-        // GET CURRENT USER
-        // -----------------------------------------------------
 
         User currentUser =
                 getLoggedInUser(authentication);
 
 
-        // -----------------------------------------------------
-        // CHECK ADMIN
-        // -----------------------------------------------------
+        // =====================================================
+        // STATION MANAGER CANNOT UPDATE
+        // =====================================================
+
+        if (currentUser.getRole()
+                == User.Role.STATION_MANAGER) {
+
+            throw new RuntimeException(
+                    "Station Managers are not authorised "
+                            + "to update ticket priority."
+            );
+        }
+
 
         boolean admin =
                 currentUser.getRole()
                         == User.Role.ADMIN;
 
-
-        // -----------------------------------------------------
-        // CHECK TECHNICIAN ASSIGNMENT
-        // -----------------------------------------------------
 
         boolean assigned =
                 isAssignedToUser(
@@ -604,10 +1392,6 @@ public class TicketController {
                         currentUser
                 );
 
-
-        // -----------------------------------------------------
-        // AUTHORISATION
-        // -----------------------------------------------------
 
         if (!admin && !assigned) {
 
@@ -617,10 +1401,6 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // VALIDATE PRIORITY
-        // -----------------------------------------------------
-
         if (!isValidPriority(priority)) {
 
             throw new IllegalArgumentException(
@@ -629,35 +1409,23 @@ public class TicketController {
         }
 
 
-        // -----------------------------------------------------
-        // UPDATE PRIORITY
-        // -----------------------------------------------------
-
         ticket.setPriority(priority);
 
         ticketService.saveTicket(ticket);
 
-
-        // -----------------------------------------------------
-        // RETURN TO TICKET
-        // -----------------------------------------------------
 
         return "redirect:/tickets/" + id;
     }
 
 
     // =========================================================
-    // DELETE TICKET
+    // DELETE
     // =========================================================
 
     @PostMapping("/{id}/delete")
     public String deleteTicket(
             @PathVariable Long id,
             Authentication authentication) {
-
-        // -----------------------------------------------------
-        // ONLY ADMIN
-        // -----------------------------------------------------
 
         if (!isAdmin(authentication)) {
 
@@ -669,12 +1437,72 @@ public class TicketController {
 
         ticketService.deleteTicket(id);
 
+
         return "redirect:/tickets";
     }
 
 
     // =========================================================
-    // VALIDATE STATUS
+    // ACTIVE TECHNICIANS
+    // =========================================================
+
+    private List<User> getActiveTechnicians() {
+
+        return userService
+                .getAllUsers()
+                .stream()
+                .filter(user ->
+                        user != null
+                                && user.getRole()
+                                == User.Role.TECHNICIAN
+                                && user.isActive()
+                )
+                .collect(Collectors.toList());
+    }
+
+
+    // =========================================================
+    // VALIDATE TECHNICIAN
+    // =========================================================
+
+    private void validateTechnicianAssignment(
+            String assignedTechnician) {
+
+        if (assignedTechnician == null
+                || assignedTechnician.isBlank()) {
+
+            return;
+        }
+
+
+        boolean validTechnician =
+                getActiveTechnicians()
+                        .stream()
+                        .anyMatch(technician -> {
+
+                            String fullName =
+                                    technician.getFirstName()
+                                            + " "
+                                            + technician.getSurname();
+
+
+                            return fullName.equalsIgnoreCase(
+                                    assignedTechnician.trim()
+                            );
+                        });
+
+
+        if (!validTechnician) {
+
+            throw new RuntimeException(
+                    "Selected technician is invalid or inactive."
+            );
+        }
+    }
+
+
+    // =========================================================
+    // VALID STATUS
     // =========================================================
 
     private boolean isValidStatus(
@@ -684,15 +1512,17 @@ public class TicketController {
             return false;
         }
 
+
         return status.equals("OPEN")
                 || status.equals("PENDING")
                 || status.equals("IN_PROGRESS")
-                || status.equals("RESOLVED");
+                || status.equals("RESOLVED")
+                || status.equals("CLOSED");
     }
 
 
     // =========================================================
-    // VALIDATE PRIORITY
+    // VALID PRIORITY
     // =========================================================
 
     private boolean isValidPriority(
@@ -702,10 +1532,12 @@ public class TicketController {
             return false;
         }
 
+
         return priority.equals("LOW")
                 || priority.equals("MEDIUM")
                 || priority.equals("HIGH")
-                || priority.equals("URGENT");
+                || priority.equals("URGENT")
+                || priority.equals("CRITICAL");
     }
 
 
@@ -719,6 +1551,7 @@ public class TicketController {
         if (authentication == null) {
             return false;
         }
+
 
         return authentication
                 .getAuthorities()
@@ -737,42 +1570,51 @@ public class TicketController {
     private User getLoggedInUser(
             Authentication authentication) {
 
-        if (authentication == null ||
-                authentication.getName() == null) {
+        if (authentication == null
+                || authentication.getName() == null) {
 
             throw new RuntimeException(
                     "No authenticated user found."
             );
         }
 
-        return userService
-                .findByUsername(
+
+        User user =
+                userService.findByUsername(
                         authentication.getName()
-                )
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Logged-in user not found."
-                        ));
+                );
+
+
+        if (user == null) {
+
+            throw new RuntimeException(
+                    "Logged-in user not found: "
+                            + authentication.getName()
+            );
+        }
+
+
+        return user;
     }
 
 
     // =========================================================
-    // CHECK TICKET ASSIGNMENT
+    // CHECK TECHNICIAN ASSIGNMENT
     // =========================================================
 
     private boolean isAssignedToUser(
             Ticket ticket,
             User user) {
 
-        if (ticket == null ||
-                user == null) {
+        if (ticket == null
+                || user == null) {
 
             return false;
         }
 
 
-        if (ticket.getAssignedTechnician() == null ||
-                ticket.getAssignedTechnician().isBlank()) {
+        if (ticket.getAssignedTechnician() == null
+                || ticket.getAssignedTechnician().isBlank()) {
 
             return false;
         }
@@ -787,5 +1629,54 @@ public class TicketController {
         return ticket
                 .getAssignedTechnician()
                 .equalsIgnoreCase(fullName);
+    }
+
+
+    // =========================================================
+    // CHECK TICKET OWNER
+    // =========================================================
+
+    private boolean isOwnedByUser(
+            Ticket ticket,
+            User user) {
+
+        if (ticket == null
+                || user == null) {
+
+            return false;
+        }
+
+
+        if (ticket.getRequesterEmail() == null
+                || user.getEmail() == null) {
+
+            return false;
+        }
+
+
+        return ticket
+                .getRequesterEmail()
+                .equalsIgnoreCase(
+                        user.getEmail()
+                );
+    }
+
+
+    // =========================================================
+    // NORMALISE LOCATION
+    // =========================================================
+
+    private String normalise(
+            String value) {
+
+        if (value == null) {
+            return "";
+        }
+
+
+        return value
+                .trim()
+                .replaceAll("\\s+", " ")
+                .toLowerCase();
     }
 }

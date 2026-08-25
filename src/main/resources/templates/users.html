@@ -21,6 +21,7 @@
 
 <body>
 
+
 <!-- =========================================================
      FIXED TOP NAVIGATION
      ========================================================= -->
@@ -41,7 +42,9 @@
 
             <h1>Users Management</h1>
 
-            <p>Gauteng EMS IT Support Management System</p>
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
 
         </div>
 
@@ -79,7 +82,9 @@
     <div class="users-container">
 
 
-        <!-- PAGE HEADING -->
+        <!-- =================================================
+             PAGE HEADING
+             ================================================= -->
 
         <div class="page-heading">
 
@@ -92,8 +97,9 @@
                 <h2>EMS System Users</h2>
 
                 <p>
-                    Manage administrators, technicians and employees
-                    who have access to the IT Support System.
+                    Manage administrators, IT technicians and
+                    station managers who have access to the
+                    Gauteng EMS IT Support System.
                 </p>
 
             </div>
@@ -117,6 +123,9 @@
 
         <div class="stats-grid">
 
+
+            <!-- TOTAL USERS -->
+
             <div class="stat-card">
 
                 <div class="stat-icon blue">
@@ -137,6 +146,8 @@
 
             </div>
 
+
+            <!-- ADMINISTRATORS -->
 
             <div class="stat-card">
 
@@ -160,6 +171,8 @@
             </div>
 
 
+            <!-- IT TECHNICIANS -->
+
             <div class="stat-card">
 
                 <div class="stat-icon green">
@@ -170,7 +183,7 @@
 
                 <div>
 
-                    <span>Technicians</span>
+                    <span>IT Technicians</span>
 
                     <strong
                             th:text="${users.?[role.name() == 'TECHNICIAN'].size()}">
@@ -182,20 +195,22 @@
             </div>
 
 
+            <!-- STATION MANAGERS -->
+
             <div class="stat-card">
 
                 <div class="stat-icon orange">
 
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-building-user"></i>
 
                 </div>
 
                 <div>
 
-                    <span>Employees</span>
+                    <span>Station Managers</span>
 
                     <strong
-                            th:text="${users.?[role.name() == 'EMPLOYEE'].size()}">
+                            th:text="${users.?[role.name() == 'STATION_MANAGER'].size()}">
                         0
                     </strong>
 
@@ -212,17 +227,24 @@
 
         <section class="users-card">
 
+
+            <!-- CARD HEADER -->
+
             <div class="card-heading">
 
                 <div>
 
                     <h3>
+
                         <i class="fa-solid fa-users"></i>
+
                         System Users
+
                     </h3>
 
                     <p>
-                        Users registered on the EMS IT Support System.
+                        Users registered on the Gauteng EMS
+                        IT Support System.
                     </p>
 
                 </div>
@@ -230,9 +252,18 @@
             </div>
 
 
+            <!-- =================================================
+                 TABLE
+                 ================================================= -->
+
             <div class="table-wrapper">
 
                 <table>
+
+
+                    <!-- =================================================
+                         TABLE HEADER
+                         ================================================= -->
 
                     <thead>
 
@@ -242,9 +273,11 @@
 
                         <th>PERSONAL NUMBER</th>
 
-                        <th>DEPARTMENT</th>
+                        <th>DISTRICT</th>
 
-                        <th>USERNAME</th>
+                        <th>EMS STATION / UNIT</th>
+
+                        <th>PHONE</th>
 
                         <th>ROLE</th>
 
@@ -257,9 +290,19 @@
                     </thead>
 
 
+                    <!-- =================================================
+                         TABLE BODY
+                         ================================================= -->
+
                     <tbody>
 
+
+                    <!-- =================================================
+                         USER ROW
+                         ================================================= -->
+
                     <tr th:each="user : ${users}">
+
 
                         <!-- USER -->
 
@@ -277,12 +320,16 @@
 
                                     <strong
                                             th:text="${user.firstName + ' ' + user.surname}">
+
                                         User Name
+
                                     </strong>
 
                                     <span
                                             th:text="${user.email}">
+
                                         email@example.com
+
                                     </span>
 
                                 </div>
@@ -294,25 +341,61 @@
 
                         <!-- PERSONAL NUMBER -->
 
-                        <td th:text="${user.personalNumber}">
-                            EMS000000
+                        <td>
+
+                            <span
+                                    th:text="${user.personalNumber}">
+
+                                EMS000000
+
+                            </span>
+
                         </td>
 
 
-                        <!-- DEPARTMENT -->
-
-                        <td th:text="${user.department}">
-                            IT Support
-                        </td>
-
-
-                        <!-- USERNAME -->
+                        <!-- DISTRICT -->
 
                         <td>
 
-                            <span class="username"
-                                  th:text="${user.username}">
-                                username
+                            <span
+                                    th:text="${user.district}">
+
+                                District
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- EMS STATION / UNIT -->
+
+                        <td>
+
+                            <div>
+
+                                <i class="fa-solid fa-house-medical"></i>
+
+                                <span
+                                        th:text="${user.stationUnit}">
+
+                                    EMS Station
+
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            <span
+                                    th:text="${user.phone}">
+
+                                071 000 0000
+
                             </span>
 
                         </td>
@@ -323,9 +406,21 @@
                         <td>
 
                             <span class="role-badge"
-                                  th:classappend="${user.role.name().toLowerCase()}"
-                                  th:text="${user.role}">
-                                TECHNICIAN
+                                  th:classappend="${user.role.name() == 'STATION_MANAGER'
+                                                   ? ' station-manager'
+                                                   : user.role.name() == 'TECHNICIAN'
+                                                   ? ' technician'
+                                                   : ' admin'}"
+                                  th:text="${user.role.name() == 'STATION_MANAGER'
+                                           ? 'Station Manager'
+                                           : user.role.name() == 'TECHNICIAN'
+                                           ? 'IT Technician'
+                                           : user.role.name() == 'ADMIN'
+                                           ? 'Administrator'
+                                           : user.role}">
+
+                                Station Manager
+
                             </span>
 
                         </td>
@@ -336,15 +431,23 @@
                         <td>
 
                             <span class="status-badge"
-                                  th:classappend="${user.active ? 'active' : 'inactive'}">
+                                  th:classappend="${user.active
+                                                   ? ' active'
+                                                   : ' inactive'}">
 
                                 <i class="fa-solid"
-                                   th:classappend="${user.active ? 'fa-circle-check' : 'fa-circle-xmark'}">
+                                   th:classappend="${user.active
+                                                    ? ' fa-circle-check'
+                                                    : ' fa-circle-xmark'}">
                                 </i>
 
                                 <span
-                                        th:text="${user.active ? 'Active' : 'Inactive'}">
+                                        th:text="${user.active
+                                                  ? 'Active'
+                                                  : 'Inactive'}">
+
                                     Active
+
                                 </span>
 
                             </span>
@@ -352,13 +455,20 @@
                         </td>
 
 
-                        <!-- ACTIONS -->
+                        <!-- =================================================
+                             ACTIONS
+                             ================================================= -->
 
                         <td>
 
                             <div class="action-buttons">
 
-                                <a href="#"
+
+                                <!-- =================================================
+                                     EDIT USER
+                                     ================================================= -->
+
+                                <a th:href="@{/users/edit/{id}(id=${user.id})}"
                                    class="action-button edit"
                                    title="Edit User">
 
@@ -367,14 +477,21 @@
                                 </a>
 
 
+                                <!-- =================================================
+                                     DELETE USER
+                                     ================================================= -->
+
                                 <form
                                         th:action="@{/users/{id}/delete(id=${user.id})}"
                                         method="post"
                                         style="display:inline;">
 
+                                    <!-- CSRF -->
+
                                     <input type="hidden"
                                            th:name="${_csrf.parameterName}"
                                            th:value="${_csrf.token}">
+
 
                                     <button
                                             type="submit"
@@ -395,16 +512,20 @@
                     </tr>
 
 
-                    <!-- EMPTY STATE -->
+                    <!-- =================================================
+                         EMPTY STATE
+                         ================================================= -->
 
                     <tr th:if="${#lists.isEmpty(users)}">
 
-                        <td colspan="7"
+                        <td colspan="8"
                             class="empty-state">
 
                             <i class="fa-solid fa-users-slash"></i>
 
-                            <h3>No users found</h3>
+                            <h3>
+                                No users found
+                            </h3>
 
                             <p>
                                 There are currently no users registered
@@ -415,6 +536,7 @@
 
                     </tr>
 
+
                     </tbody>
 
                 </table>
@@ -424,7 +546,9 @@
         </section>
 
 
-        <!-- FOOTER -->
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
 
         <footer class="users-footer">
 
@@ -441,6 +565,7 @@
             </span>
 
         </footer>
+
 
     </div>
 

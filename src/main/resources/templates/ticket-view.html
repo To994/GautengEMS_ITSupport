@@ -33,9 +33,13 @@
 
     <div class="header-left">
 
-        <a href="/tickets"
+        <!-- =====================================================
+             ROLE-AWARE BACK BUTTON
+             ===================================================== -->
+
+        <a th:href="${backUrl}"
            class="back-button"
-           title="Back to Tickets">
+           title="Back to My Dashboard">
 
             <i class="fa-solid fa-arrow-left"></i>
 
@@ -117,12 +121,16 @@
             </div>
 
 
-            <a href="/tickets"
+            <!-- =================================================
+                 ROLE-AWARE DASHBOARD BUTTON
+                 ================================================= -->
+
+            <a th:href="${backUrl}"
                class="back-tickets-button">
 
-                <i class="fa-solid fa-list"></i>
+                <i class="fa-solid fa-arrow-left"></i>
 
-                Back to Tickets
+                Back to My Dashboard
 
             </a>
 
@@ -136,13 +144,11 @@
 
         <section class="ticket-summary">
 
-
             <div class="summary-icon">
 
                 <i class="fa-solid fa-ticket"></i>
 
             </div>
-
 
 
             <div class="summary-content">
@@ -162,8 +168,9 @@
             </div>
 
 
-
-            <!-- STATUS -->
+            <!-- =================================================
+                 STATUS
+                 ================================================= -->
 
             <div class="status-box">
 
@@ -171,8 +178,6 @@
                     Status
                 </span>
 
-
-                <!-- OPEN -->
 
                 <strong class="ticket-status open"
                         th:if="${ticket.status == 'OPEN'}">
@@ -184,8 +189,6 @@
                 </strong>
 
 
-                <!-- PENDING -->
-
                 <strong class="ticket-status pending"
                         th:if="${ticket.status == 'PENDING'}">
 
@@ -195,8 +198,6 @@
 
                 </strong>
 
-
-                <!-- IN PROGRESS -->
 
                 <strong class="ticket-status progress"
                         th:if="${ticket.status == 'IN_PROGRESS'}">
@@ -208,8 +209,6 @@
                 </strong>
 
 
-                <!-- RESOLVED -->
-
                 <strong class="ticket-status resolved"
                         th:if="${ticket.status == 'RESOLVED'}">
 
@@ -219,8 +218,6 @@
 
                 </strong>
 
-
-                <!-- UNKNOWN STATUS -->
 
                 <strong class="ticket-status"
                         th:if="${ticket.status != 'OPEN'
@@ -240,11 +237,206 @@
 
 
         <!-- =================================================
-             TICKET INFORMATION
+             LOCATION INFORMATION
              ================================================= -->
 
         <section class="information-card">
 
+            <div class="card-heading">
+
+                <div class="card-heading-icon">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        EMS Location
+                    </h3>
+
+                    <p>
+                        Location where this IT problem was reported.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <!-- =================================================
+                     DISTRICT
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-map-location-dot"></i>
+
+                        District
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.district != null
+                                and !ticket.district.isBlank()}"
+                            th:text="${ticket.district}">
+
+                        District
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.district != null
+                                and !ticket.district.isBlank()}">
+
+                        Not specified
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     STATION
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-house-medical"></i>
+
+                        EMS Station
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.stationUnit != null
+                                and !ticket.stationUnit.isBlank()}"
+                            th:text="${ticket.stationUnit}">
+
+                        EMS Station
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.stationUnit != null
+                                and !ticket.stationUnit.isBlank()}">
+
+                        Not specified
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DEPARTMENT
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-building"></i>
+
+                        Department
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.department != null
+                                and !ticket.department.isBlank()}"
+                            th:text="${ticket.department}">
+
+                        Department
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.department != null
+                                and !ticket.department.isBlank()}">
+
+                        Not specified
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     LOCATION SUMMARY
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-location-crosshairs"></i>
+
+                        Reported From
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.district != null
+                                and !ticket.district.isBlank()
+                                and ticket.stationUnit != null
+                                and !ticket.stationUnit.isBlank()}">
+
+                        <span th:text="${ticket.district}">
+                            District
+                        </span>
+
+                        -
+
+                        <span th:text="${ticket.stationUnit}">
+                            Station
+                        </span>
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.district != null
+                                and !ticket.district.isBlank()
+                                and ticket.stationUnit != null
+                                and !ticket.stationUnit.isBlank()}">
+
+                        Location not specified
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TICKET INFORMATION
+             ================================================= -->
+
+        <section class="information-card">
 
             <div class="card-heading">
 
@@ -270,11 +462,12 @@
             </div>
 
 
-
             <div class="information-grid">
 
 
-                <!-- ISSUE TITLE -->
+                <!-- =================================================
+                     ISSUE TITLE
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -295,7 +488,9 @@
 
 
 
-                <!-- CATEGORY -->
+                <!-- =================================================
+                     CATEGORY
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -308,78 +503,142 @@
                     </span>
 
 
-                    <strong th:text="${ticket.category}">
+                    <strong
+                            th:if="${ticket.category != null
+                                and !ticket.category.isBlank()}"
+                            th:text="${ticket.category}">
+
                         Network
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.category != null
+                                and !ticket.category.isBlank()}">
+
+                        Not specified
+
                     </strong>
 
                 </div>
 
 
 
-                <!-- REQUESTER -->
+                <!-- =================================================
+                     PROBLEM TYPE
+                     ================================================= -->
 
                 <div class="information-item">
 
                     <span class="information-label">
 
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
 
-                        Requester
+                        Problem Type
 
                     </span>
 
 
-                    <strong th:text="${ticket.requesterName}">
-                        Requester Name
+                    <strong
+                            th:if="${ticket.problemType != null
+                                and !ticket.problemType.isBlank()}"
+                            th:text="${ticket.problemType}">
+
+                        Network Connection
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.problemType != null
+                                and !ticket.problemType.isBlank()}">
+
+                        Not specified
+
                     </strong>
 
                 </div>
 
 
 
-                <!-- EMAIL -->
+                <!-- =================================================
+                     DEVICE TYPE
+                     ================================================= -->
 
                 <div class="information-item">
 
                     <span class="information-label">
 
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-laptop"></i>
 
-                        Email
+                        Device Type
 
                     </span>
 
 
-                    <strong th:text="${ticket.requesterEmail}">
-                        requester@gauteng.gov.za
+                    <strong
+                            th:if="${ticket.deviceType != null
+                                and !ticket.deviceType.isBlank()}"
+                            th:text="${ticket.deviceType}">
+
+                        Computer
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.deviceType != null
+                                and !ticket.deviceType.isBlank()}">
+
+                        Not specified
+
                     </strong>
 
                 </div>
 
 
 
-                <!-- DEPARTMENT -->
+                <!-- =================================================
+                     ASSET NUMBER
+                     ================================================= -->
 
                 <div class="information-item">
 
                     <span class="information-label">
 
-                        <i class="fa-solid fa-building"></i>
+                        <i class="fa-solid fa-barcode"></i>
 
-                        Department
+                        Asset Number
 
                     </span>
 
 
-                    <strong th:text="${ticket.department}">
-                        IT
+                    <strong
+                            th:if="${ticket.assetNumber != null
+                                and !ticket.assetNumber.isBlank()}"
+                            th:text="${ticket.assetNumber}">
+
+                        Asset Number
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.assetNumber != null
+                                and !ticket.assetNumber.isBlank()}">
+
+                        Not provided
+
                     </strong>
 
                 </div>
 
 
 
-                <!-- PRIORITY -->
+                <!-- =================================================
+                     PRIORITY
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -392,8 +651,6 @@
                     </span>
 
 
-                    <!-- HIGH -->
-
                     <strong class="priority priority-high"
                             th:if="${ticket.priority == 'HIGH'}">
 
@@ -403,8 +660,6 @@
 
                     </strong>
 
-
-                    <!-- URGENT -->
 
                     <strong class="priority priority-urgent"
                             th:if="${ticket.priority == 'URGENT'}">
@@ -416,7 +671,15 @@
                     </strong>
 
 
-                    <!-- MEDIUM -->
+                    <strong class="priority priority-critical"
+                            th:if="${ticket.priority == 'CRITICAL'}">
+
+                        <i class="fa-solid fa-skull-crossbones"></i>
+
+                        CRITICAL
+
+                    </strong>
+
 
                     <strong class="priority priority-medium"
                             th:if="${ticket.priority == 'MEDIUM'}">
@@ -428,8 +691,6 @@
                     </strong>
 
 
-                    <!-- LOW -->
-
                     <strong class="priority priority-low"
                             th:if="${ticket.priority == 'LOW'}">
 
@@ -440,12 +701,11 @@
                     </strong>
 
 
-                    <!-- UNKNOWN / NULL -->
-
                     <strong class="priority priority-medium"
                             th:if="${ticket.priority == null
                                 or (ticket.priority != 'HIGH'
                                 and ticket.priority != 'URGENT'
+                                and ticket.priority != 'CRITICAL'
                                 and ticket.priority != 'MEDIUM'
                                 and ticket.priority != 'LOW')}">
 
@@ -465,7 +725,9 @@
 
 
 
-                <!-- ASSIGNED TECHNICIAN -->
+                <!-- =================================================
+                     ASSIGNED TECHNICIAN
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -501,9 +763,244 @@
 
                 </div>
 
+            </div>
+
+        </section>
 
 
-                <!-- CREATED -->
+
+        <!-- =================================================
+             REPORTER INFORMATION
+             ================================================= -->
+
+        <section class="information-card">
+
+            <div class="card-heading">
+
+                <div class="card-heading-icon">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Reported By
+                    </h3>
+
+                    <p>
+                        Contact information of the person who reported
+                        the IT problem.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <!-- =================================================
+                     NAME
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Requester
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.managerFirstName != null
+                                and !ticket.managerFirstName.isBlank()
+                                and ticket.managerSurname != null
+                                and !ticket.managerSurname.isBlank()}"
+                            th:text="${ticket.managerFirstName + ' ' + ticket.managerSurname}">
+
+                        Station Manager
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.managerFirstName != null
+                                and !ticket.managerFirstName.isBlank()
+                                and ticket.managerSurname != null
+                                and !ticket.managerSurname.isBlank()}"
+                            th:text="${ticket.requesterName != null
+                                ? ticket.requesterName
+                                : 'Not specified'}">
+
+                        Station Manager
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     EMAIL
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        Email
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.managerEmail != null
+                                and !ticket.managerEmail.isBlank()}"
+                            th:text="${ticket.managerEmail}">
+
+                        requester@gauteng.gov.za
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.managerEmail != null
+                                and !ticket.managerEmail.isBlank()}"
+                            th:text="${ticket.requesterEmail != null
+                                ? ticket.requesterEmail
+                                : 'Not provided'}">
+
+                        Not provided
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CELLPHONE
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+
+                        Cellphone
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.managerPhone != null
+                                and !ticket.managerPhone.isBlank()}"
+                            th:text="${ticket.managerPhone}">
+
+                        072 000 0000
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.managerPhone != null
+                                and !ticket.managerPhone.isBlank()}">
+
+                        Not provided
+
+                    </strong>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MANAGER ROLE
+                     ================================================= -->
+
+                <div class="information-item">
+
+                    <span class="information-label">
+
+                        <i class="fa-solid fa-id-badge"></i>
+
+                        Role
+
+                    </span>
+
+
+                    <strong
+                            th:if="${ticket.managerRole != null
+                                and !ticket.managerRole.isBlank()}"
+                            th:text="${ticket.managerRole}">
+
+                        Station Manager
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.managerRole != null
+                                and !ticket.managerRole.isBlank()}">
+
+                        Station Manager
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             DATE / TIME INFORMATION
+             ================================================= -->
+
+        <section class="information-card">
+
+            <div class="card-heading">
+
+                <div class="card-heading-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Ticket Timeline
+                    </h3>
+
+                    <p>
+                        Date and time information for this support request.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="information-grid">
+
+
+                <!-- =================================================
+                     CREATED
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -511,20 +1008,34 @@
 
                         <i class="fa-solid fa-calendar-plus"></i>
 
-                        Created
+                        Date & Time Created
 
                     </span>
 
 
-                    <strong th:text="${ticket.createdAt}">
-                        Date
+                    <strong
+                            th:if="${ticket.createdAt != null}"
+                            th:text="${#temporals.format(ticket.createdAt, 'dd MMMM yyyy HH:mm')}">
+
+                        23 August 2026 17:30
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.createdAt != null}">
+
+                        Not available
+
                     </strong>
 
                 </div>
 
 
 
-                <!-- UPDATED -->
+                <!-- =================================================
+                     LAST UPDATED
+                     ================================================= -->
 
                 <div class="information-item">
 
@@ -537,12 +1048,23 @@
                     </span>
 
 
-                    <strong th:text="${ticket.updatedAt}">
-                        Date
+                    <strong
+                            th:if="${ticket.updatedAt != null}"
+                            th:text="${#temporals.format(ticket.updatedAt, 'dd MMMM yyyy HH:mm')}">
+
+                        23 August 2026 18:00
+
+                    </strong>
+
+
+                    <strong
+                            th:unless="${ticket.updatedAt != null}">
+
+                        Not available
+
                     </strong>
 
                 </div>
-
 
             </div>
 
@@ -555,7 +1077,6 @@
              ================================================= -->
 
         <section class="description-card">
-
 
             <div class="card-heading">
 
@@ -579,7 +1100,6 @@
                 </div>
 
             </div>
-
 
 
             <div class="description-content">
@@ -618,7 +1138,6 @@
         <section class="ticket-management-card"
                  th:if="${canEdit}">
 
-
             <div class="card-heading">
 
                 <div class="card-heading-icon">
@@ -644,7 +1163,6 @@
             </div>
 
 
-
             <div class="management-grid">
 
 
@@ -655,7 +1173,6 @@
                 <form class="management-form"
                       th:action="@{/tickets/{id}/status(id=${ticket.id})}"
                       method="post">
-
 
                     <input type="hidden"
                            th:name="${_csrf.parameterName}"
@@ -730,7 +1247,6 @@
                       th:action="@{/tickets/{id}/priority(id=${ticket.id})}"
                       method="post">
 
-
                     <input type="hidden"
                            th:name="${_csrf.parameterName}"
                            th:value="${_csrf.token}">
@@ -780,6 +1296,14 @@
 
                         </option>
 
+
+                        <option value="CRITICAL"
+                                th:selected="${ticket.priority == 'CRITICAL'}">
+
+                            Critical
+
+                        </option>
+
                     </select>
 
 
@@ -794,7 +1318,6 @@
 
                 </form>
 
-
             </div>
 
         </section>
@@ -808,16 +1331,18 @@
         <section class="ticket-actions">
 
 
-            <!-- LEFT -->
+            <!-- =================================================
+                 LEFT
+                 ================================================= -->
 
             <div class="left-actions">
 
-                <a href="/tickets"
+                <a th:href="${backUrl}"
                    class="action-button secondary">
 
                     <i class="fa-solid fa-arrow-left"></i>
 
-                    Back to Tickets
+                    Back to My Dashboard
 
                 </a>
 
@@ -825,7 +1350,9 @@
 
 
 
-            <!-- RIGHT -->
+            <!-- =================================================
+                 RIGHT
+                 ================================================= -->
 
             <div class="right-actions">
 

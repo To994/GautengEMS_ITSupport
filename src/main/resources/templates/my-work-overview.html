@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        My Work Overview | Gauteng EMS IT Support
+    </title>
+
+    <link rel="stylesheet"
+          href="/css/my-work-overview.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="work-header">
+
+    <div class="header-left">
+
+        <a href="/technician-dashboard"
+           class="back-button">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            <span>
+                Back to Dashboard
+            </span>
+
+        </a>
+
+
+        <div class="header-icon">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+        </div>
+
+
+        <div class="header-title">
+
+            <span>
+                TECHNICIAN PERFORMANCE
+            </span>
+
+            <h1>
+                My Work Overview
+            </h1>
+
+            <p>
+                Track your tickets, progress and personal performance
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-brand">
+
+        <img src="/images/gauteng-ems-logo.jpeg"
+             alt="Gauteng EMS Logo">
+
+        <div>
+
+            <strong>
+                GAUTENG EMS
+            </strong>
+
+            <span>
+                IT SUPPORT
+            </span>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main class="work-page">
+
+    <div class="work-container">
+
+
+        <!-- =================================================
+             PERSONAL BANNER
+             ================================================= -->
+
+        <section class="personal-banner">
+
+            <div class="personal-banner-content">
+
+                <div class="technician-avatar">
+
+                    <i class="fa-solid fa-user-gear"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="section-label">
+                        YOUR WORKSPACE
+                    </span>
+
+
+                    <h2>
+
+                        Welcome,
+
+                        <span th:text="${technician.firstName}">
+                            Technician
+                        </span>
+
+                        👋
+
+                    </h2>
+
+
+                    <p>
+                        This dashboard contains only your own
+                        assigned tickets and performance.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="personal-badge">
+
+                <i class="fa-solid fa-shield-check"></i>
+
+                <div>
+
+                    <span>
+                        PRIVATE VIEW
+                    </span>
+
+                    <strong>
+                        MY WORK ONLY
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PERFORMANCE MESSAGE
+             ================================================= -->
+
+        <section class="performance-message"
+                 th:classappend="${performancePercentage >= 80
+                    ? ' excellent'
+                    : performancePercentage >= 60
+                    ? ' good'
+                    : performancePercentage >= 40
+                    ? ' average'
+                    : ' needs-improvement'}">
+
+            <div class="performance-message-icon">
+
+                <i class="fa-solid"
+                   th:classappend="${performancePercentage >= 80
+                    ? ' fa-trophy'
+                    : performancePercentage >= 60
+                    ? ' fa-thumbs-up'
+                    : performancePercentage >= 40
+                    ? ' fa-person-running'
+                    : ' fa-triangle-exclamation'}">
+                </i>
+
+            </div>
+
+
+            <div class="performance-message-content">
+
+                <span class="performance-label">
+                    YOUR CURRENT PERFORMANCE
+                </span>
+
+
+                <h2 th:text="${performanceTitle}">
+                    Excellent Work!
+                </h2>
+
+
+                <p th:text="${performanceMessage}">
+                    You're doing an excellent job.
+                </p>
+
+            </div>
+
+
+            <div class="performance-score">
+
+                <strong th:text="${performancePercentage + '%'}">
+                    80%
+                </strong>
+
+                <span>
+                    RESOLUTION RATE
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             STATISTICS
+             ================================================= -->
+
+        <section class="statistics-section">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    YOUR NUMBERS
+                </span>
+
+                <h3>
+                    Work Statistics
+                </h3>
+
+                <p>
+                    A live summary of your personal ticket workload.
+                </p>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <!-- TOTAL -->
+
+                <div class="stat-card total-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon blue">
+                            <i class="fa-solid fa-ticket"></i>
+                        </div>
+
+                        <span>
+                            TOTAL
+                        </span>
+
+                    </div>
+
+                    <strong th:text="${totalTickets}">
+                        0
+                    </strong>
+
+                    <p>
+                        Tickets handled
+                    </p>
+
+                </div>
+
+
+
+                <!-- OPEN -->
+
+                <div class="stat-card open-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon red">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </div>
+
+                        <span>
+                            OPEN
+                        </span>
+
+                    </div>
+
+                    <strong th:text="${openTickets}">
+                        0
+                    </strong>
+
+                    <p>
+                        Waiting for action
+                    </p>
+
+                </div>
+
+
+
+                <!-- IN PROGRESS -->
+
+                <div class="stat-card progress-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon yellow">
+                            <i class="fa-solid fa-spinner"></i>
+                        </div>
+
+                        <span>
+                            IN PROGRESS
+                        </span>
+
+                    </div>
+
+                    <strong th:text="${inProgressTickets}">
+                        0
+                    </strong>
+
+                    <p>
+                        Currently being handled
+                    </p>
+
+                </div>
+
+
+
+                <!-- RESOLVED -->
+
+                <div class="stat-card resolved-card">
+
+                    <div class="stat-card-top">
+
+                        <div class="stat-icon green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <span>
+                            RESOLVED
+                        </span>
+
+                    </div>
+
+                    <strong th:text="${resolvedTickets}">
+                        0
+                    </strong>
+
+                    <p>
+                        Successfully resolved
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CHARTS
+             ================================================= -->
+
+        <section class="charts-grid">
+
+
+            <!-- =================================================
+                 STATUS DONUT
+                 ================================================= -->
+
+            <div class="chart-card">
+
+                <div class="card-header">
+
+                    <div class="card-header-icon blue-icon">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            TICKET STATUS
+                        </span>
+
+                        <h3>
+                            My Work Distribution
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="donut-container">
+
+                    <canvas id="workChart"></canvas>
+
+                    <div class="donut-center">
+
+                        <strong th:text="${totalTickets}">
+                            0
+                        </strong>
+
+                        <span>
+                            TOTAL
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="chart-summary">
+
+                    <div>
+
+                        <span class="summary-dot red-dot"></span>
+
+                        <span>
+                            Open
+                        </span>
+
+                        <strong th:text="${openTickets}">
+                            0
+                        </strong>
+
+                        <small id="openPercentage">
+                            0%
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="summary-dot yellow-dot"></span>
+
+                        <span>
+                            In Progress
+                        </span>
+
+                        <strong th:text="${inProgressTickets}">
+                            0
+                        </strong>
+
+                        <small id="progressPercentage">
+                            0%
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="summary-dot green-dot"></span>
+
+                        <span>
+                            Resolved
+                        </span>
+
+                        <strong th:text="${resolvedTickets}">
+                            0
+                        </strong>
+
+                        <small id="resolvedPercentage">
+                            0%
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 RESOLVED OVER TIME
+                 ================================================= -->
+
+            <div class="chart-card wide-chart-card">
+
+                <div class="card-header">
+
+                    <div class="card-header-icon green-icon">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            RESOLUTION ACTIVITY
+                        </span>
+
+                        <h3>
+                            Tickets Resolved Over Time
+                        </h3>
+
+                    </div>
+
+                    <div class="chart-period">
+                        Last 6 Months
+                    </div>
+
+                </div>
+
+
+                <div class="bar-chart-container">
+
+                    <canvas id="resolvedChart"></canvas>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRIORITY
+                 ================================================= -->
+
+            <div class="chart-card priority-card">
+
+                <div class="card-header">
+
+                    <div class="card-header-icon purple-icon">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            TICKET PRIORITY
+                        </span>
+
+                        <h3>
+                            My Ticket Priority
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="priority-chart-container">
+
+                    <canvas id="priorityChart"></canvas>
+
+                </div>
+
+
+                <div class="priority-list">
+
+                    <div>
+
+                        <span class="priority-color urgent-color"></span>
+
+                        <span>
+                            Urgent
+                        </span>
+
+                        <strong th:text="${urgentPriorityTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="priority-color high-color"></span>
+
+                        <span>
+                            High
+                        </span>
+
+                        <strong th:text="${highPriorityTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="priority-color medium-color"></span>
+
+                        <span>
+                            Medium
+                        </span>
+
+                        <strong th:text="${mediumPriorityTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="priority-color low-color"></span>
+
+                        <span>
+                            Low
+                        </span>
+
+                        <strong th:text="${lowPriorityTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PERFORMANCE SCORE
+             ================================================= -->
+
+        <section class="performance-dashboard-card">
+
+            <div class="performance-gauge-area">
+
+                <span class="section-label">
+                    PERSONAL PERFORMANCE
+                </span>
+
+                <h3>
+                    Resolution Performance
+                </h3>
+
+
+                <div class="gauge">
+
+                    <div class="gauge-inner">
+
+                        <strong th:text="${performancePercentage + '%'}">
+                            0%
+                        </strong>
+
+                        <span>
+                            RESOLUTION RATE
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="performance-details">
+
+                <div class="performance-detail-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            SELF-ASSESSMENT
+                        </span>
+
+                        <h3 th:text="${performanceTitle}">
+                            Excellent Work!
+                        </h3>
+
+                    </div>
+
+                    <i class="fa-solid fa-star"></i>
+
+                </div>
+
+
+                <p th:text="${performanceMessage}">
+                    You're doing an excellent job.
+                </p>
+
+
+                <div class="performance-metrics">
+
+                    <div>
+
+                        <span>
+                            Resolved
+                        </span>
+
+                        <strong th:text="${resolvedTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Outstanding
+                        </span>
+
+                        <strong th:text="${unresolvedTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong th:text="${totalTickets}">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             MY TICKETS
+             ================================================= -->
+
+        <section class="tickets-section">
+
+            <div class="section-heading ticket-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        MY TICKET HISTORY
+                    </span>
+
+                    <h3>
+                        Tickets I've Worked On
+                    </h3>
+
+                    <p>
+                        Only tickets assigned to you are displayed.
+                    </p>
+
+                </div>
+
+
+                <a href="/tickets"
+                   class="view-tickets-button">
+
+                    <i class="fa-solid fa-ticket"></i>
+
+                    View Tickets
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <div class="tickets-card">
+
+
+                <!-- =================================================
+                     TABLE
+                     ================================================= -->
+
+                <div class="table-wrapper"
+                     th:if="${!#lists.isEmpty(myTickets)}">
+
+                    <table>
+
+                        <thead>
+
+                        <tr>
+
+                            <th>TICKET</th>
+
+                            <th>ISSUE</th>
+
+                            <th>STATION / UNIT</th>
+
+                            <th>PRIORITY</th>
+
+                            <th>STATUS</th>
+
+                            <th>DATE</th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                        <tr th:each="ticket : ${myTickets}">
+
+                            <td>
+
+                                <span class="ticket-number"
+                                      th:text="${ticket.ticketNumber}">
+                                    EMS-000001
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="ticket-issue">
+
+                                    <strong
+                                            th:text="${ticket.title}">
+                                        Computer problem
+                                    </strong>
+
+                                    <span
+                                            th:text="${ticket.category}">
+                                        Hardware
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="station-cell">
+
+                                    <i class="fa-solid fa-house-medical"></i>
+
+                                    <span
+                                            th:text="${ticket.stationUnit}">
+                                        EMS Station
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="priority-badge"
+                                      th:classappend="${ticket.priority != null
+                                        and ticket.priority.equalsIgnoreCase('HIGH')
+                                        ? ' high'
+                                        : ticket.priority != null
+                                        and ticket.priority.equalsIgnoreCase('URGENT')
+                                        ? ' urgent'
+                                        : ticket.priority != null
+                                        and ticket.priority.equalsIgnoreCase('LOW')
+                                        ? ' low'
+                                        : ' medium'}"
+                                      th:text="${ticket.priority}">
+                                    MEDIUM
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="ticket-status"
+                                      th:classappend="${ticket.status != null
+                                        and ticket.status.equalsIgnoreCase('RESOLVED')
+                                        ? ' resolved'
+                                        : ticket.status != null
+                                        and ticket.status.equalsIgnoreCase('IN_PROGRESS')
+                                        ? ' progress'
+                                        : ' open'}"
+                                      th:text="${ticket.status}">
+                                    OPEN
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                        th:if="${ticket.createdAt != null}"
+                                        th:text="${#temporals.format(ticket.createdAt, 'dd MMM yyyy')}">
+                                    15 Aug 2026
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                     ================================================= -->
+
+                <div class="empty-state"
+                     th:if="${#lists.isEmpty(myTickets)}">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-ticket"></i>
+
+                    </div>
+
+                    <h3>
+                        No Tickets Assigned Yet
+                    </h3>
+
+                    <p>
+                        You currently have no tickets assigned to you.
+                        Your personal work history will appear here
+                        when you start handling support tickets.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="work-footer">
+
+            <div>
+
+                <i class="fa-solid fa-headset"></i>
+
+                <strong>
+                    GAUTENG EMS IT SUPPORT
+                </strong>
+
+            </div>
+
+            <span>
+                Reliable. Responsive. Ready to Help.
+            </span>
+
+        </footer>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     CHART JAVASCRIPT
+     ========================================================= -->
+
+<script th:inline="javascript">
+
+    /* =========================================================
+       PERSONAL DATA
+       ========================================================= */
+
+    const totalTickets =
+        /*[[${totalTickets}]]*/ 0;
+
+    const openTickets =
+        /*[[${openTickets}]]*/ 0;
+
+    const inProgressTickets =
+        /*[[${inProgressTickets}]]*/ 0;
+
+    const resolvedTickets =
+        /*[[${resolvedTickets}]]*/ 0;
+
+
+    const urgentPriorityTickets =
+        /*[[${urgentPriorityTickets}]]*/ 0;
+
+    const highPriorityTickets =
+        /*[[${highPriorityTickets}]]*/ 0;
+
+    const mediumPriorityTickets =
+        /*[[${mediumPriorityTickets}]]*/ 0;
+
+    const lowPriorityTickets =
+        /*[[${lowPriorityTickets}]]*/ 0;
+
+
+    const resolvedMonthLabels =
+        /*[[${resolvedMonthLabels}]]*/ [];
+
+    const resolvedMonthValues =
+        /*[[${resolvedMonthValues}]]*/ [];
+
+
+    /* =========================================================
+       PERCENTAGE CALCULATION
+       ========================================================= */
+
+    function percentage(value, total) {
+
+        if (total === 0) {
+            return 0;
+        }
+
+        return Math.round(
+            (value / total) * 100
+        );
+    }
+
+
+    document.getElementById(
+        "openPercentage"
+    ).textContent =
+        percentage(openTickets, totalTickets) + "%";
+
+
+    document.getElementById(
+        "progressPercentage"
+    ).textContent =
+        percentage(inProgressTickets, totalTickets) + "%";
+
+
+    document.getElementById(
+        "resolvedPercentage"
+    ).textContent =
+        percentage(resolvedTickets, totalTickets) + "%";
+
+
+    /* =========================================================
+       CHART DEFAULTS
+       ========================================================= */
+
+    Chart.defaults.font.family =
+        "'Segoe UI', Arial, sans-serif";
+
+    Chart.defaults.color =
+        "#8ea4b8";
+
+
+    /* =========================================================
+       DOUGHNUT CENTRE TEXT
+       ========================================================= */
+
+    const centreTextPlugin = {
+
+        id: "centreText",
+
+        beforeDraw(chart) {
+
+            const {
+                ctx,
+                chartArea
+            } = chart;
+
+            if (!chartArea) {
+                return;
+            }
+
+
+            const centerX =
+                (chartArea.left + chartArea.right) / 2;
+
+            const centerY =
+                (chartArea.top + chartArea.bottom) / 2;
+
+
+            ctx.save();
+
+            ctx.textAlign = "center";
+
+            ctx.textBaseline = "middle";
+
+
+            ctx.font =
+                "700 30px Segoe UI";
+
+            ctx.fillStyle =
+                "#ffffff";
+
+
+            ctx.fillText(
+                totalTickets,
+                centerX,
+                centerY - 7
+            );
+
+
+            ctx.font =
+                "600 10px Segoe UI";
+
+            ctx.fillStyle =
+                "#7890a4";
+
+
+            ctx.fillText(
+                "TOTAL TICKETS",
+                centerX,
+                centerY + 18
+            );
+
+
+            ctx.restore();
+        }
+    };
+
+
+    /* =========================================================
+       STATUS DOUGHNUT
+       ========================================================= */
+
+    const workCanvas =
+        document.getElementById(
+            "workChart"
+        );
+
+
+    if (workCanvas) {
+
+        new Chart(
+            workCanvas,
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Open",
+                        "In Progress",
+                        "Resolved"
+                    ],
+
+                    datasets: [{
+
+                        data: [
+                            openTickets,
+                            inProgressTickets,
+                            resolvedTickets
+                        ],
+
+                        backgroundColor: [
+                            "#ef5350",
+                            "#f5b93f",
+                            "#22c879"
+                        ],
+
+                        borderColor: "#0b1928",
+
+                        borderWidth: 5,
+
+                        hoverOffset: 8
+
+                    }]
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "70%",
+
+                    animation: {
+                        animateRotate: true,
+                        duration: 900
+                    },
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            backgroundColor:
+                                "#101f30",
+
+                            borderColor:
+                                "rgba(255,255,255,0.12)",
+
+                            borderWidth: 1,
+
+                            padding: 12,
+
+                            callbacks: {
+
+                                label: function(context) {
+
+                                    const value =
+                                        context.raw;
+
+                                    const percent =
+                                        percentage(
+                                            value,
+                                            totalTickets
+                                        );
+
+                                    return " "
+                                        + context.label
+                                        + ": "
+                                        + value
+                                        + " ("
+                                        + percent
+                                        + "%)";
+                                }
+                            }
+                        }
+                    }
+                },
+
+                plugins: [
+                    centreTextPlugin
+                ]
+
+            }
+        );
+    }
+
+
+    /* =========================================================
+       RESOLVED OVER TIME BAR CHART
+       ========================================================= */
+
+    const resolvedCanvas =
+        document.getElementById(
+            "resolvedChart"
+        );
+
+
+    if (resolvedCanvas) {
+
+        new Chart(
+            resolvedCanvas,
+            {
+
+                type: "bar",
+
+                data: {
+
+                    labels:
+                        resolvedMonthLabels,
+
+                    datasets: [{
+
+                        label:
+                            "Resolved Tickets",
+
+                        data:
+                            resolvedMonthValues,
+
+                        backgroundColor:
+                            "rgba(34, 200, 121, 0.75)",
+
+                        borderColor:
+                            "#22c879",
+
+                        borderWidth: 1,
+
+                        borderRadius: 8,
+
+                        maxBarThickness: 42
+
+                    }]
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+                                display: false
+                            },
+
+                            ticks: {
+                                color: "#8198aa"
+                            }
+                        },
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0,
+                                color: "#8198aa"
+                            },
+
+                            grid: {
+                                color:
+                                    "rgba(255,255,255,0.06)"
+                            }
+                        }
+                    },
+
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            backgroundColor:
+                                "#101f30",
+
+                            borderColor:
+                                "rgba(255,255,255,0.12)",
+
+                            borderWidth: 1,
+
+                            padding: 12
+                        }
+                    }
+                }
+
+            }
+        );
+    }
+
+
+    /* =========================================================
+       PRIORITY DOUGHNUT
+       ========================================================= */
+
+    const priorityCanvas =
+        document.getElementById(
+            "priorityChart"
+        );
+
+
+    if (priorityCanvas) {
+
+        new Chart(
+            priorityCanvas,
+            {
+
+                type: "doughnut",
+
+                data: {
+
+                    labels: [
+                        "Urgent",
+                        "High",
+                        "Medium",
+                        "Low"
+                    ],
+
+                    datasets: [{
+
+                        data: [
+                            urgentPriorityTickets,
+                            highPriorityTickets,
+                            mediumPriorityTickets,
+                            lowPriorityTickets
+                        ],
+
+                        backgroundColor: [
+                            "#ff5252",
+                            "#ef5350",
+                            "#f3a62f",
+                            "#2779e8"
+                        ],
+
+                        borderColor: "#0b1928",
+
+                        borderWidth: 4,
+
+                        hoverOffset: 7
+                    }]
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    cutout: "67%",
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            backgroundColor:
+                                "#101f30",
+
+                            padding: 12,
+
+                            callbacks: {
+
+                                label: function(context) {
+
+                                    const value =
+                                        context.raw;
+
+                                    const percent =
+                                        percentage(
+                                            value,
+                                            totalTickets
+                                        );
+
+                                    return " "
+                                        + context.label
+                                        + ": "
+                                        + value
+                                        + " ("
+                                        + percent
+                                        + "%)";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+</script>
+
+
+</body>
+
+</html>

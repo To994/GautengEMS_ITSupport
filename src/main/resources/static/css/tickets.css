@@ -916,5 +916,50 @@ body {
 .tickets-container {
     position: relative;
 }
+/* =========================================================
+   TECHNICIAN CREATE TICKET - ACCESS RESTRICTED
+   ========================================================= */
+
+.technician-disabled-button {
+    cursor: pointer;
+    font-family: inherit;
+    opacity: 0.75;
+}
+
+
+.technician-disabled-button:hover {
+    transform: none;
+}
+
+
+.empty-disabled-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    margin-top: 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    color: #8799aa;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.empty-disabled-button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
 
 

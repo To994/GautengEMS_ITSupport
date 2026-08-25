@@ -284,6 +284,131 @@
 
 
         /* =====================================================
+           DESKTOP SIDEBAR COLLAPSE
+           ===================================================== */
+
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+
+        .main-content {
+            transition:
+                    margin-left 0.3s ease,
+                    width 0.3s ease;
+        }
+
+
+        /* =====================================================
+           COLLAPSED SIDEBAR
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .sidebar {
+            width: 80px;
+        }
+
+        .dashboard-wrapper.sidebar-collapsed .main-content {
+            margin-left: 80px;
+        }
+
+
+        /* =====================================================
+           HIDE SIDEBAR TEXT
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .sidebar-brand h2,
+        .dashboard-wrapper.sidebar-collapsed .sidebar-brand span,
+        .dashboard-wrapper.sidebar-collapsed .menu-title,
+        .dashboard-wrapper.sidebar-collapsed .menu-item span,
+        .dashboard-wrapper.sidebar-collapsed .sidebar-footer strong,
+        .dashboard-wrapper.sidebar-collapsed .sidebar-footer small {
+            display: none;
+        }
+
+
+        /* =====================================================
+           COLLAPSED LOGO
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .sidebar-brand {
+            justify-content: center;
+        }
+
+        .dashboard-wrapper.sidebar-collapsed .sidebar-brand img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+        }
+
+
+        /* =====================================================
+           COLLAPSED MENU
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .menu-item {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .dashboard-wrapper.sidebar-collapsed .menu-item i {
+            margin: 0;
+        }
+
+
+        /* =====================================================
+           HIDE BADGE
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .menu-badge {
+            display: none;
+        }
+
+
+        /* =====================================================
+           COLLAPSED FOOTER
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .sidebar-footer {
+            justify-content: center;
+        }
+
+
+        /* =====================================================
+           TOOLTIP
+           ===================================================== */
+
+        .dashboard-wrapper.sidebar-collapsed .menu-item {
+            position: relative;
+        }
+
+        .dashboard-wrapper.sidebar-collapsed .menu-item:hover::after {
+            content: attr(data-title);
+
+            position: absolute;
+
+            left: 70px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            background: #172033;
+            color: #ffffff;
+
+            padding: 8px 12px;
+
+            border-radius: 6px;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+
+            z-index: 9999;
+
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+
+        /* =====================================================
            RESPONSIVE
            ===================================================== */
 
@@ -294,6 +419,7 @@
             }
 
         }
+
 
         @media (max-width: 600px) {
 
@@ -346,7 +472,8 @@
 
 
             <a href="/dashboard"
-               class="menu-item active">
+               class="menu-item active"
+               data-title="Dashboard">
 
                 <i class="fa-solid fa-chart-line"></i>
 
@@ -356,7 +483,8 @@
 
 
             <a href="/tickets"
-               class="menu-item">
+               class="menu-item"
+               data-title="IT Tickets">
 
                 <i class="fa-solid fa-ticket"></i>
 
@@ -372,7 +500,8 @@
 
 
             <a href="#"
-               class="menu-item">
+               class="menu-item"
+               data-title="Call Tracker">
 
                 <i class="fa-solid fa-headset"></i>
 
@@ -382,7 +511,8 @@
 
 
             <a href="/users"
-               class="menu-item">
+               class="menu-item"
+               data-title="Users">
 
                 <i class="fa-solid fa-users"></i>
 
@@ -392,7 +522,8 @@
 
 
             <a href="/technicians"
-               class="menu-item">
+               class="menu-item"
+               data-title="Technicians">
 
                 <i class="fa-solid fa-user-gear"></i>
 
@@ -407,7 +538,8 @@
 
 
             <a href="#"
-               class="menu-item">
+               class="menu-item"
+               data-title="IT Equipment">
 
                 <i class="fa-solid fa-computer"></i>
 
@@ -417,7 +549,8 @@
 
 
             <a href="#"
-               class="menu-item">
+               class="menu-item"
+               data-title="Departments">
 
                 <i class="fa-solid fa-building"></i>
 
@@ -426,8 +559,9 @@
             </a>
 
 
-            <a href="#"
-               class="menu-item">
+            <a href="/reports"
+               class="menu-item"
+               data-title="Reports">
 
                 <i class="fa-solid fa-chart-pie"></i>
 
@@ -441,8 +575,9 @@
             </p>
 
 
-            <a href="#"
-               class="menu-item">
+            <a href="/settings"
+               class="menu-item"
+               data-title="Settings">
 
                 <i class="fa-solid fa-gear"></i>
 
@@ -451,14 +586,36 @@
             </a>
 
 
-            <a href="/logout"
-               class="menu-item logout">
+            <!-- =================================================
+                 LOGOUT
+                 ================================================= -->
 
-                <i class="fa-solid fa-right-from-bracket"></i>
+            <form th:action="@{/logout}"
+                  method="post"
+                  style="margin:0; padding:0;">
 
-                <span>Logout</span>
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
 
-            </a>
+
+                <button type="submit"
+                        class="menu-item logout"
+                        data-title="Logout"
+                        style="width:100%;
+                               border:none;
+                               background:none;
+                               cursor:pointer;
+                               text-align:left;
+                               font:inherit;">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>Logout</span>
+
+                </button>
+
+            </form>
 
 
         </nav>
@@ -503,7 +660,8 @@
 
                 <button class="menu-toggle"
                         type="button"
-                        aria-label="Open menu">
+                        aria-label="Collapse or expand sidebar"
+                        title="Collapse / Expand Sidebar">
 
                     <i class="fa-solid fa-bars"></i>
 
@@ -1079,7 +1237,7 @@
                         </a>
 
 
-                        <a href="#"
+                        <a href="/reports"
                            class="quick-action">
 
                             <div class="quick-icon purple-icon">
@@ -1276,33 +1434,19 @@
 
                         <tr>
 
-                            <th>
-                                Technician
-                            </th>
+                            <th>Technician</th>
 
-                            <th>
-                                Current Status
-                            </th>
+                            <th>Current Status</th>
 
-                            <th>
-                                Check In
-                            </th>
+                            <th>Check In</th>
 
-                            <th>
-                                Lunch Started
-                            </th>
+                            <th>Lunch Started</th>
 
-                            <th>
-                                Lunch Timer
-                            </th>
+                            <th>Lunch Timer</th>
 
-                            <th>
-                                Returned
-                            </th>
+                            <th>Returned</th>
 
-                            <th>
-                                Check Out
-                            </th>
+                            <th>Check Out</th>
 
                         </tr>
 
@@ -1312,19 +1456,12 @@
                         <tbody>
 
 
-                        <!-- =================================================
-                             TECHNICIANS
-                             ================================================= -->
-
                         <tr th:each="row : ${technicianAttendance}">
 
-
-                            <!-- TECHNICIAN -->
 
                             <td>
 
                                 <div class="attendance-technician">
-
 
                                     <div class="attendance-avatar"
                                          th:text="${#strings.substring(
@@ -1365,12 +1502,7 @@
 
 
 
-                            <!-- STATUS -->
-
                             <td>
-
-
-                                <!-- ONLINE -->
 
                                 <span class="attendance-status online"
                                       th:if="${row.status == 'ONLINE'}">
@@ -1382,8 +1514,6 @@
                                 </span>
 
 
-                                <!-- LUNCH -->
-
                                 <span class="attendance-status lunch"
                                       th:if="${row.status == 'LUNCH'}">
 
@@ -1394,8 +1524,6 @@
                                 </span>
 
 
-                                <!-- LUNCH EXCEEDED -->
-
                                 <span class="attendance-status exceeded"
                                       th:if="${row.status == 'LUNCH_EXCEEDED'}">
 
@@ -1405,8 +1533,6 @@
 
                                 </span>
 
-
-                                <!-- OFFLINE -->
 
                                 <span class="attendance-status offline"
                                       th:if="${row.status == 'OFFLINE'}">
@@ -1420,8 +1546,6 @@
                             </td>
 
 
-
-                            <!-- CHECK IN -->
 
                             <td>
 
@@ -1449,8 +1573,6 @@
 
 
 
-                            <!-- LUNCH START -->
-
                             <td>
 
                                 <span class="attendance-time-value"
@@ -1477,12 +1599,7 @@
 
 
 
-                            <!-- =================================================
-                                 LUNCH COUNTDOWN
-                                 ================================================= -->
-
                             <td>
-
 
                                 <span class="lunch-countdown"
                                       th:if="${row.status == 'LUNCH'}"
@@ -1521,8 +1638,6 @@
 
 
 
-                            <!-- RETURNED -->
-
                             <td>
 
                                 <span class="attendance-time-value"
@@ -1548,8 +1663,6 @@
                             </td>
 
 
-
-                            <!-- CHECK OUT -->
 
                             <td>
 
@@ -1579,10 +1692,6 @@
                         </tr>
 
 
-
-                        <!-- =================================================
-                             EMPTY
-                             ================================================= -->
 
                         <tr th:if="${#lists.isEmpty(technicianAttendance)}">
 
@@ -1754,7 +1863,6 @@
 
         <footer class="dashboard-footer">
 
-
             <div>
 
                 <img src="/images/gauteng-ems-logo.jpeg"
@@ -1770,7 +1878,6 @@
             <span>
                 Reliable. Responsive. Ready to Help.
             </span>
-
 
         </footer>
 
@@ -1824,25 +1931,25 @@
 
 
     /* =========================================================
-       MOBILE SIDEBAR
+       DESKTOP SIDEBAR OPEN / CLOSE
        ========================================================= */
 
     const menuToggle =
         document.querySelector(".menu-toggle");
 
 
-    const sidebar =
-        document.querySelector(".sidebar");
+    const dashboardWrapper =
+        document.querySelector(".dashboard-wrapper");
 
 
-    if (menuToggle && sidebar) {
+    if (menuToggle && dashboardWrapper) {
 
         menuToggle.addEventListener(
             "click",
-            () => {
+            function () {
 
-                sidebar.classList.toggle(
-                    "sidebar-open"
+                dashboardWrapper.classList.toggle(
+                    "sidebar-collapsed"
                 );
 
             }
@@ -1997,18 +2104,6 @@
 
     /* =========================================================
        LUNCH COUNTDOWN
-       =========================================================
-
-       Maximum lunch = 90 minutes.
-
-       IMPORTANT:
-       This countdown ONLY displays the time.
-
-       It DOES NOT automatically return the technician
-       to WORKING.
-
-       The technician must click:
-       "Return to Work"
        ========================================================= */
 
     function updateLunchCountdowns() {
@@ -2035,11 +2130,6 @@
                 }
 
 
-                /*
-                 * Convert the LocalDateTime generated by
-                 * Thymeleaf into a JavaScript Date.
-                 */
-
                 const lunchStart =
                     new Date(
                         lunchStartString
@@ -2047,9 +2137,7 @@
 
 
                 if (isNaN(lunchStart.getTime())) {
-
                     return;
-
                 }
 
 
@@ -2077,10 +2165,6 @@
                     return;
                 }
 
-
-                /* =============================================
-                   STILL WITHIN 90 MINUTES
-                   ============================================= */
 
                 if (remaining > 0) {
 
@@ -2111,11 +2195,6 @@
                     );
 
                 }
-
-
-                /* =============================================
-                   90 MINUTES EXCEEDED
-                   ============================================= */
 
                 else {
 
@@ -2170,16 +2249,6 @@
 
     /* =========================================================
        REFRESH ATTENDANCE DISPLAY
-       =========================================================
-
-       The server determines whether the 90-minute limit has
-       been exceeded.
-
-       Refresh the page periodically so that the Admin's
-       attendance status is updated from the database.
-
-       This does NOT change attendance records and does NOT
-       automatically return technicians from lunch.
        ========================================================= */
 
     setTimeout(

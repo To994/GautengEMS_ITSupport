@@ -19,6 +19,56 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <style>
+
+        /* =========================================================
+           LOGOUT BUTTON
+           ========================================================= */
+
+        .logout-form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            padding: 10px 16px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #dc3545;
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                    transform 0.2s ease,
+                    opacity 0.2s ease,
+                    box-shadow 0.2s ease;
+        }
+
+        .logout-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+
+            box-shadow:
+                    0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logout-button i {
+            font-size: 14px;
+        }
+
+    </style>
+
 </head>
 
 
@@ -58,6 +108,10 @@
     <div class="header-right">
 
 
+        <!-- =================================================
+             GAUTENG EMS BRAND
+             ================================================= -->
+
         <div class="header-brand">
 
             <img src="/images/gauteng-ems-logo.jpeg"
@@ -78,6 +132,11 @@
         </div>
 
 
+
+        <!-- =================================================
+             LOGGED-IN TECHNICIAN
+             ================================================= -->
+
         <div class="header-user">
 
             <i class="fa-solid fa-user-circle"></i>
@@ -86,7 +145,9 @@
 
                 <strong
                         th:text="${technician.firstName + ' ' + technician.surname}">
+
                     Technician
+
                 </strong>
 
                 <span>
@@ -96,6 +157,33 @@
             </div>
 
         </div>
+
+
+
+        <!-- =================================================
+             LOGOUT
+             ================================================= -->
+
+        <form th:action="@{/logout}"
+              method="post"
+              class="logout-form">
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <button type="submit"
+                    class="logout-button"
+                    title="Logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </form>
+
 
     </div>
 
@@ -180,10 +268,6 @@
         <section class="attendance-card">
 
 
-            <!-- =================================================
-                 ATTENDANCE HEADER
-                 ================================================= -->
-
             <div class="attendance-header">
 
 
@@ -212,9 +296,7 @@
 
 
 
-                <!-- =================================================
-                     NOT CHECKED IN
-                     ================================================= -->
+                <!-- NOT CHECKED IN -->
 
                 <div class="status-badge"
                      th:if="${attendance == null}">
@@ -227,9 +309,7 @@
 
 
 
-                <!-- =================================================
-                     WORKING / ONLINE
-                     ================================================= -->
+                <!-- WORKING -->
 
                 <div class="status-badge working"
                      th:if="${attendance != null
@@ -243,9 +323,7 @@
 
 
 
-                <!-- =================================================
-                     LUNCH / OFFLINE
-                     ================================================= -->
+                <!-- LUNCH -->
 
                 <div class="status-badge lunch"
                      th:if="${attendance != null
@@ -259,9 +337,7 @@
 
 
 
-                <!-- =================================================
-                     LUNCH EXCEEDED / OFFLINE
-                     ================================================= -->
+                <!-- LUNCH EXCEEDED -->
 
                 <div class="status-badge lunch-exceeded"
                      th:if="${attendance != null
@@ -275,9 +351,7 @@
 
 
 
-                <!-- =================================================
-                     CHECKED OUT / OFFLINE
-                     ================================================= -->
+                <!-- CHECKED OUT -->
 
                 <div class="status-badge checked-out"
                      th:if="${attendance != null
@@ -291,9 +365,7 @@
 
 
 
-                <!-- =================================================
-                     AWAY / OFFLINE
-                     ================================================= -->
+                <!-- AWAY -->
 
                 <div class="status-badge away"
                      th:if="${attendance != null
@@ -316,9 +388,7 @@
             <div class="attendance-content">
 
 
-                <!-- =================================================
-                     CHECK IN
-                     ================================================= -->
+                <!-- CHECK IN -->
 
                 <div class="attendance-time">
 
@@ -360,9 +430,7 @@
 
 
 
-                <!-- =================================================
-                     LUNCH START
-                     ================================================= -->
+                <!-- LUNCH START -->
 
                 <div class="attendance-time">
 
@@ -404,9 +472,7 @@
 
 
 
-                <!-- =================================================
-                     LUNCH RETURN
-                     ================================================= -->
+                <!-- LUNCH RETURN -->
 
                 <div class="attendance-time">
 
@@ -448,9 +514,7 @@
 
 
 
-                <!-- =================================================
-                     CHECK OUT
-                     ================================================= -->
+                <!-- CHECK OUT -->
 
                 <div class="attendance-time">
 
@@ -588,9 +652,7 @@
             <div class="attendance-actions">
 
 
-                <!-- =================================================
-                     CHECK IN
-                     ================================================= -->
+                <!-- CHECK IN -->
 
                 <form th:if="${attendance == null}"
                       th:action="@{/technician-dashboard/check-in}"
@@ -614,9 +676,7 @@
 
 
 
-                <!-- =================================================
-                     START LUNCH
-                     ================================================= -->
+                <!-- START LUNCH -->
 
                 <form th:if="${attendance != null
                      and attendance.status.name() == 'WORKING'
@@ -643,9 +703,7 @@
 
 
 
-                <!-- =================================================
-                     RETURN FROM NORMAL LUNCH
-                     ================================================= -->
+                <!-- RETURN FROM NORMAL LUNCH -->
 
                 <form th:if="${attendance != null
                      and attendance.status.name() == 'LUNCH'
@@ -672,9 +730,7 @@
 
 
 
-                <!-- =================================================
-                     RETURN AFTER LUNCH TIME EXCEEDED
-                     ================================================= -->
+                <!-- RETURN AFTER LUNCH EXCEEDED -->
 
                 <form th:if="${attendance != null
                      and attendance.status.name() == 'LUNCH_EXCEEDED'
@@ -701,9 +757,7 @@
 
 
 
-                <!-- =================================================
-                     CHECK OUT
-                     ================================================= -->
+                <!-- CHECK OUT -->
 
                 <form th:if="${attendance != null
                      and attendance.checkOut == null}"
@@ -949,14 +1003,14 @@
 
 
 
-                <!-- CREATE TICKET -->
+                <!-- MY WORK OVERVIEW -->
 
-                <a href="/tickets/new"
+                <a href="/technician-dashboard/my-work"
                    class="quick-action">
 
                     <div class="quick-icon green">
 
-                        <i class="fa-solid fa-plus"></i>
+                        <i class="fa-solid fa-chart-line"></i>
 
                     </div>
 
@@ -964,12 +1018,12 @@
                     <div>
 
                         <strong>
-                            Create Ticket
+                            My Work Overview
                         </strong>
 
 
                         <span>
-                            Create a new IT support request
+                            View your tickets, performance and work progress
                         </span>
 
                     </div>
@@ -983,8 +1037,9 @@
 
                 <!-- USER MANAGEMENT -->
 
-                <a href="/users"
-                   class="quick-action restricted-action">
+                <button type="button"
+                        class="quick-action restricted-action"
+                        onclick="showTechnicianRestriction()">
 
                     <div class="quick-icon purple">
 
@@ -999,7 +1054,6 @@
                             User Management
                         </strong>
 
-
                         <span>
                             Administrator function
                         </span>
@@ -1009,7 +1063,8 @@
 
                     <i class="fa-solid fa-lock arrow"></i>
 
-                </a>
+                </button>
+
 
             </div>
 
@@ -1055,32 +1110,6 @@
 
 <script th:inline="javascript">
 
-    /*
-     * =========================================================
-     * LUNCH COUNTDOWN
-     * =========================================================
-     *
-     * The server provides the lunch start time.
-     *
-     * The maximum lunch period is exactly:
-     *
-     * 90 minutes = 5,400 seconds
-     *
-     * The countdown runs in the browser.
-     *
-     * IMPORTANT:
-     *
-     * Reaching 00:00 does NOT automatically return
-     * the technician to work.
-     *
-     * The technician must still click:
-     *
-     * "Return to Work"
-     *
-     * =========================================================
-     */
-
-
     const lunchStart =
         /*[[${attendance != null
         and attendance.lunchStart != null
@@ -1113,11 +1142,6 @@
         );
 
 
-    /*
-     * Only run the countdown while the technician
-     * is actually on lunch.
-     */
-
     if (
         lunchCountdown &&
         lunchCountdownContainer &&
@@ -1125,15 +1149,6 @@
         lunchStatus === "LUNCH" &&
         !lunchEnd
     ) {
-
-
-        /*
-         * Convert server LocalDateTime
-         * into a JavaScript Date.
-         *
-         * The server and browser are expected
-         * to use the same local timezone.
-         */
 
         const startTime =
             new Date(
@@ -1145,10 +1160,6 @@
                     )
             );
 
-
-        /*
-         * 90 MINUTES
-         */
 
         const lunchLimitMilliseconds =
             90 * 60 * 1000;
@@ -1162,7 +1173,6 @@
 
         function updateLunchCountdown() {
 
-
             const now =
                 new Date().getTime();
 
@@ -1170,12 +1180,6 @@
             let remaining =
                 lunchEndTime - now;
 
-
-            /*
-             * =====================================================
-             * LUNCH TIME HAS EXPIRED
-             * =====================================================
-             */
 
             if (remaining <= 0) {
 
@@ -1187,22 +1191,6 @@
                     "countdown-expired"
                 );
 
-
-                /*
-                 * We do NOT submit the return form.
-                 *
-                 * We do NOT automatically mark the technician
-                 * as working.
-                 *
-                 * We simply refresh the dashboard.
-                 *
-                 * The backend will then detect that the
-                 * 90 minutes have expired and change:
-                 *
-                 * LUNCH
-                 *      ↓
-                 * LUNCH_EXCEEDED
-                 */
 
                 setTimeout(
                     function () {
@@ -1217,13 +1205,6 @@
                 return;
             }
 
-
-
-            /*
-             * =====================================================
-             * CONVERT REMAINING TIME
-             * =====================================================
-             */
 
             const totalSeconds =
                 Math.floor(
@@ -1247,13 +1228,6 @@
                 totalSeconds % 60;
 
 
-
-            /*
-             * FORMAT
-             *
-             * HH:MM:SS
-             */
-
             lunchCountdown.textContent =
                 String(hours).padStart(2, "0")
                 + ":"
@@ -1264,17 +1238,8 @@
         }
 
 
-
-        /*
-         * First update immediately.
-         */
-
         updateLunchCountdown();
 
-
-        /*
-         * Update every second.
-         */
 
         setInterval(
             updateLunchCountdown,

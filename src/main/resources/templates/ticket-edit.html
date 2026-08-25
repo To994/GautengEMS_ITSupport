@@ -21,10 +21,6 @@
 
 <body>
 
-<!-- =========================================================
-     FIXED TOP NAVIGATION
-     ========================================================= -->
-
 <header class="form-header">
 
     <div class="header-left">
@@ -41,7 +37,9 @@
 
             <h1>Edit IT Ticket</h1>
 
-            <p>Gauteng EMS IT Support Management System</p>
+            <p>
+                Gauteng EMS IT Support Management System
+            </p>
 
         </div>
 
@@ -70,16 +68,10 @@
 </header>
 
 
-<!-- =========================================================
-     MAIN CONTENT
-     ========================================================= -->
-
 <main class="ticket-edit-page">
 
     <div class="edit-container">
 
-
-        <!-- PAGE HEADING -->
 
         <div class="page-heading">
 
@@ -110,11 +102,8 @@
         </div>
 
 
-        <!-- =================================================
-             EDIT FORM
-             ================================================= -->
-
         <section class="edit-card">
+
 
             <div class="card-heading">
 
@@ -141,20 +130,15 @@
                   th:object="${ticket}"
                   method="post">
 
-                <!-- CSRF PROTECTION -->
 
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}">
 
 
-                <!-- Keep database ID -->
-
                 <input type="hidden"
                        th:field="*{id}">
 
-
-                <!-- Keep ticket number -->
 
                 <input type="hidden"
                        th:field="*{ticketNumber}">
@@ -251,12 +235,20 @@
                                     Email / Outlook
                                 </option>
 
-                                <option value="Account">
-                                    Account / Password
+                                <option value="Active Directory">
+                                    Active Directory
                                 </option>
 
-                                <option value="System">
-                                    System / Application
+                                <option value="Citrix">
+                                    Citrix
+                                </option>
+
+                                <option value="GEMS">
+                                    GEMS
+                                </option>
+
+                                <option value="Tablet">
+                                    Tablet
                                 </option>
 
                                 <option value="Other">
@@ -297,6 +289,10 @@
 
                                 <option value="HIGH">
                                     High
+                                </option>
+
+                                <option value="URGENT">
+                                    Urgent
                                 </option>
 
                                 <option value="CRITICAL">
@@ -451,7 +447,7 @@
                     </div>
 
 
-                    <!-- EMAIL -->
+                    <!-- REQUESTER EMAIL -->
 
                     <div class="form-group">
 
@@ -473,14 +469,106 @@
 
                     </div>
 
+
+                    <!-- DISTRICT -->
+
+                    <div class="form-group">
+
+                        <label for="district">
+                            District
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-map-location-dot"></i>
+
+                            <select
+                                    id="district"
+                                    th:field="*{district}">
+
+                                <option value="">
+                                    Select district
+                                </option>
+
+                                <option value="City of Johannesburg">
+                                    City of Johannesburg
+                                </option>
+
+                                <option value="City of Tshwane">
+                                    City of Tshwane
+                                </option>
+
+                                <option value="Ekurhuleni">
+                                    Ekurhuleni
+                                </option>
+
+                                <option value="Sedibeng">
+                                    Sedibeng
+                                </option>
+
+                                <option value="West Rand">
+                                    West Rand
+                                </option>
+
+                                <option value="Gauteng Provincial">
+                                    Gauteng Provincial
+                                </option>
+
+                                <option value="ECC">
+                                    ECC
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STATION / UNIT -->
+
+                    <div class="form-group">
+
+                        <label for="stationUnit">
+                            Station / Unit
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <select
+                                    id="stationUnit"
+                                    th:field="*{stationUnit}">
+
+                                <option value="">
+                                    Select district first
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <small class="field-help">
+                            Select a district first to view its stations.
+                        </small>
+
+                    </div>
+
                 </div>
 
 
                 <!-- =================================================
-                     TECHNICIAN
+                     TECHNICIAN ASSIGNMENT
+                     ADMIN ONLY
                      ================================================= -->
 
-                <div class="section-title">
+                <div class="section-title"
+                     th:if="${isAdmin}">
 
                     <div class="section-number">
                         03
@@ -499,7 +587,8 @@
                 </div>
 
 
-                <div class="form-grid">
+                <div class="form-grid"
+                     th:if="${isAdmin}">
 
                     <div class="form-group">
 
@@ -515,22 +604,46 @@
                                     id="assignedTechnician"
                                     th:field="*{assignedTechnician}">
 
-                                <!-- No technician -->
-
                                 <option value="">
                                     Not assigned
                                 </option>
-
-
-                                <!-- Active technicians -->
 
                                 <option
                                         th:each="technician : ${technicians}"
                                         th:value="${technician.firstName + ' ' + technician.surname}"
                                         th:text="${technician.firstName + ' ' + technician.surname}">
+
                                 </option>
 
                             </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     TECHNICIAN INFORMATION
+                     ================================================= -->
+
+                <div class="form-grid"
+                     th:if="${isTechnician}">
+
+                    <div class="form-group full">
+
+                        <div class="field-help"
+                             style="padding:14px;
+                                    border-radius:9px;
+                                    background:#f0fdf4;
+                                    border:1px solid #bbf7d0;
+                                    color:#166534;">
+
+                            <i class="fa-solid fa-user-gear"></i>
+
+                            You are editing a ticket assigned to you.
+                            Technician assignment cannot be changed here.
 
                         </div>
 
@@ -571,8 +684,6 @@
         </section>
 
 
-        <!-- FOOTER -->
-
         <footer class="edit-footer">
 
             <i class="fa-solid fa-headset"></i>
@@ -592,6 +703,259 @@
     </div>
 
 </main>
+
+
+<!-- =========================================================
+     DISTRICT → STATION DROPDOWN
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const districtSelect =
+            document.getElementById("district");
+
+        const stationSelect =
+            document.getElementById("stationUnit");
+
+
+        const stationsByDistrict = {
+
+            "City of Johannesburg": [
+
+                "Johannesburg Central",
+                "Doornfontein",
+                "Hillbrow",
+                "Yeoville",
+                "Berea",
+                "Jeppe",
+                "Lenasia",
+                "Roodepoort",
+                "Florida",
+                "Randburg",
+                "Diepsloot",
+                "Alexandra",
+                "Midrand"
+
+            ],
+
+            "City of Tshwane": [
+
+                "Tshwane Central",
+                "Pretoria Central",
+                "Pretoria West",
+                "Soshanguve",
+                "Mamelodi",
+                "Atteridgeville",
+                "Centurion",
+                "Ga-Rankuwa",
+                "Hammanskraal"
+
+            ],
+
+            "Ekurhuleni": [
+
+                "Alberton",
+                "Boksburg",
+                "Benoni",
+                "Brakpan",
+                "Germiston",
+                "Kempton Park",
+                "Springs",
+                "Edenvale",
+                "Tembisa"
+
+            ],
+
+            "Sedibeng": [
+
+                "Vanderbijlpark",
+                "Vereeniging",
+                "Sebokeng",
+                "Sharpeville",
+                "Evaton",
+                "Meyerton",
+                "Heidelberg"
+
+            ],
+
+            "West Rand": [
+
+                "Krugersdorp",
+                "Randfontein",
+                "Roodepoort",
+                "Carletonville",
+                "Westonaria"
+
+            ],
+
+            "Gauteng Provincial": [
+
+                "Gauteng Provincial Office",
+                "EMS Head Office"
+
+            ],
+
+            "ECC": [
+
+                "ECC Station / Unit List To Be Added"
+
+            ],
+
+            "Other": [
+
+                "Other / Not Listed"
+
+            ]
+
+        };
+
+
+        /*
+         * Remember the existing station value.
+         *
+         * This is important when editing an existing
+         * ticket so that its station is not lost.
+         */
+
+        const existingStation =
+            stationSelect.value;
+
+
+        function loadStations() {
+
+            const selectedDistrict =
+                districtSelect.value;
+
+
+            stationSelect.innerHTML = "";
+
+
+            /*
+             * No district selected.
+             */
+
+            if (!selectedDistrict) {
+
+                stationSelect.disabled = true;
+
+                const option =
+                    document.createElement("option");
+
+                option.value = "";
+
+                option.textContent =
+                    "Select district first";
+
+                stationSelect.appendChild(option);
+
+                return;
+            }
+
+
+            /*
+             * District selected.
+             */
+
+            stationSelect.disabled = false;
+
+
+            const defaultOption =
+                document.createElement("option");
+
+            defaultOption.value = "";
+
+            defaultOption.textContent =
+                "Select station / unit";
+
+            stationSelect.appendChild(
+                defaultOption
+            );
+
+
+            const stations =
+                stationsByDistrict[selectedDistrict] || [];
+
+
+            /*
+             * Add matching stations.
+             */
+
+            stations.forEach(function (station) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = station;
+
+                option.textContent = station;
+
+                stationSelect.appendChild(option);
+
+            });
+
+
+            /*
+             * Preserve the station on edit.
+             */
+
+            if (existingStation) {
+
+                const matchingOption =
+                    Array.from(
+                        stationSelect.options
+                    ).find(function (option) {
+
+                        return option.value === existingStation;
+
+                    });
+
+
+                if (matchingOption) {
+
+                    stationSelect.value =
+                        existingStation;
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Reload stations whenever district changes.
+         */
+
+        districtSelect.addEventListener(
+            "change",
+            function () {
+
+                /*
+                 * When the user changes district,
+                 * remove the old station.
+                 */
+
+                stationSelect.value = "";
+
+                loadStations();
+
+            }
+        );
+
+
+        /*
+         * Load correct stations immediately
+         * when the edit page opens.
+         */
+
+        loadStations();
+
+    });
+
+</script>
+
 
 </body>
 

@@ -16,25 +16,68 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            org.springframework.security.authentication.dao.DaoAuthenticationProvider authenticationProvider
+            org.springframework.security.authentication.dao.DaoAuthenticationProvider authenticationProvider,
+            CustomUserDetailsService userDetailsService
     ) throws Exception {
 
         http
+
+                // =====================================================
+                // CSRF
+                // =====================================================
+
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/login")
                 )
 
+
+                // =====================================================
+                // AUTHORIZATION
+                // =====================================================
+
                 .authorizeHttpRequests(auth -> auth
+
+                        // =====================================================
+                        // PUBLIC PAGES / RESOURCES
+                        // =====================================================
 
                         .requestMatchers(
                                 "/login",
+
+                                "/forgot-password",
+
+                                "/reset-password",
+
                                 "/css/**",
+
                                 "/images/**",
+
                                 "/js/**"
                         ).permitAll()
 
+
+                        // =====================================================
+                        // ADMIN-ONLY MANAGEMENT
+                        // =====================================================
+
+                        .requestMatchers(
+                                "/settings",
+
+                                "/locations/**"
+                        ).hasRole("ADMIN")
+
+
+                        // =====================================================
+                        // ALL OTHER AUTHENTICATED USERS
+                        // =====================================================
+
                         .anyRequest().authenticated()
                 )
+
+
+                // =====================================================
+                // LOGIN
+                // =====================================================
 
                 .formLogin(form -> form
 
@@ -42,21 +85,90 @@ public class SecurityConfig {
 
                         .loginProcessingUrl("/login")
 
-                        .successHandler(roleBasedSuccessHandler())
+                        .successHandler(
+                                roleBasedSuccessHandler()
+                        )
 
-                        .failureUrl("/login?error=true")
+                        .failureUrl(
+                                "/login?error=true"
+                        )
 
                         .permitAll()
                 )
 
+
+                // =====================================================
+                // REMEMBER ME
+                // =====================================================
+
+                .rememberMe(remember -> remember
+
+                        /*
+                         * This must match the name of the
+                         * checkbox in login.html:
+                         *
+                         * name="remember-me"
+                         */
+
+                        .rememberMeParameter("remember-me")
+
+
+                        /*
+                         * Remember the user for 14 days.
+                         */
+
+                        .tokenValiditySeconds(
+                                14 * 24 * 60 * 60
+                        )
+
+
+                        /*
+                         * Spring Security uses the existing
+                         * user details service to identify
+                         * the logged-in user.
+                         */
+
+                        .userDetailsService(
+                                userDetailsService
+                        )
+
+
+                        /*
+                         * Key used to sign the remember-me
+                         * authentication token.
+                         *
+                         * Keep this value unchanged once
+                         * deployed.
+                         */
+
+                        .key(
+                                "GautengEMS-ITSupport-RememberMe-Key-2026"
+                        )
+                )
+
+
+                // =====================================================
+                // LOGOUT
+                // =====================================================
+
                 .logout(logout -> logout
 
-                        .logoutSuccessUrl("/login?logout=true")
+                        .logoutSuccessUrl(
+                                "/login?logout=true"
+                        )
 
                         .permitAll()
                 );
 
-        http.authenticationProvider(authenticationProvider);
+
+        // =========================================================
+        // AUTHENTICATION PROVIDER
+        // =========================================================
+
+        http.authenticationProvider(
+                authenticationProvider
+        );
+
 
         return http.build();
     }
@@ -89,30 +201,64 @@ public class SecurityConfig {
                             );
 
 
-            boolean isEmployee =
+            boolean isStationManager =
                     authentication.getAuthorities()
                             .stream()
                             .anyMatch(authority ->
                                     authority.getAuthority()
-                                            .equals("ROLE_EMPLOYEE")
+                                            .equals("ROLE_STATION_MANAGER")
                             );
 
 
+            // -------------------------------------------------
+            // ADMIN
+            // -------------------------------------------------
+
             if (isAdmin) {
 
-                response.sendRedirect("/dashboard");
+                response.sendRedirect(
+                        "/dashboard"
+                );
 
-            } else if (isTechnician) {
+            }
 
-                response.sendRedirect("/technician-dashboard");
 
-            } else if (isEmployee) {
+            // -------------------------------------------------
+            // TECHNICIAN
+            // -------------------------------------------------
 
-                response.sendRedirect("/employee-dashboard");
+            else if (isTechnician) {
 
-            } else {
+                response.sendRedirect(
+                        "/technician-dashboard"
+                );
 
-                response.sendRedirect("/login?error=true");
+            }
+
+
+            // -------------------------------------------------
+            // STATION MANAGER
+            // -------------------------------------------------
+
+            else if (isStationManager) {
+
+                response.sendRedirect(
+                        "/employee/dashboard"
+                );
+
+            }
+
+
+            // -------------------------------------------------
+            // UNKNOWN ROLE
+            // -------------------------------------------------
+
+            else {
+
+                response.sendRedirect(
+                        "/login?error=true"
+                );
+
             }
         };
     }
@@ -143,7 +289,9 @@ public class SecurityConfig {
                         userDetailsService
                 );
 
-        provider.setPasswordEncoder(passwordEncoder);
+        provider.setPasswordEncoder(
+                passwordEncoder
+        );
 
         return provider;
     }

@@ -2,67 +2,98 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Create IT Ticket | Gauteng EMS IT Support</title>
 
-    <link rel="stylesheet" href="/css/ticket-form.css">
+    <link rel="stylesheet"
+          href="/css/ticket-form.css">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
 
 <div class="ticket-form-page">
 
-    <!-- HEADER -->
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
 
     <header class="form-header">
 
         <div class="header-left">
 
-            <a href="/tickets" class="back-button">
+            <a href="/tickets"
+               class="back-button">
+
                 <i class="fa-solid fa-arrow-left"></i>
+
             </a>
 
             <div>
-                <h1>Create New IT Ticket</h1>
-                <p>Gauteng EMS IT Support Management System</p>
+
+                <h1>
+                    Create New IT Ticket
+                </h1>
+
+                <p>
+                    Gauteng EMS IT Support Management System
+                </p>
+
             </div>
 
         </div>
 
         <div class="header-badge">
+
             <i class="fa-solid fa-headset"></i>
+
             IT SUPPORT
+
         </div>
 
     </header>
 
 
-    <!-- MAIN -->
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
 
     <main class="form-container">
 
         <div class="form-card">
 
-            <!-- FORM HEADER -->
+            <!-- =================================================
+                 FORM HEADER
+                 ================================================= -->
 
             <div class="form-card-header">
 
                 <div class="form-title-icon">
+
                     <i class="fa-solid fa-ticket"></i>
+
                 </div>
 
                 <div>
 
-                    <h2>New Support Request</h2>
+                    <h2>
+                        New Support Request
+                    </h2>
 
                     <p>
+
                         Enter the details of the IT issue below.
-                        Required fields are marked with <strong>*</strong>.
+                        Required fields are marked with
+                        <strong>*</strong>.
+
                     </p>
 
                 </div>
@@ -70,17 +101,25 @@
             </div>
 
 
-            <!-- FORM -->
+            <!-- =================================================
+                 FORM
+                 ================================================= -->
 
             <form action="/tickets/save"
                   method="post"
-
                   th:object="${ticket}">
+
+                <!-- CSRF -->
+
                 <input type="hidden"
                        th:name="${_csrf.parameterName}"
                        th:value="${_csrf.token}">
 
-                <!-- ISSUE INFORMATION -->
+
+                <!-- =================================================
+                     SECTION 01
+                     ISSUE INFORMATION
+                     ================================================= -->
 
                 <div class="section-title">
 
@@ -89,8 +128,15 @@
                     </div>
 
                     <div>
-                        <h3>Issue Information</h3>
-                        <span>Describe the problem that requires IT assistance.</span>
+
+                        <h3>
+                            Issue Information
+                        </h3>
+
+                        <span>
+                            Describe the problem that requires IT assistance.
+                        </span>
+
                     </div>
 
                 </div>
@@ -99,13 +145,16 @@
                 <div class="form-grid">
 
 
-                    <!-- TITLE -->
+                    <!-- ISSUE TITLE -->
 
                     <div class="form-group full">
 
                         <label for="title">
+
                             Issue Title
+
                             <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -129,8 +178,11 @@
                     <div class="form-group">
 
                         <label for="category">
+
                             Issue Category
+
                             <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -193,13 +245,120 @@
                     </div>
 
 
+                    <!-- PROBLEM TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="problemType">
+
+                            Problem Type
+
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                            <select
+                                    id="problemType"
+                                    th:field="*{problemType}"
+                                    required>
+
+                                <option value="">
+                                    Select problem type
+                                </option>
+
+                                <option value="Computer not starting">
+                                    Computer not starting
+                                </option>
+
+                                <option value="Computer slow">
+                                    Computer slow
+                                </option>
+
+                                <option value="Network connection">
+                                    Network connection
+                                </option>
+
+                                <option value="Internet connection">
+                                    Internet connection
+                                </option>
+
+                                <option value="Printer not working">
+                                    Printer not working
+                                </option>
+
+                                <option value="Printer offline">
+                                    Printer offline
+                                </option>
+
+                                <option value="Email problem">
+                                    Email problem
+                                </option>
+
+                                <option value="Password reset">
+                                    Password reset
+                                </option>
+
+                                <option value="Active Directory account">
+                                    Active Directory account
+                                </option>
+
+                                <option value="Citrix problem">
+                                    Citrix problem
+                                </option>
+
+                                <option value="GEMS problem">
+                                    GEMS problem
+                                </option>
+
+                                <option value="Software installation">
+                                    Software installation
+                                </option>
+
+                                <option value="Software error">
+                                    Software error
+                                </option>
+
+                                <option value="Tablet problem">
+                                    Tablet problem
+                                </option>
+
+                                <option value="Teams problem">
+                                    Microsoft Teams problem
+                                </option>
+
+                                <option value="Power BI problem">
+                                    Power BI problem
+                                </option>
+
+                                <option value="Hardware replacement">
+                                    Hardware replacement
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
                     <!-- PRIORITY -->
 
                     <div class="form-group">
 
                         <label for="priority">
+
                             Priority
+
                             <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -227,6 +386,10 @@
                                     High
                                 </option>
 
+                                <option value="URGENT">
+                                    Urgent
+                                </option>
+
                                 <option value="CRITICAL">
                                     Critical
                                 </option>
@@ -238,13 +401,110 @@
                     </div>
 
 
+                    <!-- DEVICE TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="deviceType">
+
+                            Device Type
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-computer"></i>
+
+                            <select
+                                    id="deviceType"
+                                    th:field="*{deviceType}">
+
+                                <option value="">
+                                    Select device
+                                </option>
+
+                                <option value="Desktop Computer">
+                                    Desktop Computer
+                                </option>
+
+                                <option value="Laptop">
+                                    Laptop
+                                </option>
+
+                                <option value="Printer">
+                                    Printer
+                                </option>
+
+                                <option value="Scanner">
+                                    Scanner
+                                </option>
+
+                                <option value="Tablet">
+                                    Tablet
+                                </option>
+
+                                <option value="Monitor">
+                                    Monitor
+                                </option>
+
+                                <option value="Network Equipment">
+                                    Network Equipment
+                                </option>
+
+                                <option value="Telephone">
+                                    Telephone
+                                </option>
+
+                                <option value="Server">
+                                    Server
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ASSET NUMBER -->
+
+                    <div class="form-group">
+
+                        <label for="assetNumber">
+
+                            Asset Number
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-barcode"></i>
+
+                            <input
+                                    type="text"
+                                    id="assetNumber"
+                                    th:field="*{assetNumber}"
+                                    placeholder="e.g. EMS-IT-00125">
+
+                        </div>
+
+                    </div>
+
+
                     <!-- DESCRIPTION -->
 
                     <div class="form-group full">
 
                         <label for="description">
+
                             Description
+
                             <span>*</span>
+
                         </label>
 
                         <div class="textarea-wrapper">
@@ -265,7 +525,10 @@
                 </div>
 
 
-                <!-- REQUESTER INFORMATION -->
+                <!-- =================================================
+                     SECTION 02
+                     REQUESTER INFORMATION
+                     ================================================= -->
 
                 <div class="section-title">
 
@@ -274,8 +537,15 @@
                     </div>
 
                     <div>
-                        <h3>Requester Information</h3>
-                        <span>Details of the EMS employee reporting the issue.</span>
+
+                        <h3>
+                            Requester Information
+                        </h3>
+
+                        <span>
+                            Details of the EMS employee reporting the issue.
+                        </span>
+
                     </div>
 
                 </div>
@@ -289,8 +559,11 @@
                     <div class="form-group">
 
                         <label for="requesterName">
+
                             Full Name
+
                             <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -309,12 +582,14 @@
                     </div>
 
 
-                    <!-- EMAIL -->
+                    <!-- REQUESTER EMAIL -->
 
                     <div class="form-group">
 
                         <label for="requesterEmail">
+
                             Email Address
+
                         </label>
 
                         <div class="input-wrapper">
@@ -337,8 +612,11 @@
                     <div class="form-group">
 
                         <label for="department">
+
                             Department / Unit
+
                             <span>*</span>
+
                         </label>
 
                         <div class="input-wrapper">
@@ -393,12 +671,123 @@
                     </div>
 
 
-                    <!-- TECHNICIAN -->
+                    <!-- =================================================
+                         DISTRICT
+                         ================================================= -->
 
                     <div class="form-group">
 
+                        <label for="district">
+
+                            District
+
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-map-location-dot"></i>
+
+                            <select
+                                    id="district"
+                                    th:field="*{district}"
+                                    required>
+
+                                <option value="">
+                                    Select district
+                                </option>
+
+                                <option value="City of Johannesburg">
+                                    City of Johannesburg
+                                </option>
+
+                                <option value="City of Tshwane">
+                                    City of Tshwane
+                                </option>
+
+                                <option value="Ekurhuleni">
+                                    Ekurhuleni
+                                </option>
+
+                                <option value="Sedibeng">
+                                    Sedibeng
+                                </option>
+
+                                <option value="West Rand">
+                                    West Rand
+                                </option>
+
+                                <option value="Gauteng Provincial">
+                                    Gauteng Provincial
+                                </option>
+
+                                <option value="ECC">
+                                    ECC
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         STATION / UNIT
+                         ================================================= -->
+
+                    <div class="form-group">
+
+                        <label for="stationUnit">
+
+                            Station / Unit
+
+                            <span>*</span>
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <select
+                                    id="stationUnit"
+                                    th:field="*{stationUnit}"
+                                    required
+                                    disabled>
+
+                                <option value="">
+                                    Select district first
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <small class="field-help">
+                            Select a district first to view its stations.
+                        </small>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TECHNICIAN ASSIGNMENT
+                         ADMIN ONLY
+                         ================================================= -->
+
+                    <div class="form-group"
+                         th:if="${isAdmin}">
+
                         <label for="assignedTechnician">
+
                             Assign Technician
+
                         </label>
 
                         <div class="input-wrapper">
@@ -413,16 +802,11 @@
                                     Unassigned
                                 </option>
 
-                                <option value="IT Technician">
-                                    IT Technician
-                                </option>
+                                <option
+                                        th:each="technician : ${technicians}"
+                                        th:value="${technician.firstName + ' ' + technician.surname}"
+                                        th:text="${technician.firstName + ' ' + technician.surname}">
 
-                                <option value="Senior Technician">
-                                    Senior Technician
-                                </option>
-
-                                <option value="Support Technician">
-                                    Support Technician
                                 </option>
 
                             </select>
@@ -430,24 +814,243 @@
                         </div>
 
                         <small class="field-help">
-                            Leave unassigned if a technician will claim the ticket.
+
+                            Only IT Management can assign a technician.
+
                         </small>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         STATION MANAGER INFORMATION
+                         ================================================= -->
+
+                    <div class="form-group full"
+                         th:if="${isStationManager}">
+
+                        <div class="field-help"
+                             style="padding:14px;
+                                    border-radius:9px;
+                                    background:#f0fdf4;
+                                    border:1px solid #bbf7d0;
+                                    color:#166534;">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Your ticket will be submitted as
+                            <strong>Unassigned</strong>.
+
+                            IT Management will assign a technician,
+                            or an available technician may claim the ticket.
+
+                        </div>
 
                     </div>
 
                 </div>
 
 
-                <!-- SUBMISSION -->
+                <!-- =================================================
+                     SECTION 03
+                     STATION MANAGER INFORMATION
+                     ================================================= -->
+
+                <div class="section-title"
+                     th:if="${isStationManager}">
+
+                    <div class="section-number">
+                        03
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Station Manager Information
+                        </h3>
+
+                        <span>
+                            Contact details for the person reporting the issue.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid"
+                     th:if="${isStationManager}">
+
+
+                    <!-- MANAGER FIRST NAME -->
+
+                    <div class="form-group">
+
+                        <label for="managerFirstName">
+
+                            First Name
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                    type="text"
+                                    id="managerFirstName"
+                                    th:field="*{managerFirstName}"
+                                    placeholder="First name">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MANAGER SURNAME -->
+
+                    <div class="form-group">
+
+                        <label for="managerSurname">
+
+                            Surname
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                    type="text"
+                                    id="managerSurname"
+                                    th:field="*{managerSurname}"
+                                    placeholder="Surname">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MANAGER EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="managerEmail">
+
+                            Email
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            <input
+                                    type="email"
+                                    id="managerEmail"
+                                    th:field="*{managerEmail}"
+                                    placeholder="manager@gauteng.gov.za">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MANAGER PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="managerPhone">
+
+                            Phone
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            <input
+                                    type="tel"
+                                    id="managerPhone"
+                                    th:field="*{managerPhone}"
+                                    placeholder="Contact number">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MANAGER ROLE -->
+
+                    <div class="form-group">
+
+                        <label for="managerRole">
+
+                            Role
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-user-tie"></i>
+
+                            <input
+                                    type="text"
+                                    id="managerRole"
+                                    th:field="*{managerRole}"
+                                    placeholder="Station Manager">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MANAGER IP ADDRESS -->
+
+                    <div class="form-group">
+
+                        <label for="managerIpAddress">
+
+                            Computer IP Address
+
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-network-wired"></i>
+
+                            <input
+                                    type="text"
+                                    id="managerIpAddress"
+                                    th:field="*{managerIpAddress}"
+                                    placeholder="e.g. 10.10.10.25">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUBMISSION
+                     ================================================= -->
 
                 <div class="form-actions">
 
-                    <a href="/tickets" class="cancel-button">
+                    <a href="/tickets/cancel"
+                       class="cancel-button">
+
                         <i class="fa-solid fa-xmark"></i>
+
                         Cancel
+
                     </a>
 
-                    <button type="submit" class="submit-button">
+                    <button type="submit"
+                            class="submit-button">
 
                         <i class="fa-solid fa-paper-plane"></i>
 
@@ -462,19 +1065,30 @@
         </div>
 
 
-        <!-- INFORMATION PANEL -->
+        <!-- =====================================================
+             INFORMATION PANEL
+             ===================================================== -->
 
         <aside class="information-panel">
 
             <div class="info-header">
 
                 <div class="info-icon">
+
                     <i class="fa-solid fa-shield-halved"></i>
+
                 </div>
 
                 <div>
-                    <h3>IT Support</h3>
-                    <span>Ticket Guidelines</span>
+
+                    <h3>
+                        IT Support
+                    </h3>
+
+                    <span>
+                        Ticket Guidelines
+                    </span>
+
                 </div>
 
             </div>
@@ -482,20 +1096,25 @@
 
             <div class="info-list">
 
-
                 <div class="info-item">
 
                     <div class="info-item-icon">
+
                         <i class="fa-solid fa-circle-info"></i>
+
                     </div>
 
                     <div>
 
-                        <strong>Provide clear details</strong>
+                        <strong>
+                            Provide clear details
+                        </strong>
 
                         <p>
+
                             Include enough information for the technician
                             to understand and troubleshoot the issue.
+
                         </p>
 
                     </div>
@@ -506,16 +1125,22 @@
                 <div class="info-item">
 
                     <div class="info-item-icon">
+
                         <i class="fa-solid fa-triangle-exclamation"></i>
+
                     </div>
 
                     <div>
 
-                        <strong>Choose the correct priority</strong>
+                        <strong>
+                            Choose the correct priority
+                        </strong>
 
                         <p>
+
                             Critical issues affecting emergency operations
                             should be marked as Critical.
+
                         </p>
 
                     </div>
@@ -526,16 +1151,22 @@
                 <div class="info-item">
 
                     <div class="info-item-icon">
+
                         <i class="fa-solid fa-user-gear"></i>
+
                     </div>
 
                     <div>
 
-                        <strong>Technician assignment</strong>
+                        <strong>
+                            Technician assignment
+                        </strong>
 
                         <p>
-                            Tickets can be assigned by IT Management,
-                            or left available for technicians to claim.
+
+                            IT Management assigns technicians to tickets,
+                            or technicians can claim unassigned tickets.
+
                         </p>
 
                     </div>
@@ -546,16 +1177,22 @@
                 <div class="info-item">
 
                     <div class="info-item-icon">
+
                         <i class="fa-solid fa-clock"></i>
+
                     </div>
 
                     <div>
 
-                        <strong>Track your ticket</strong>
+                        <strong>
+                            Track your ticket
+                        </strong>
 
                         <p>
+
                             Once submitted, your ticket receives a unique
                             reference number for tracking.
+
                         </p>
 
                     </div>
@@ -565,17 +1202,23 @@
             </div>
 
 
+            <!-- EMERGENCY NOTE -->
+
             <div class="emergency-note">
 
                 <i class="fa-solid fa-phone-volume"></i>
 
                 <div>
 
-                    <strong>Emergency IT Issue?</strong>
+                    <strong>
+                        Emergency IT Issue?
+                    </strong>
 
                     <span>
+
                         For critical operational IT issues,
                         contact the IT Support team immediately.
+
                     </span>
 
                 </div>
@@ -587,22 +1230,296 @@
     </main>
 
 
-    <!-- FOOTER -->
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
 
     <footer>
 
         <span>
+
             <i class="fa-solid fa-headset"></i>
+
             Gauteng EMS IT Support
+
         </span>
 
         <span>
+
             Reliable. Responsive. Ready to Help.
+
         </span>
 
     </footer>
 
 </div>
 
+
+<!-- =========================================================
+     DISTRICT → STATION DROPDOWN
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const districtSelect =
+            document.getElementById("district");
+
+        const stationSelect =
+            document.getElementById("stationUnit");
+
+
+        /*
+         * IMPORTANT:
+         * Keep the station names here exactly as they
+         * exist in your EMS station list.
+         *
+         * ECC is intentionally left without stations
+         * until its official station list is supplied.
+         */
+
+        const stationsByDistrict = {
+
+            "City of Johannesburg": [
+
+                "Johannesburg Central",
+                "Doornfontein",
+                "Hillbrow",
+                "Yeoville",
+                "Berea",
+                "Jeppe",
+                "Lenasia",
+                "Roodepoort",
+                "Florida",
+                "Randburg",
+                "Diepsloot",
+                "Alexandra",
+                "Midrand"
+
+            ],
+
+            "City of Tshwane": [
+
+                "Tshwane Central",
+                "Pretoria Central",
+                "Pretoria West",
+                "Soshanguve",
+                "Mamelodi",
+                "Atteridgeville",
+                "Centurion",
+                "Ga-Rankuwa",
+                "Hammanskraal"
+
+            ],
+
+            "Ekurhuleni": [
+
+                "Alberton",
+                "Boksburg",
+                "Benoni",
+                "Brakpan",
+                "Germiston",
+                "Kempton Park",
+                "Springs",
+                "Edenvale",
+                "Tembisa"
+
+            ],
+
+            "Sedibeng": [
+
+                "Vanderbijlpark",
+                "Vereeniging",
+                "Sebokeng",
+                "Sharpeville",
+                "Evaton",
+                "Meyerton",
+                "Heidelberg"
+
+            ],
+
+            "West Rand": [
+
+                "Krugersdorp",
+                "Randfontein",
+                "Roodepoort",
+                "Carletonville",
+                "Westonaria"
+
+            ],
+
+            "Gauteng Provincial": [
+
+                "Gauteng Provincial Office",
+                "EMS Head Office"
+
+            ],
+
+            "ECC": [
+
+                "ECC Station / Unit List To Be Added"
+
+            ],
+
+            "Other": [
+
+                "Other / Not Listed"
+
+            ]
+
+        };
+
+
+        function loadStations() {
+
+            const selectedDistrict =
+                districtSelect.value;
+
+            const previousStation =
+                stationSelect.value;
+
+
+            stationSelect.innerHTML = "";
+
+
+            /*
+             * No district selected
+             */
+
+            if (!selectedDistrict) {
+
+                stationSelect.disabled = true;
+
+                const option =
+                    document.createElement("option");
+
+                option.value = "";
+
+                option.textContent =
+                    "Select district first";
+
+                stationSelect.appendChild(option);
+
+                return;
+            }
+
+
+            /*
+             * District selected
+             */
+
+            stationSelect.disabled = false;
+
+
+            const defaultOption =
+                document.createElement("option");
+
+            defaultOption.value = "";
+
+            defaultOption.textContent =
+                "Select station / unit";
+
+            stationSelect.appendChild(
+                defaultOption
+            );
+
+
+            const stations =
+                stationsByDistrict[selectedDistrict] || [];
+
+
+            /*
+             * No stations available yet
+             */
+
+            if (stations.length === 0) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = "";
+
+                option.textContent =
+                    "No stations available";
+
+                stationSelect.appendChild(option);
+
+                stationSelect.disabled = true;
+
+                return;
+            }
+
+
+            /*
+             * Add stations
+             */
+
+            stations.forEach(function (station) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = station;
+
+                option.textContent = station;
+
+                stationSelect.appendChild(option);
+
+            });
+
+
+            /*
+             * Preserve existing value if editing
+             */
+
+            if (previousStation) {
+
+                const matchingOption =
+                    Array.from(
+                        stationSelect.options
+                    ).find(function (option) {
+
+                        return option.value === previousStation;
+
+                    });
+
+
+                if (matchingOption) {
+
+                    stationSelect.value =
+                        previousStation;
+
+                }
+
+            }
+
+        }
+
+
+        /*
+         * Change district
+         */
+
+        districtSelect.addEventListener(
+            "change",
+            loadStations
+        );
+
+
+        /*
+         * Load station list on page load.
+         * This also helps when Thymeleaf has
+         * already populated a district value.
+         */
+
+        loadStations();
+
+    });
+
+</script>
+
+
 </body>
+
 </html>

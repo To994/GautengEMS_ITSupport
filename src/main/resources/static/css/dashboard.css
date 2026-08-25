@@ -1999,3 +1999,254 @@ a:focus-visible {
     }
 
 }
+////for side bar collapsing
+
+/* =========================================================
+   ADMIN SIDEBAR COLLAPSE
+   ========================================================= */
+
+/* Smooth transition */
+
+.sidebar {
+    width: 270px;
+
+    transition:
+        width 0.3s ease,
+        transform 0.3s ease;
+}
+
+.main-content {
+    width: calc(100% - 270px);
+
+    margin-left: 270px;
+
+    transition:
+        width 0.3s ease,
+        margin-left 0.3s ease;
+}
+
+
+/* =========================================================
+   COLLAPSED DESKTOP SIDEBAR
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed .sidebar {
+    width: 80px;
+}
+
+.dashboard-wrapper.sidebar-collapsed .main-content {
+    width: calc(100% - 80px);
+
+    margin-left: 80px;
+}
+
+
+/* =========================================================
+   HIDE SIDEBAR TEXT
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-brand h2,
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-brand span,
+
+.dashboard-wrapper.sidebar-collapsed
+.menu-title,
+
+.dashboard-wrapper.sidebar-collapsed
+.menu-item span:not(.menu-badge),
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-footer strong,
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-footer small {
+    display: none;
+}
+
+
+/* =========================================================
+   COLLAPSED BRAND
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-brand {
+    justify-content: center;
+
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-brand img {
+    width: 45px;
+    height: 45px;
+}
+
+
+/* =========================================================
+   COLLAPSED MENU
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-menu {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dashboard-wrapper.sidebar-collapsed
+.menu-item {
+    justify-content: center;
+
+    gap: 0;
+
+    padding-left: 0;
+    padding-right: 0;
+
+    height: 46px;
+}
+
+.dashboard-wrapper.sidebar-collapsed
+.menu-item i:first-child {
+    width: auto;
+
+    margin: 0;
+
+    font-size: 16px;
+}
+
+
+/* =========================================================
+   HIDE BADGE
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed
+.menu-badge {
+    display: none;
+}
+
+
+/* =========================================================
+   COLLAPSED FOOTER
+   ========================================================= */
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-footer {
+    justify-content: center;
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    padding: 10px;
+}
+
+.dashboard-wrapper.sidebar-collapsed
+.sidebar-footer > i {
+    margin: 0;
+}
+
+
+/* =========================================================
+   TOGGLE BUTTON
+   ========================================================= */
+
+.menu-toggle {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e1e6ef;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #3154d9;
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background: #eef3ff;
+
+    color: #15358f;
+}
+
+.menu-toggle:active {
+    transform: scale(0.95);
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 901px) {
+
+    .menu-toggle {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 270px;
+
+        transform: translateX(-100%);
+    }
+
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+
+        box-shadow:
+            10px 0 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .main-content {
+        width: 100%;
+
+        margin-left: 0;
+    }
+
+    /*
+     * On mobile the sidebar uses slide-in/slide-out.
+     * It does not use the 80px desktop collapse.
+     */
+
+    .dashboard-wrapper.sidebar-collapsed
+    .sidebar {
+        width: 270px;
+
+        transform: translateX(-100%);
+    }
+
+    .dashboard-wrapper.sidebar-collapsed
+    .main-content {
+        width: 100%;
+
+        margin-left: 0;
+    }
+
+}
